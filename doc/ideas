@@ -1,0 +1,11 @@
+Ideas for ScorpioFS
+--------------------
+* symmetric encrypted metadata
+* serialize metadata file if in lowmem mode
+* chunk popularity for metadata file (load to memory the most popular chunk)
+* fetch random chunks for metadata
+* collaboration--filesharing (groups, permissions etc)
+* traffic information--report (seeders, leechers, files, chunks)
+* trustable peers 
+* anonymity (I2P)
+* disk quota
