@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/886/scorpiofs/trunk/src/fuse/scorpiofs/util/test
+END
+Tree.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/836/scorpiofs/trunk/src/fuse/scorpiofs/util/test/Tree.java
+END
+Chunk.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/822/scorpiofs/trunk/src/fuse/scorpiofs/util/test/Chunk.java
+END
+ChunkList.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/822/scorpiofs/trunk/src/fuse/scorpiofs/util/test/ChunkList.java
+END
+Node.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/836/scorpiofs/trunk/src/fuse/scorpiofs/util/test/Node.java
+END
+utils.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/886/scorpiofs/trunk/src/fuse/scorpiofs/util/test/utils.java
+END

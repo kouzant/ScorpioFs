@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/885/scorpiofs/trunk/src/unipi/p2p/chord
+END
+Bootstrapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/538/scorpiofs/trunk/src/unipi/p2p/chord/Bootstrapper.java
+END
+Replicator.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/885/scorpiofs/trunk/src/unipi/p2p/chord/Replicator.java
+END
+Constants.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/885/scorpiofs/trunk/src/unipi/p2p/chord/Constants.java
+END
+ChordNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/885/scorpiofs/trunk/src/unipi/p2p/chord/ChordNode.java
+END
+Storage.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/821/scorpiofs/trunk/src/unipi/p2p/chord/Storage.java
+END
+RMIClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/538/scorpiofs/trunk/src/unipi/p2p/chord/RMIClient.java
+END
+Finger.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/821/scorpiofs/trunk/src/unipi/p2p/chord/Finger.java
+END
+RemoteChordNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/717/scorpiofs/trunk/src/unipi/p2p/chord/RemoteChordNode.java
+END
+HashChecker.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/823/scorpiofs/trunk/src/unipi/p2p/chord/HashChecker.java
+END
+ChordException.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/538/scorpiofs/trunk/src/unipi/p2p/chord/ChordException.java
+END
+ObjectDiskIO.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/564/scorpiofs/trunk/src/unipi/p2p/chord/ObjectDiskIO.java
+END

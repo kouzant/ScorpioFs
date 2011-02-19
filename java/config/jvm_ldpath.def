@@ -1,0 +1,1 @@
+LDPATH := -L/usr/lib/jvm/default-java/jre/lib/i386/server -L/usr/lib/jvm/default-java/jre/lib/i386/server -L/usr/lib/jvm/default-java/jre/../lib/i386 -L/usr/java/packages/lib/i386 -L/lib -L/usr/lib

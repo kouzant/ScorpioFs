@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/887/scorpiofs/trunk/src/lib
+END
+commons-logging.jar
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/539/scorpiofs/trunk/src/lib/commons-logging.jar
+END
+log4j-1.2.8.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/539/scorpiofs/trunk/src/lib/log4j-1.2.8.jar
+END

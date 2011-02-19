@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/886/scorpiofs/trunk/src/fuse/scorpiofs/util
+END
+FsWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/622/scorpiofs/trunk/src/fuse/scorpiofs/util/FsWriter.java
+END
+Constants.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/717/scorpiofs/trunk/src/fuse/scorpiofs/util/Constants.java
+END
+FsNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/867/scorpiofs/trunk/src/fuse/scorpiofs/util/FsNode.java
+END
+MD5sum.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/622/scorpiofs/trunk/src/fuse/scorpiofs/util/MD5sum.java
+END
+FsTree.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/822/scorpiofs/trunk/src/fuse/scorpiofs/util/FsTree.java
+END
+DataObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/886/scorpiofs/trunk/src/fuse/scorpiofs/util/DataObject.java
+END
+DataObject2.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/867/scorpiofs/trunk/src/fuse/scorpiofs/util/DataObject2.java
+END
+DataList.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/886/scorpiofs/trunk/src/fuse/scorpiofs/util/DataList.java
+END
+DataCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/622/scorpiofs/trunk/src/fuse/scorpiofs/util/DataCache.java
+END

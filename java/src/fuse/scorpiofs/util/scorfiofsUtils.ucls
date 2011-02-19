@@ -1,0 +1,142 @@
+<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.Constants" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/Constants.java" binary="false">    
+    <position x="91" y="43" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.DataCache" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/DataCache.java" binary="false">    
+    <position x="129" y="201" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.DataList" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/DataList.java" binary="false">    
+    <position x="135" y="522" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.DataObject" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/DataObject.java" binary="false">    
+    <position x="562" y="255" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.FsNode" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/FsNode.java" binary="false">    
+    <position x="543" y="807" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.FsTree" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/FsTree.java" binary="false">    
+    <position x="237" y="865" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.FsWriter" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/FsWriter.java" binary="false">    
+    <position x="302" y="1" width="84" height="49"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="fuse.scorpiofs.util.MD5sum" project="ScorpioFs" 
+    file="/ScorpioFs/src/fuse/scorpiofs/util/MD5sum.java" binary="false">    
+    <position x="310" y="115" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.FsNode" file="/ScorpioFs/src/fuse/scorpiofs/util/FsNode.java" 
+      binary="false" navigable="false">      
+      <attribute name="datalist"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.DataList" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataList.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.FsTree" file="/ScorpioFs/src/fuse/scorpiofs/util/FsTree.java" 
+      binary="false" navigable="false">      
+      <attribute name="rootNode"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.FsNode" file="/ScorpioFs/src/fuse/scorpiofs/util/FsNode.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.DataList" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataList.java" binary="false" navigable="false">      
+      <attribute name="onRAM"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.DataObject" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataObject.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.DataObject" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataObject.java" binary="false" navigable="false">      
+      <attribute name="parentList"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.DataList" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataList.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.DataCache" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataCache.java" binary="false" navigable="false">      
+      <attribute name="dataCache"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.DataObject" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataObject.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.FsNode" file="/ScorpioFs/src/fuse/scorpiofs/util/FsNode.java" 
+      binary="false" navigable="false">      
+      <attribute name="parent"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.FsNode" file="/ScorpioFs/src/fuse/scorpiofs/util/FsNode.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="ScorpioFs" name="fuse.scorpiofs.util.DataList" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataList.java" binary="false" navigable="false">      
+      <attribute name="theList"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="ScorpioFs" name="fuse.scorpiofs.util.DataObject" 
+      file="/ScorpioFs/src/fuse/scorpiofs/util/DataObject.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
