@@ -53,6 +53,7 @@ public class StartChordService {
         try {
         	ConfigParser conf = new ConfigParser(configFile);
         	servicePort=conf.getPort();
+            System.out.println("Property Port: "+servicePort);
         	realIP=conf.getRealIP();
         	bootstrapURL = conf.getBootstrap();
         	outputFolder = conf.getOutputDir();
