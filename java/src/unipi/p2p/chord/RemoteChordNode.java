@@ -107,4 +107,5 @@ public interface RemoteChordNode extends Remote {
 	public LinkedList getSuccessorList() throws RemoteException;
 	public void increasePopularity(BigInteger itemKey, int points) throws RemoteException;
 	public void delete(BigInteger itemKey) throws RemoteException;
+	public String getIPAddress() throws RemoteException;
 }

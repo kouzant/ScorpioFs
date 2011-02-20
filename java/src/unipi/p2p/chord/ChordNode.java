@@ -43,6 +43,9 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public Hashtable<BigInteger, String> data_hash = new Hashtable();
 	public HashMap<BigInteger, Integer> dataPopularity;
 	
+	public String getIPAddress() throws RemoteException{
+		return (String) this.localNode.getIPAddress();
+	}
 	public ChordNode(Finger localNode, boolean startupNew, Finger workingChordNode) throws RemoteException{
 		super();
 		//java.rmi.server.

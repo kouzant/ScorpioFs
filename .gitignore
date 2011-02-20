@@ -1,2 +1,4 @@
 java/build
 java/dist
+clients/
+*.log

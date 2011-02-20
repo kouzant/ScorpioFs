@@ -206,6 +206,7 @@ public class DataObject implements Serializable {
 				e1.printStackTrace();
 			}*/
 		if ((onDisk == true) && (this.theData == null)){
+			log.info("fromDisk()");
 			fromDisk();
 		}
 		
@@ -220,6 +221,7 @@ public class DataObject implements Serializable {
 			target_finger = localChordObj.findSuccessor(dataID);
 			RemoteChordNode target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
 			if (!target_node.hasKey(dataID)){
+				log.info("Storing chunk at target node");
 				target_node.put(stor_obj);
 			}
 			onNetwork = true;
@@ -257,6 +259,7 @@ public class DataObject implements Serializable {
 			RemoteChordNode target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
 			if (target_node.hasKey(dataID)) {
 				stor_obj = target_node.get(dataID);
+				log.info("Found first on: "+target_node.getIPAddress());
 				theData = stor_obj.getData();
 				parentList.addOnRAM(this);
 			}
@@ -268,6 +271,7 @@ public class DataObject implements Serializable {
 					target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
 					if (target_node.hasKey(dataID)) {
 						stor_obj = target_node.get(dataID);
+						log.info("Found on: "+target_node.getIPAddress());
 						theData = stor_obj.getData();
 						parentList.addOnRAM(this);
 						break;

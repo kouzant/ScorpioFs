@@ -43,4 +43,23 @@ Running
 3. Create the directory where the scorpioFs file system should be mounted (e.g. mkdir /tmp/tmp) 
 4. Run './scorpio.sh -port 6789 -fstree /tmp/fstree /tmp/tmp
 5. Enjoy or die
-6. Run 'fusermount -u /tmp/tmp' to unmount the scorpioFS.  
+6. Run 'fusermount -u /tmp/tmp' to unmount the scorpioFS. 
+
+------------------------------------
+chord.properties examples:
+
+First Node:
+-----------
+#bootstrap=localhost
+#port=6789
+external_ip=localhost
+outputdir=/tmp/localhost:6789/
+hashtable=/tmp/localhost.6789/chord.hashtable
+
+Bootstrapping Nodes:
+-------------------- 
+bootstrap=localhost:6789
+external_ip=localhost
+port=6788
+outputdir=/tmp/localhost:6788/
+hashtable=/tmp/localhost:6788/chord.hashtable
