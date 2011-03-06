@@ -372,7 +372,7 @@ public class ScorpioFS implements Filesystem3{
 	public void saveFstreeToFile(String filename){
 		ObjectDiskIO objectWriter = new ObjectDiskIO();
 		try {
-			objectWriter.saveObject(my_tree, filename);
+			objectWriter.saveObject(my_tree, new File(filename));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.err.println("ERROR:\tCannot write to "+filename);
@@ -462,15 +462,19 @@ public class ScorpioFS implements Filesystem3{
 
 		ScorpioFS fs = new ScorpioFS(mountpoint);
 		
-		ObjectDiskIO objectReader = new ObjectDiskIO();
-		try {
-			fs.my_tree = (FsTree)objectReader.loadObject(fstree);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		File fsTree=new File(fstree);
+		if(fsTree.exists()){
+			ObjectDiskIO objectReader = new ObjectDiskIO();
+			try {
+				fs.my_tree = (FsTree)objectReader.loadObject(fsTree);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println("total inodes=" + fs.my_tree.getTotalInodes());
+		}else{
+			System.out.println("Fetch fstree from network");
 		}
-		System.out.println("total inodes=" + fs.my_tree.getTotalInodes());
-		
 		
 		try {
 			FuseMount.mount(fuseArgs,fs, null);

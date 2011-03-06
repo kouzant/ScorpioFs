@@ -289,7 +289,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public void writeMetadataFileToDisk(){
 		ObjectDiskIO objectWriter = new ObjectDiskIO();
 		try {
-			objectWriter.saveObject(this.data_hash, this.metadataFile);
+			objectWriter.saveObject(this.data_hash, new File(this.metadataFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -403,7 +403,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 				int currentValue = dataPopularity.get(key);
 				dataPopularity.put(key, currentValue + 50); //each request gets 50 points
 			}*/
-			Storage storageObj = (Storage)objectReader.loadObject(filename);
+			Storage storageObj = (Storage)objectReader.loadObject(new File(filename));
 			return storageObj;
 		} catch (Exception e) {
 			log.error("Could not retrieve object no. " + key);
@@ -418,8 +418,9 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			// check if disk limit is reached
 			ObjectDiskIO objectWriter = new ObjectDiskIO();
 			try {
-				objectWriter.saveObject(storageObj, outputFolder + storageObj.getShaHex());
-				data_hash.put(storageObj.getID(), outputFolder + storageObj.getShaHex());
+				String output=outputFolder+storageObj.getShaHex();
+				objectWriter.saveObject(storageObj, new File(output));
+				data_hash.put(storageObj.getID(), output);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -506,7 +507,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 					//for each file that matches the pattern, create a dataobject and add it to the data_hash
 					ObjectDiskIO objectReader = new ObjectDiskIO();
 					try {
-						Storage storageObj = (Storage)objectReader.loadObject(contents[i].toString());
+						Storage storageObj = (Storage)objectReader.loadObject(contents[i]);
 						data_hash.put(storageObj.getID(), contents[i].toString());
 						
 					} catch (Exception e) {
@@ -524,7 +525,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		//if file exists, load it
 		ObjectDiskIO objectReader = new ObjectDiskIO();
 		try {
-			this.data_hash = (Hashtable<BigInteger, String>) objectReader.loadObject(this.metadataFile);
+			this.data_hash = (Hashtable<BigInteger, String>) objectReader.loadObject(new File(this.metadataFile));
 			
 			
 

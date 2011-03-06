@@ -40,7 +40,7 @@ public class HashChecker implements Runnable {
 			ObjectDiskIO objectReader = new ObjectDiskIO();
 			try {
 				Storage storageObj = (Storage) objectReader
-						.loadObject(filename);
+						.loadObject(new File(filename));
 				storageObj.calculateID();
 				if (!(storageObj.getID().equals(hashSet.toArray()[i]))) {
 					System.out.println("incorrect hash.");

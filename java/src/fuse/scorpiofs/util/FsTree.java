@@ -1,5 +1,6 @@
 package fuse.scorpiofs.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -89,7 +90,7 @@ public int getTotalBlocks(){
 public void toFile(String filename){
 	ObjectDiskIO objectWriter = new ObjectDiskIO();
 	try {
-		objectWriter.saveObject(this.rootNode, filename);
+		objectWriter.saveObject(this.rootNode, new File(filename));
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.err.println("ERROR:\tCannot write to "+filename);
