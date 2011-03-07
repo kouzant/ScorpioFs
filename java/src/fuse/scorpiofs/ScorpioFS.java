@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,7 +24,7 @@ import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.ObjectDiskIO;
 import unipi.p2p.chord.RemoteChordNode;
-
+import unipi.p2p.chord.util.Util;
 import com.sun.security.auth.module.UnixSystem;
 
 import fuse.Errno;
@@ -371,6 +372,7 @@ public class ScorpioFS implements Filesystem3{
 	
 	public void saveFstreeToFile(String filename){
 		ObjectDiskIO objectWriter = new ObjectDiskIO();
+		tokenize(filename);
 		try {
 			objectWriter.saveObject(my_tree, new File(filename));
 		} catch (IOException e) {
@@ -378,6 +380,41 @@ public class ScorpioFS implements Filesystem3{
 			System.err.println("ERROR:\tCannot write to "+filename);
 		}
 		
+	}
+	
+	void tokenize(String filename){
+		File fsTree=new File(filename);
+		byte[] buffer=new byte[1024];
+		try{
+			FileInputStream fis=new FileInputStream(fsTree);
+			try{
+				while(fis.available()>0){
+					fis.read(buffer);
+					String hash=Util.shaHex(buffer);
+					String tmpStore="/tmp/"+hash;
+					try{
+						FileOutputStream fos=new FileOutputStream(tmpStore);
+						try{
+							fos.write(buffer);
+							fos.flush();
+							fos.close();
+						}catch(IOException e0){
+							e0.printStackTrace();
+						}
+					}catch(FileNotFoundException e0){
+						e0.printStackTrace();
+					}catch(SecurityException e1){
+						e1.printStackTrace();
+					}
+					
+				}
+				fis.close();
+			}catch(IOException e0){
+				e0.printStackTrace();
+			}
+		}catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
 	}
 	
 	private void setFstree(FsTree tree){
