@@ -41,6 +41,7 @@ import fuse.scorpiofs.util.DataCache;
 import fuse.scorpiofs.util.DataObject;
 import fuse.scorpiofs.util.FsNode;
 import fuse.scorpiofs.util.FsTree;
+import fuse.scorpiofs.util.FsTreeChunks;
 import fuse.scorpiofs.util.test.Tree;
 
 public class ScorpioFS implements Filesystem3{
@@ -372,7 +373,7 @@ public class ScorpioFS implements Filesystem3{
 	
 	public void saveFstreeToFile(String filename){
 		ObjectDiskIO objectWriter = new ObjectDiskIO();
-		tokenize(filename);
+		
 		try {
 			objectWriter.saveObject(my_tree, new File(filename));
 		} catch (IOException e) {
@@ -384,31 +385,41 @@ public class ScorpioFS implements Filesystem3{
 	
 	void tokenize(String filename){
 		File fsTree=new File(filename);
-		byte[] buffer=new byte[1024];
+		byte[] buffer=new byte[1048576];
 		try{
 			FileInputStream fis=new FileInputStream(fsTree);
 			try{
-				while(fis.available()>0){
-					fis.read(buffer);
-					String hash=Util.shaHex(buffer);
-					String tmpStore="/tmp/"+hash;
-					try{
-						FileOutputStream fos=new FileOutputStream(tmpStore);
+				log.info("fis.available: "+fis.available());
+				FsTreeChunks fsc=new FsTreeChunks();
+				if(fis.available()>1048576){
+					while(fis.available()>0){
+						fis.read(buffer);
+						String hash=Util.shaHex(buffer);
+						log.info("Primary Chunk ID: "+hash);
+						fsc.setID(hash);
+						String tmpStore="/tmp/"+hash;
 						try{
-							fos.write(buffer);
-							fos.flush();
-							fos.close();
-						}catch(IOException e0){
+							FileOutputStream fos=new FileOutputStream(tmpStore);
+							try{
+								fos.write(buffer);
+								fos.flush();
+								fos.close();
+							}catch(IOException e0){
+								e0.printStackTrace();
+							}
+						}catch(FileNotFoundException e0){
 							e0.printStackTrace();
+						}catch(SecurityException e1){
+							e1.printStackTrace();
 						}
-					}catch(FileNotFoundException e0){
-						e0.printStackTrace();
-					}catch(SecurityException e1){
-						e1.printStackTrace();
+
 					}
-					
 				}
 				fis.close();
+				Iterator<String> it=fsc.getIDs();
+				while(it.hasNext()){
+					log.info("Chunk ID: "+it.next());
+				}
 			}catch(IOException e0){
 				e0.printStackTrace();
 			}
@@ -526,6 +537,7 @@ public class ScorpioFS implements Filesystem3{
 		fs.my_tree.rootNode.printStatus();
 		
 		fs.saveFstreeToFile(fstree);
+		fs.tokenize(fstree);
 		
 		//Tree tmptree = new Tree();
 		//tmptree.root = fuse.scorpiofs.util.test.utils.CopyNode(fs.my_tree.rootNode, null);
