@@ -24,4 +24,8 @@ public class FsTreeChunks implements Serializable{
 		Iterator<String> it=chunkIDList.iterator();
 		return it;
 	}
+	
+	public void delIDs(){
+		chunkIDList.removeAll(chunkIDList);
+	}
 }

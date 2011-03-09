@@ -39,6 +39,7 @@ import fuse.FuseStatfsSetter;
 import fuse.scorpiofs.util.Constants;
 import fuse.scorpiofs.util.DataCache;
 import fuse.scorpiofs.util.DataObject;
+import fuse.scorpiofs.util.FileCrypto;
 import fuse.scorpiofs.util.FsNode;
 import fuse.scorpiofs.util.FsTree;
 import fuse.scorpiofs.util.FsTreeChunks;
@@ -373,7 +374,6 @@ public class ScorpioFS implements Filesystem3{
 	
 	public void saveFstreeToFile(String filename){
 		ObjectDiskIO objectWriter = new ObjectDiskIO();
-		
 		try {
 			objectWriter.saveObject(my_tree, new File(filename));
 		} catch (IOException e) {
@@ -390,7 +390,17 @@ public class ScorpioFS implements Filesystem3{
 			FileInputStream fis=new FileInputStream(fsTree);
 			try{
 				log.info("fis.available: "+fis.available());
+				//Encrypt fstree
+				FileCrypto fc=new FileCrypto();
+				File encFile=new File(filename+".enc");
+				FileOutputStream encFos=new FileOutputStream(encFile);
+				fc.encrypt(fis, encFos);
+				fis.close();
+				encFos.close();
+				fis=new FileInputStream(encFile);
 				FsTreeChunks fsc=new FsTreeChunks();
+				//Remove existing dataID
+				fsc.delIDs();
 				if(fis.available()>1048576){
 					while(fis.available()>0){
 						fis.read(buffer);
@@ -412,7 +422,6 @@ public class ScorpioFS implements Filesystem3{
 						}catch(SecurityException e1){
 							e1.printStackTrace();
 						}
-
 					}
 				}
 				fis.close();
@@ -423,8 +432,19 @@ public class ScorpioFS implements Filesystem3{
 			}catch(IOException e0){
 				e0.printStackTrace();
 			}
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
+		}catch(FileNotFoundException e0){
+			e0.printStackTrace();
+		}
+	}
+	
+	void saveInterFile(String filename){
+		ObjectDiskIO objectWriter = new ObjectDiskIO();
+		try {
+			FsTreeChunks fsc=new FsTreeChunks();
+			objectWriter.saveObject(fsc, new File(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("ERROR:\tCannot write to "+filename);
 		}
 	}
 	
@@ -538,7 +558,7 @@ public class ScorpioFS implements Filesystem3{
 		
 		fs.saveFstreeToFile(fstree);
 		fs.tokenize(fstree);
-		
+		fs.saveInterFile("/home/antonis/interFs");
 		//Tree tmptree = new Tree();
 		//tmptree.root = fuse.scorpiofs.util.test.utils.CopyNode(fs.my_tree.rootNode, null);
 		//fuse.scorpiofs.util.test.utils.printTree(tmptree.root);
