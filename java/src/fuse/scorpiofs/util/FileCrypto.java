@@ -24,8 +24,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class FileCrypto {
 	
-	private static FileInputStream fis;
-	private static FileOutputStream fos;
 	private static byte[] buffer=new byte[64];
 	private static int bytesRead;
 	private static  char[] password;
