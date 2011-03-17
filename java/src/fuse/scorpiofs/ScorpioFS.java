@@ -40,9 +40,11 @@ import fuse.scorpiofs.util.Constants;
 import fuse.scorpiofs.util.DataCache;
 import fuse.scorpiofs.util.DataObject;
 import fuse.scorpiofs.util.FileCrypto;
+import fuse.scorpiofs.util.Initialize;
 import fuse.scorpiofs.util.FsNode;
 import fuse.scorpiofs.util.FsTree;
 import fuse.scorpiofs.util.FsTreeChunks;
+import fuse.scorpiofs.util.RevokeChunks;
 import fuse.scorpiofs.util.test.Tree;
 
 public class ScorpioFS implements Filesystem3{
@@ -386,6 +388,7 @@ public class ScorpioFS implements Filesystem3{
 	void tokenize(String filename){
 		File fsTree=new File(filename);
 		byte[] buffer=new byte[1048576];
+		FsTreeChunks fsc=new FsTreeChunks();
 		try{
 			FileInputStream fis=new FileInputStream(fsTree);
 			try{
@@ -398,10 +401,10 @@ public class ScorpioFS implements Filesystem3{
 				fis.close();
 				encFos.close();
 				fis=new FileInputStream(encFile);
-				FsTreeChunks fsc=new FsTreeChunks();
 				//Remove existing dataID
 				fsc.delIDs();
 				if(fis.available()>1048576){
+					int counter=0;
 					while(fis.available()>0){
 						fis.read(buffer);
 						String hash=Util.shaHex(buffer);
@@ -422,6 +425,28 @@ public class ScorpioFS implements Filesystem3{
 						}catch(SecurityException e1){
 							e1.printStackTrace();
 						}
+						counter++;
+					}
+				}else{
+					//fstree less than 1MB
+					fis.read(buffer);
+					String hash=Util.shaHex(buffer);
+					log.info("Only one chunk: "+hash);
+					fsc.setID(hash);
+					String tmpStore="/tmp/"+hash;
+					try{
+						FileOutputStream fos=new FileOutputStream(tmpStore);
+						try{
+							fos.write(buffer);
+							fos.flush();
+							fos.close();
+						}catch(IOException e0){
+							e0.printStackTrace();
+						}
+					}catch(FileNotFoundException e0){
+						e0.printStackTrace();
+					}catch(SecurityException e1){
+						e1.printStackTrace();
 					}
 				}
 				fis.close();
@@ -432,19 +457,17 @@ public class ScorpioFS implements Filesystem3{
 			}catch(IOException e0){
 				e0.printStackTrace();
 			}
+			
+			ObjectDiskIO objectWriter = new ObjectDiskIO();
+			try {
+				objectWriter.saveObject(fsc, new File("/home/antonis/.scorpiofs/interFs"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.err.println("ERROR:\tCannot write interFs");
+			}
+			
 		}catch(FileNotFoundException e0){
 			e0.printStackTrace();
-		}
-	}
-	
-	void saveInterFile(String filename){
-		ObjectDiskIO objectWriter = new ObjectDiskIO();
-		try {
-			FsTreeChunks fsc=new FsTreeChunks();
-			objectWriter.saveObject(fsc, new File(filename));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("ERROR:\tCannot write to "+filename);
 		}
 	}
 	
@@ -469,7 +492,7 @@ public class ScorpioFS implements Filesystem3{
 		String mountpoint = null;
 		int argCount = 0;
 		int i;
-
+		
 		for (i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
 				argument = args[i];
@@ -488,6 +511,12 @@ public class ScorpioFS implements Filesystem3{
 						argCount++;
 						fstree = args[i];
 					}
+				}
+				
+				if(argument.equals("-init")){
+					new Initialize();
+					argCount++;
+					i--;
 				}
 
 			} else {
@@ -530,6 +559,9 @@ public class ScorpioFS implements Filesystem3{
 
 		ScorpioFS fs = new ScorpioFS(mountpoint);
 		
+		//new method
+		//RevokeChunks lala=new RevokeChunks(fs);
+		
 		File fsTree=new File(fstree);
 		if(fsTree.exists()){
 			ObjectDiskIO objectReader = new ObjectDiskIO();
@@ -540,6 +572,20 @@ public class ScorpioFS implements Filesystem3{
 				e1.printStackTrace();
 			}
 			System.out.println("total inodes=" + fs.my_tree.getTotalInodes());
+			
+			File interFile=new File("/home/antonis/.scorpiofs/interFs");
+			FsTreeChunks ftc=new FsTreeChunks();
+			if(interFile.exists()){
+				try{
+					ftc=(FsTreeChunks)objectReader.loadObject(interFile);
+					Iterator<String> it=ftc.getIDs();
+					while(it.hasNext()){
+						System.out.println(it.next());
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 		}else{
 			System.out.println("Fetch fstree from network");
 		}
@@ -558,7 +604,6 @@ public class ScorpioFS implements Filesystem3{
 		
 		fs.saveFstreeToFile(fstree);
 		fs.tokenize(fstree);
-		fs.saveInterFile("/home/antonis/interFs");
 		//Tree tmptree = new Tree();
 		//tmptree.root = fuse.scorpiofs.util.test.utils.CopyNode(fs.my_tree.rootNode, null);
 		//fuse.scorpiofs.util.test.utils.printTree(tmptree.root);

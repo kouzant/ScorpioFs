@@ -98,7 +98,7 @@ public class FileCrypto {
 		}
 	}
 
-	public static void decrypt(FileInputStream fis, FileOutputStream fos, char[] password) throws Exception{
+	public void decrypt(FileInputStream fis, FileOutputStream fos) throws Exception{
 		byte[] salt=new byte[8];
 		byte[] iv=new byte[16];
 		fis.read(salt);
@@ -106,24 +106,50 @@ public class FileCrypto {
 		System.out.println("Initialization Vector: "+new String(iv)+"size: "+iv.length);
 		System.out.println("Salt: "+new String(salt));
 
-		SecretKeyFactory factory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		KeySpec spec=new PBEKeySpec(password,salt,1024,128);
-		SecretKey tmp=factory.generateSecret(spec);
-		SecretKey secret = new SecretKeySpec(tmp.getEncoded(),"AES");
+		try{
+			SecretKeyFactory factory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			KeySpec spec=new PBEKeySpec(password,salt,1024,128);
+			SecretKey tmp=factory.generateSecret(spec);
+			SecretKey secret = new SecretKeySpec(tmp.getEncoded(),"AES");
 
-		Cipher cipher=Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-		cipher.init(Cipher.DECRYPT_MODE,secret,new IvParameterSpec(iv));
+			Cipher cipher=Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			cipher.init(Cipher.DECRYPT_MODE,secret,new IvParameterSpec(iv));
 
-		while((bytesRead=fis.read(buffer))!=-1){
-			byte[] output=cipher.update(buffer,0,bytesRead);
+			while((bytesRead=fis.read(buffer))!=-1){
+				byte[] output=cipher.update(buffer,0,bytesRead);
+				if(output!=null)
+					fos.write(output);
+			}
+			byte[] output=cipher.doFinal();
 			if(output!=null)
 				fos.write(output);
+			fos.flush();
+			fis.close();
+			fos.close();
+		}catch(NullPointerException e0){
+			e0.printStackTrace();
+		}catch(NoSuchAlgorithmException e1){
+			e1.printStackTrace();
+		}catch(IllegalArgumentException e2){
+			e2.printStackTrace();
+		}catch(InvalidKeySpecException e3){
+			e3.printStackTrace();
+		}catch(ArrayIndexOutOfBoundsException e4){
+			e4.printStackTrace();
+		}catch(NoSuchProviderException e5){
+			e5.printStackTrace();
+		}catch(NoSuchPaddingException e6){
+			e6.printStackTrace();
+		}catch(InvalidKeyException e7){
+			e7.printStackTrace();
+		}catch(IllegalStateException e8){
+			e8.printStackTrace();
+		}catch(IllegalBlockSizeException e9){
+			e9.printStackTrace();
+		}catch(BadPaddingException e10){
+			e10.printStackTrace();
+		}catch(IOException e11){
+			e11.printStackTrace();
 		}
-		byte[] output=cipher.doFinal();
-		if(output!=null)
-			fos.write(output);
-		fos.flush();
-		fis.close();
-		fos.close();
 	}
 }
