@@ -9,10 +9,12 @@ import java.util.Iterator;
 import fuse.scorpiofs.ScorpioFS;
 
 import unipi.p2p.chord.ObjectDiskIO;
+import fuse.scorpiofs.util.Constants;
 
 public class RevokeChunks {
 	public RevokeChunks(ScorpioFS fs){
-		String interFileLoc="/home/antonis/.scorpiofs/interFs";
+		String interFileLoc=Constants.interFileName;
+		System.out.println("interFs: "+interFileLoc);
 		File interFile=new File(interFileLoc);
 		if(interFile.exists()){
 			ObjectDiskIO objectReader=new ObjectDiskIO();
@@ -27,7 +29,7 @@ public class RevokeChunks {
 					System.out.println("interFile Error!!!");
 				}
 				FileInputStream fis;
-				FileOutputStream fos=new FileOutputStream("/home/antonis/.scorpiofs/fsTree.enc");
+				FileOutputStream fos=new FileOutputStream(Constants.fsTreeName+".enc");
 				//write chunks to one file
 				while(it.hasNext()){
 					fis=new FileInputStream("/tmp/"+it.next());
@@ -43,15 +45,15 @@ public class RevokeChunks {
 				}
 				fos.close();
 
-				fis=new FileInputStream("/home/antonis/.scorpiofs/fsTree.enc");
-				fos=new FileOutputStream("/home/antonis/.scorpiofs/fsTree");
+				fis=new FileInputStream(Constants.fsTreeName+".enc");
+				fos=new FileOutputStream(Constants.fsTreeName);
 				FileCrypto fc=new FileCrypto();
 				fc.decrypt(fis, fos);
 				fis.close();
 				fos.close();
 				//finally deserialize fstree
 				try{
-					File newFsTree=new File("/home/antonis/.scorpiofs/fsTree");
+					File newFsTree=new File(Constants.fsTreeName);
 					fs.my_tree=(FsTree)objectReader.loadObject(newFsTree);
 				}catch(Exception e){
 					System.out.println("Could NOT read new fstree");

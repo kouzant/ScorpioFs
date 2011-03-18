@@ -16,6 +16,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +26,8 @@ import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.ObjectDiskIO;
 import unipi.p2p.chord.RemoteChordNode;
 import unipi.p2p.chord.util.Util;
+
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import com.sun.security.auth.module.UnixSystem;
 
 import fuse.Errno;
@@ -36,6 +39,7 @@ import fuse.FuseGetattrSetter;
 import fuse.FuseMount;
 import fuse.FuseOpenSetter;
 import fuse.FuseStatfsSetter;
+import fuse.scorpiofs.util.ConfigurationParser;
 import fuse.scorpiofs.util.Constants;
 import fuse.scorpiofs.util.DataCache;
 import fuse.scorpiofs.util.DataObject;
@@ -385,8 +389,9 @@ public class ScorpioFS implements Filesystem3{
 		
 	}
 	
-	void tokenize(String filename){
-		File fsTree=new File(filename);
+	void tokenize(String fsTreeName){
+		File fsTree=new File(fsTreeName);
+		System.out.println("fsTree size: "+fsTree.length());
 		byte[] buffer=new byte[1048576];
 		FsTreeChunks fsc=new FsTreeChunks();
 		try{
@@ -395,7 +400,7 @@ public class ScorpioFS implements Filesystem3{
 				log.info("fis.available: "+fis.available());
 				//Encrypt fstree
 				FileCrypto fc=new FileCrypto();
-				File encFile=new File(filename+".enc");
+				File encFile=new File(fsTreeName+".enc");
 				FileOutputStream encFos=new FileOutputStream(encFile);
 				fc.encrypt(fis, encFos);
 				fis.close();
@@ -490,6 +495,8 @@ public class ScorpioFS implements Filesystem3{
 		String port = null;
 		String fstree = null;
 		String mountpoint = null;
+		String configFile=null;
+		Boolean init=false;
 		int argCount = 0;
 		int i;
 		
@@ -514,9 +521,17 @@ public class ScorpioFS implements Filesystem3{
 				}
 				
 				if(argument.equals("-init")){
-					new Initialize();
+					init=true;
 					argCount++;
 					i--;
+				}
+				
+				if(argument.equals("-config")){
+					argCount++;
+					if(i<args.length){
+						argCount++;
+						configFile=args[i];
+					}
 				}
 
 			} else {
@@ -557,12 +572,26 @@ public class ScorpioFS implements Filesystem3{
 			System.exit(-1);
 		}
 
+		ConfigurationParser cp=new ConfigurationParser(configFile);
+		Constants.setPersonalDir(cp.getPersonalDir());
+		Constants.setInterFileName(cp.getInterFilename());
+		Constants.setFsTreeName(cp.getfsTreeName());
+		
+		if(init)
+			new Initialize();
+		
 		ScorpioFS fs = new ScorpioFS(mountpoint);
 		
-		//new method
-		//RevokeChunks lala=new RevokeChunks(fs);
+		//TO BE FIXED
+		fstree=Constants.fsTreeName;
 		
-		File fsTree=new File(fstree);
+		//new method
+		File ifn=new File(Constants.interFileName);
+		if(ifn.exists()){
+			RevokeChunks lala=new RevokeChunks(fs);
+		}
+
+		/*File fsTree=new File(fstree);
 		if(fsTree.exists()){
 			ObjectDiskIO objectReader = new ObjectDiskIO();
 			try {
@@ -572,8 +601,8 @@ public class ScorpioFS implements Filesystem3{
 				e1.printStackTrace();
 			}
 			System.out.println("total inodes=" + fs.my_tree.getTotalInodes());
-			
-			File interFile=new File("/home/antonis/.scorpiofs/interFs");
+
+			File interFile=new File(Constants.interFileName);
 			FsTreeChunks ftc=new FsTreeChunks();
 			if(interFile.exists()){
 				try{
@@ -588,7 +617,7 @@ public class ScorpioFS implements Filesystem3{
 			}
 		}else{
 			System.out.println("Fetch fstree from network");
-		}
+		}*/
 		
 		try {
 			FuseMount.mount(fuseArgs,fs, null);
@@ -602,8 +631,21 @@ public class ScorpioFS implements Filesystem3{
 		fs.my_tree.calcTotalBlocksAndInodes();
 		fs.my_tree.rootNode.printStatus();
 		
-		fs.saveFstreeToFile(fstree);
-		fs.tokenize(fstree);
+		fs.saveFstreeToFile(Constants.fsTreeName);
+		try{
+			TimeUnit.SECONDS.sleep(1);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		fs.tokenize(Constants.fsTreeName);
+		try{
+			TimeUnit.SECONDS.sleep(1);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		new File(Constants.fsTreeName).delete();
+		String tmpEncFsTree=Constants.fsTreeName.concat(".enc");
+		new File(tmpEncFsTree).delete();
 		//Tree tmptree = new Tree();
 		//tmptree.root = fuse.scorpiofs.util.test.utils.CopyNode(fs.my_tree.rootNode, null);
 		//fuse.scorpiofs.util.test.utils.printTree(tmptree.root);

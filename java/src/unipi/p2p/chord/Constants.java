@@ -9,5 +9,4 @@ public class Constants {
 	public static final String CHORDPROPERTIESFILE = "chord.properties";
 	public static final int REPLICATION_FACTOR = 3;
 	public static final long REPLICATION_INTERVAL = 10 * 1000; // in milliseconds
-	
 }
