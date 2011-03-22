@@ -2,6 +2,7 @@ package fuse.scorpiofs.util;
 
 import java.io.*;
 import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -31,14 +32,14 @@ public class FileCrypto {
 	public FileCrypto(){
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		java.io.Console cons;
-		if((cons=System.console())!=null){
+		if(((cons=System.console())!=null) && (Constants.password==null)){
 			try{
 				password=cons.readPassword("[%s]", "Password:");
+				Constants.setPassword(password);
 			}catch(IOError e0){
 				e0.printStackTrace();
 			}
 		}
-		System.out.println("The password is: "+new String(password));
 	}
 	
 	public void encrypt(FileInputStream fis, FileOutputStream fos){
@@ -48,7 +49,7 @@ public class FileCrypto {
 
 		try{
 			SecretKeyFactory factory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-			KeySpec spec=new PBEKeySpec(password,salt,1024,128);
+			KeySpec spec=new PBEKeySpec(Constants.password,salt,1024,128);
 			SecretKey tmp=factory.generateSecret(spec);
 			SecretKey secret = new SecretKeySpec(tmp.getEncoded(),"AES");
 
@@ -107,26 +108,26 @@ public class FileCrypto {
 		}
 	}
 
-	public void decrypt(FileInputStream fis, FileOutputStream fos) throws Exception{
+	public void decrypt(FileInputStream fis, FileOutputStream fos){
 		byte[] salt=new byte[8];
 		byte[] iv=new byte[16];
 		
-		File saltFile=new File(Constants.personalDir+"/.salt");
-		FileInputStream saFis=new FileInputStream(saltFile);
-		saFis.read(salt);
-		saFis.close();
-		
-		File ivFile=new File(Constants.personalDir+"/.iv");
-		FileInputStream ivFis=new FileInputStream(ivFile);
-		ivFis.read(iv);
-		ivFis.close();
-		
-		System.out.println("Initialization Vector: "+new String(iv)+"size: "+iv.length);
-		System.out.println("Salt: "+new String(salt));
-
 		try{
+			File saltFile=new File(Constants.personalDir+"/.salt");
+			FileInputStream saFis=new FileInputStream(saltFile);
+			saFis.read(salt);
+			saFis.close();
+
+			File ivFile=new File(Constants.personalDir+"/.iv");
+			FileInputStream ivFis=new FileInputStream(ivFile);
+			ivFis.read(iv);
+			ivFis.close();
+
+			System.out.println("Initialization Vector: "+new String(iv)+"size: "+iv.length);
+			System.out.println("Salt: "+new String(salt));
+
 			SecretKeyFactory factory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-			KeySpec spec=new PBEKeySpec(password,salt,1024,128);
+			KeySpec spec=new PBEKeySpec(Constants.password,salt,1024,128);
 			SecretKey tmp=factory.generateSecret(spec);
 			SecretKey secret = new SecretKeySpec(tmp.getEncoded(),"AES");
 
@@ -166,8 +167,10 @@ public class FileCrypto {
 			e9.printStackTrace();
 		}catch(BadPaddingException e10){
 			e10.printStackTrace();
-		}catch(IOException e11){
+		}catch(InvalidAlgorithmParameterException e11){
 			e11.printStackTrace();
+		}catch(IOException e12){
+			e12.printStackTrace();
 		}
 	}
 }

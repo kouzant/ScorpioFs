@@ -9,6 +9,7 @@ public class Constants {
 	public static String personalDir=USER_HOME+"/.scorpiofs";
 	public static String interFileName=personalDir+"interFile";
 	public static String fsTreeName=personalDir+"fsTree";
+	public static char[] password=null;
 
 	public static void setReplicationFactor(int x) {
 		replicationFactor = x;
@@ -24,5 +25,9 @@ public class Constants {
 	
 	public static void setFsTreeName(String fstn){
 		fsTreeName=fstn;
+	}
+	
+	public static void setPassword(char[] pass){
+		password=pass;
 	}
 }

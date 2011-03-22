@@ -45,6 +45,8 @@ import fuse.scorpiofs.util.DataCache;
 import fuse.scorpiofs.util.DataObject;
 import fuse.scorpiofs.util.FileCrypto;
 import fuse.scorpiofs.util.Initialize;
+import fuse.scorpiofs.util.Finalize;
+import fuse.scorpiofs.util.ZipCompress;
 import fuse.scorpiofs.util.FsNode;
 import fuse.scorpiofs.util.FsTree;
 import fuse.scorpiofs.util.FsTreeChunks;
@@ -577,13 +579,36 @@ public class ScorpioFS implements Filesystem3{
 		Constants.setInterFileName(cp.getInterFilename());
 		Constants.setFsTreeName(cp.getfsTreeName());
 		
-		if(init)
+		if(init){
 			new Initialize();
+		}else{
+			String zipFileName=Constants.personalDir.concat("/secretDir.zip");
+			FileCrypto fc=new FileCrypto();
+			try{
+				FileInputStream fis=new FileInputStream(zipFileName.concat(".enc"));
+				FileOutputStream fos=new FileOutputStream(zipFileName);
+				fc.decrypt(fis, fos);
+				try{
+					fos.flush();
+					fos.close();
+					fis.close();
+				}catch(IOException e){
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}catch(FileNotFoundException e){
+				e.printStackTrace();
+				System.exit(1);
+			}
+			ZipCompress zc=new ZipCompress();
+			zc.unZip(zipFileName);
+		}
 		
 		ScorpioFS fs = new ScorpioFS(mountpoint);
 		
 		//TO BE FIXED
 		fstree=Constants.fsTreeName;
+		
 		
 		//new method
 		File ifn=new File(Constants.interFileName);
@@ -643,9 +668,9 @@ public class ScorpioFS implements Filesystem3{
 		}catch(InterruptedException e){
 			e.printStackTrace();
 		}
-		new File(Constants.fsTreeName).delete();
-		String tmpEncFsTree=Constants.fsTreeName.concat(".enc");
-		new File(tmpEncFsTree).delete();
+		
+		new Finalize();
+		
 		//Tree tmptree = new Tree();
 		//tmptree.root = fuse.scorpiofs.util.test.utils.CopyNode(fs.my_tree.rootNode, null);
 		//fuse.scorpiofs.util.test.utils.printTree(tmptree.root);
