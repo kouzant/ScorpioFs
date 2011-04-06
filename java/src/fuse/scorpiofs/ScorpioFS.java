@@ -411,13 +411,15 @@ public class ScorpioFS implements Filesystem3{
 				//Remove existing dataID
 				fsc.delIDs();
 				if(fis.available()>1048576){
-					int counter=0;
 					while(fis.available()>0){
 						fis.read(buffer);
 						String hash=Util.shaHex(buffer);
 						log.info("Primary Chunk ID: "+hash);
 						fsc.setID(hash);
 						String tmpStore="/tmp/"+hash;
+						//Send chunks to network
+						//Make use of localChordNode
+						//The try block is temporary. Here will send packets to the network
 						try{
 							FileOutputStream fos=new FileOutputStream(tmpStore);
 							try{
@@ -432,7 +434,6 @@ public class ScorpioFS implements Filesystem3{
 						}catch(SecurityException e1){
 							e1.printStackTrace();
 						}
-						counter++;
 					}
 				}else{
 					//fstree less than 1MB
