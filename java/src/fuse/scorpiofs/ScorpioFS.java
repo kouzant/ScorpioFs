@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -26,6 +27,7 @@ import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.ObjectDiskIO;
 import unipi.p2p.chord.RemoteChordNode;
 import unipi.p2p.chord.util.Util;
+import unipi.p2p.chord.Storage;
 
 import com.sun.corba.se.impl.orbutil.closure.Constant;
 import com.sun.security.auth.module.UnixSystem;
@@ -39,6 +41,7 @@ import fuse.FuseGetattrSetter;
 import fuse.FuseMount;
 import fuse.FuseOpenSetter;
 import fuse.FuseStatfsSetter;
+import fuse.scorpiofs.util.ChunkNetwork;
 import fuse.scorpiofs.util.ConfigurationParser;
 import fuse.scorpiofs.util.Constants;
 import fuse.scorpiofs.util.DataCache;
@@ -413,14 +416,10 @@ public class ScorpioFS implements Filesystem3{
 				if(fis.available()>1048576){
 					while(fis.available()>0){
 						fis.read(buffer);
-						String hash=Util.shaHex(buffer);
-						log.info("Primary Chunk ID: "+hash);
-						fsc.setID(hash);
-						String tmpStore="/tmp/"+hash;
 						//Send chunks to network
 						//Make use of localChordNode
 						//The try block is temporary. Here will send packets to the network
-						try{
+						/*try{
 							FileOutputStream fos=new FileOutputStream(tmpStore);
 							try{
 								fos.write(buffer);
@@ -433,35 +432,21 @@ public class ScorpioFS implements Filesystem3{
 							e0.printStackTrace();
 						}catch(SecurityException e1){
 							e1.printStackTrace();
-						}
+						}*/
+						
+						BigInteger dataID=ChunkNetwork.toNetwork(buffer, localChordNode);
+						fsc.setID(dataID);
 					}
 				}else{
 					//fstree less than 1MB
 					fis.read(buffer);
-					String hash=Util.shaHex(buffer);
-					log.info("Only one chunk: "+hash);
-					fsc.setID(hash);
-					String tmpStore="/tmp/"+hash;
-					try{
-						FileOutputStream fos=new FileOutputStream(tmpStore);
-						try{
-							fos.write(buffer);
-							fos.flush();
-							fos.close();
-						}catch(IOException e0){
-							e0.printStackTrace();
-						}
-					}catch(FileNotFoundException e0){
-						e0.printStackTrace();
-					}catch(SecurityException e1){
-						e1.printStackTrace();
-					}
+					BigInteger dataID=ChunkNetwork.toNetwork(buffer, localChordNode);
+					fsc.setID(dataID);
 				}
-				fis.close();
-				Iterator<String> it=fsc.getIDs();
+				/*Iterator<BigInteger> it=fsc.getIDs();
 				while(it.hasNext()){
 					log.info("Chunk ID: "+it.next());
-				}
+				}*/
 			}catch(IOException e0){
 				e0.printStackTrace();
 			}
@@ -469,11 +454,15 @@ public class ScorpioFS implements Filesystem3{
 			ObjectDiskIO objectWriter = new ObjectDiskIO();
 			try {
 				objectWriter.saveObject(fsc, new File("/home/antonis/.scorpiofs/interFs"));
-			} catch (IOException e) {
+				FsTreeChunks c = (FsTreeChunks)objectWriter.loadObject(new File("/home/antonis/.scorpiofs/interFs"));
+				log.info("Succesfully saved interFs " + c.getIDs().next().toString());
+			} catch (Exception e) {
+				log.error("error creating interFs");
+				e.printStackTrace();
 				// TODO Auto-generated catch block
 				System.err.println("ERROR:\tCannot write interFs");
 			}
-			
+			objectWriter=null;
 		}catch(FileNotFoundException e0){
 			e0.printStackTrace();
 		}
@@ -574,7 +563,8 @@ public class ScorpioFS implements Filesystem3{
 			System.err.println("ERROR:\tCan't connect to local chord node");
 			System.exit(-1);
 		}
-
+		
+		ScorpioFS fs = new ScorpioFS(mountpoint);
 		ConfigurationParser cp=new ConfigurationParser(configFile);
 		Constants.setPersonalDir(cp.getPersonalDir());
 		Constants.setInterFileName(cp.getInterFilename());
@@ -605,18 +595,29 @@ public class ScorpioFS implements Filesystem3{
 			zc.unZip(zipFileName);
 		}
 		
-		ScorpioFS fs = new ScorpioFS(mountpoint);
+		
 		
 		//TO BE FIXED
 		fstree=Constants.fsTreeName;
 		
-		
 		//new method
 		File ifn=new File(Constants.interFileName);
 		if(ifn.exists()){
-			RevokeChunks lala=new RevokeChunks(fs);
+			log.info("Just before revoking fstree chunks");
+			RevokeChunks lala=new RevokeChunks();
+			File newFsTree=lala.koko(localChordNode,ifn);
+			ObjectDiskIO objectReader=new ObjectDiskIO();
+			if(newFsTree==null){
+				log.info("NEWFSTREE IS NULL!");
+			}
+			try{
+				fs.my_tree=(FsTree)objectReader.loadObject(newFsTree);
+			}catch(Exception e){
+				log.info("Error in deserialization of newFsTree");
+				e.printStackTrace();
+			}
 		}
-
+		
 		/*File fsTree=new File(fstree);
 		if(fsTree.exists()){
 			ObjectDiskIO objectReader = new ObjectDiskIO();

@@ -9,17 +9,17 @@ import java.io.Serializable;
 import java.io.File;
 
 public class ObjectDiskIO {
-	 public void saveObject(Serializable object, File filename) throws IOException {
-	       ObjectOutputStream objstream = new ObjectOutputStream(new FileOutputStream(filename));
-	       objstream.writeObject(object);
-	       objstream.close();
+	 public void saveObject(Serializable inObject, File filename) throws IOException {
+	       ObjectOutputStream objOutStream = new ObjectOutputStream(new FileOutputStream(filename));
+	       objOutStream.writeObject(inObject);
+	       objOutStream.close();
 	    }
 	 
 	    public Object loadObject(File filename) throws Exception {
-	       ObjectInputStream objstream = new ObjectInputStream(new FileInputStream(filename));
-	       Object object = objstream.readObject();
-	       objstream.close();
-	       return object;
+	       ObjectInputStream objInStream = new ObjectInputStream(new FileInputStream(filename));
+	       Object outObject = objInStream.readObject();
+	       objInStream.close();
+	       return outObject;
 	    }
 
 

@@ -15,6 +15,7 @@ public class Finalize {
 		zipArgs.add(Constants.personalDir.concat("/secretDir.zip"));
 		//Next all the files we want to be included in the zip file
 		zipArgs.add(Constants.interFileName);
+		System.out.println("Adding "+Constants.interFileName);
 		zipArgs.add(Constants.personalDir.concat("/.iv"));
 		zipArgs.add(Constants.personalDir.concat("/.salt"));
 		System.out.println("Archiving...");

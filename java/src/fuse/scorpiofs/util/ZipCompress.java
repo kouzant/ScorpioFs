@@ -22,8 +22,11 @@ public class ZipCompress {
 				try{
 					zos.putNextEntry(new ZipEntry(fileName));
 					int c;
+					
+					buffer = new byte[256];
+					
 					while((c=in.read(buffer))!=-1)
-						bos.write(buffer);
+						bos.write(buffer,0, c);
 					in.close();
 					bos.flush();
 				}catch(IOException e0){
@@ -50,16 +53,20 @@ public class ZipCompress {
 			ZipInputStream zis=new ZipInputStream(csumi);
 			BufferedInputStream bis=new BufferedInputStream(zis);
 			ZipEntry ze;
+			
 			try{
 				while((ze=zis.getNextEntry())!=null){
 					System.out.println("Extracting file: "+ze);
 					int c;
+					BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(ze.getName()));
+
+					buffer=new byte[256];
+					
 					while((c=bis.read(buffer))!=-1){
-						BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(ze.getName()));
-						bos.write(buffer);
+						bos.write(buffer,0,c);
 						bos.flush();
-						bos.close();
 					}
+					bos.close();
 				}
 				bis.close();
 			}catch(IOException e){

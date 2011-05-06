@@ -4,65 +4,68 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Iterator;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import fuse.scorpiofs.ScorpioFS;
 
 import unipi.p2p.chord.ObjectDiskIO;
+import unipi.p2p.chord.RemoteChordNode;
 import fuse.scorpiofs.util.Constants;
 
-public class RevokeChunks {
-	public RevokeChunks(ScorpioFS fs){
-		String interFileLoc=Constants.interFileName;
-		System.out.println("interFs: "+interFileLoc);
-		File interFile=new File(interFileLoc);
-		if(interFile.exists()){
-			ObjectDiskIO objectReader=new ObjectDiskIO();
-			byte[] buffer=new byte[1048576];
-			try{
-				FsTreeChunks ftc=(FsTreeChunks)objectReader.loadObject(interFile);
-				Iterator<String> it1=ftc.getIDs();
-				Iterator<String> it=ftc.getIDs();
-				if(it1.hasNext()){
-					System.out.println("ID: "+it1.next());
-				}else{
-					System.out.println("interFile Error!!!");
-				}
-				FileInputStream fis;
-				FileOutputStream fos=new FileOutputStream(Constants.fsTreeName+".enc");
-				//write chunks to one file
-				while(it.hasNext()){
-					fis=new FileInputStream("/tmp/"+it.next());
-					System.out.println("RevokeChunks.chunks: "+fis);
-					try{
-						fis.read(buffer);
-						fos.write(buffer);
-						fos.flush();
-					}catch(IOException e0){
-						e0.printStackTrace();
-					}
-					fis.close();
-				}
-				fos.close();
+public class RevokeChunks{
+	private static final Log log = LogFactory.getLog(RevokeChunks.class);
 
-				fis=new FileInputStream(Constants.fsTreeName+".enc");
-				fos=new FileOutputStream(Constants.fsTreeName);
-				FileCrypto fc=new FileCrypto();
-				fc.decrypt(fis, fos);
-				fis.close();
-				fos.close();
-				//finally deserialize fstree
-				try{
-					File newFsTree=new File(Constants.fsTreeName);
-					fs.my_tree=(FsTree)objectReader.loadObject(newFsTree);
-				}catch(Exception e){
-					System.out.println("Could NOT read new fstree");
-				}
-			}catch(Exception e1){
-				e1.printStackTrace();
+	public File koko(RemoteChordNode localChordNode,File interFileName){
+		log.info("koko");
+		ObjectDiskIO objectReader=new ObjectDiskIO();
+		byte[] buffer=new byte[1048576];
+		File newFsTree=null;
+		
+		try{
+			
+			log.info("interFile exists: "+interFileName.exists() + interFileName.length());
+			Object x = objectReader.loadObject(interFileName);
+			
+			FsTreeChunks ftc=(FsTreeChunks)objectReader.loadObject(interFileName);
+			log.info("KATARARARARARARA");
+			Iterator<BigInteger> it=ftc.getIDs();
+			Iterator<BigInteger> it2=ftc.getIDs();
+			while(it2.hasNext()){
+				System.out.println("Data ID: "+it.next());
 			}
-		}else{
-			System.out.println("Could NOT find interFs");
+			FileOutputStream fos=new FileOutputStream(Constants.fsTreeName+".enc");
+			while(it.hasNext()){
+				//Here revoke chunks from network
+				buffer=ChunkNetwork.getChunks(it.next(), localChordNode);
+				try{
+					fos.write(buffer);
+					fos.flush();
+				}catch(IOException e0){
+					e0.printStackTrace();
+				}
+			}
+			fos.close();
+
+			FileInputStream fis=new FileInputStream(Constants.fsTreeName+".enc");
+			fos=new FileOutputStream(Constants.fsTreeName);
+			FileCrypto fc=new FileCrypto();
+			fc.decrypt(fis, fos);
+			fis.close();
+			fos.close();
+			//finally deserialize fstree
+			newFsTree=new File(Constants.fsTreeName);
+		}catch(Exception e1){
+			e1.printStackTrace();
 		}
+		
+		return newFsTree;
+	}
+	public void dummy(){
+		System.out.println("Just been called");
 	}
 }

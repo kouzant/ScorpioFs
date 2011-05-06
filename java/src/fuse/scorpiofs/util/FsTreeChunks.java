@@ -1,12 +1,14 @@
 package fuse.scorpiofs.util;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.*;
 
 public class FsTreeChunks implements Serializable{
-	List<String> chunkIDList=new ArrayList<String>();
+	private static final long serialVersionUID = 1L;
+	List<BigInteger> chunkIDList=new ArrayList<BigInteger>();
 	
-	public void setID(String chunkID){
+	public void setID(BigInteger chunkID){
 		try{
 			chunkIDList.add(chunkID);
 		}catch(UnsupportedOperationException e0){
@@ -20,8 +22,8 @@ public class FsTreeChunks implements Serializable{
 		}
 	}
 	
-	public Iterator<String> getIDs(){
-		Iterator<String> it=chunkIDList.iterator();
+	public Iterator<BigInteger> getIDs(){
+		Iterator<BigInteger> it=chunkIDList.iterator();
 		return it;
 	}
 	
