@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.RemoteChordNode;
 import unipi.p2p.chord.Storage;
+import unipi.p2p.chord.util.Util;
 
 public class ChunkNetwork {
 	private static final Log log = LogFactory.getLog(ChunkNetwork.class);
@@ -21,6 +22,7 @@ public class ChunkNetwork {
 		storageObj.setReplicationFactor(unipi.p2p.chord.Constants.REPLICATION_FACTOR);
 		BigInteger dataID=storageObj.getID();
 		log.info("Chunk id: "+dataID);
+		log.info("Chunk id hash: "+Util.shaHex(buffer));
 		
 		Finger targetFinger;
 		try{
@@ -60,7 +62,7 @@ public class ChunkNetwork {
 			log.info("Chunk id: "+dataID);
 			targetFinger=localChordNode.findSuccessor(dataID);
 			RemoteChordNode targetNode=(RemoteChordNode) Naming.lookup("rmi://"+targetFinger.toString()+
-					"unipi.p2p.chord.ChordNode");
+					"/unipi.p2p.chord.ChordNode");
 			if(targetNode.hasKey(dataID)){
 				storageObj=targetNode.get(dataID);
 				log.info("fstree chunk found first on: "+targetNode.getIPAddress());
@@ -71,8 +73,13 @@ public class ChunkNetwork {
 				for(int i=0;i<replication;i++){
 					targetID=unipi.p2p.chord.util.Util.integerValue(targetID.toString());
 					targetFinger=localChordNode.findSuccessor(targetID);
-					targetNode=(RemoteChordNode) Naming.lookup("rmi://"+targetFinger.toString()+
-							"/unipi.p2p.chord.ChordNode");
+					StringBuilder sb=new StringBuilder();
+					sb.append("rmi://");
+					sb.append(targetFinger.toString());
+					sb.append("/");
+					sb.append("unipi.p2p.chord.ChordNode");
+					log.info("rmiNodeUri: "+sb.toString());
+					targetNode=(RemoteChordNode) Naming.lookup(sb.toString());
 					if(targetNode.hasKey(dataID)){
 						storageObj=targetNode.get(dataID);
 						log.info("fstree chunk found on: "+targetNode.getIPAddress());

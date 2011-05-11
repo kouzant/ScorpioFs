@@ -598,6 +598,7 @@ public class ScorpioFS implements Filesystem3{
 			if(ifn.exists()){
 				log.info("Just before revoking fstree chunks");
 				RetrieveChunks lala=new RetrieveChunks();
+				log.info("After retrieving fstree chunks");
 				File newFsTree=lala.koko(localChordNode,ifn);
 				ObjectDiskIO objectReader=new ObjectDiskIO();
 				if(newFsTree==null){

@@ -21,27 +21,21 @@ public class RetrieveChunks{
 	private static final Log log = LogFactory.getLog(RetrieveChunks.class);
 
 	public File koko(RemoteChordNode localChordNode,File interFileName){
-		log.info("koko");
 		ObjectDiskIO objectReader=new ObjectDiskIO();
 		byte[] buffer=new byte[1048576];
 		File newFsTree=null;
 		
 		try{
 			
-			log.info("interFile exists: "+interFileName.exists() + interFileName.length());
-			Object x = objectReader.loadObject(interFileName);
-			
+			log.info("interFile exists: "+interFileName.exists() + interFileName.length());			
 			FsTreeChunks ftc=(FsTreeChunks)objectReader.loadObject(interFileName);
-			log.info("KATARARARARARARA");
 			Iterator<BigInteger> it=ftc.getIDs();
-			Iterator<BigInteger> it2=ftc.getIDs();
-			while(it2.hasNext()){
-				System.out.println("Data ID: "+it.next());
-			}
 			FileOutputStream fos=new FileOutputStream(Constants.fsTreeName+".enc");
 			while(it.hasNext()){
+				BigInteger idTemp=it.next();
+				log.info("Chunk id: "+idTemp);
 				//Here revoke chunks from network
-				buffer=ChunkNetwork.getChunks(it.next(), localChordNode);
+				buffer=ChunkNetwork.getChunks(idTemp, localChordNode);
 				try{
 					fos.write(buffer);
 					fos.flush();
