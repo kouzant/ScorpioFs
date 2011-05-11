@@ -17,8 +17,8 @@ import unipi.p2p.chord.ObjectDiskIO;
 import unipi.p2p.chord.RemoteChordNode;
 import fuse.scorpiofs.util.Constants;
 
-public class RevokeChunks{
-	private static final Log log = LogFactory.getLog(RevokeChunks.class);
+public class RetrieveChunks{
+	private static final Log log = LogFactory.getLog(RetrieveChunks.class);
 
 	public File koko(RemoteChordNode localChordNode,File interFileName){
 		log.info("koko");

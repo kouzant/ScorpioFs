@@ -29,7 +29,6 @@ import unipi.p2p.chord.RemoteChordNode;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.Storage;
 
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import com.sun.security.auth.module.UnixSystem;
 
 import fuse.Errno;
@@ -53,7 +52,7 @@ import fuse.scorpiofs.util.ZipCompress;
 import fuse.scorpiofs.util.FsNode;
 import fuse.scorpiofs.util.FsTree;
 import fuse.scorpiofs.util.FsTreeChunks;
-import fuse.scorpiofs.util.RevokeChunks;
+import fuse.scorpiofs.util.RetrieveChunks;
 import fuse.scorpiofs.util.test.Tree;
 
 public class ScorpioFS implements Filesystem3{
@@ -593,6 +592,24 @@ public class ScorpioFS implements Filesystem3{
 			}
 			ZipCompress zc=new ZipCompress();
 			zc.unZip(zipFileName);
+			
+			//new method
+			File ifn=new File(Constants.interFileName);
+			if(ifn.exists()){
+				log.info("Just before revoking fstree chunks");
+				RetrieveChunks lala=new RetrieveChunks();
+				File newFsTree=lala.koko(localChordNode,ifn);
+				ObjectDiskIO objectReader=new ObjectDiskIO();
+				if(newFsTree==null){
+					log.info("NEWFSTREE IS NULL!");
+				}
+				try{
+					fs.my_tree=(FsTree)objectReader.loadObject(newFsTree);
+				}catch(Exception e){
+					log.info("Error in deserialization of newFsTree");
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		
@@ -600,23 +617,7 @@ public class ScorpioFS implements Filesystem3{
 		//TO BE FIXED
 		fstree=Constants.fsTreeName;
 		
-		//new method
-		File ifn=new File(Constants.interFileName);
-		if(ifn.exists()){
-			log.info("Just before revoking fstree chunks");
-			RevokeChunks lala=new RevokeChunks();
-			File newFsTree=lala.koko(localChordNode,ifn);
-			ObjectDiskIO objectReader=new ObjectDiskIO();
-			if(newFsTree==null){
-				log.info("NEWFSTREE IS NULL!");
-			}
-			try{
-				fs.my_tree=(FsTree)objectReader.loadObject(newFsTree);
-			}catch(Exception e){
-				log.info("Error in deserialization of newFsTree");
-				e.printStackTrace();
-			}
-		}
+		
 		
 		/*File fsTree=new File(fstree);
 		if(fsTree.exists()){
