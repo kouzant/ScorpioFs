@@ -73,13 +73,8 @@ public class ChunkNetwork {
 				for(int i=0;i<replication;i++){
 					targetID=unipi.p2p.chord.util.Util.integerValue(targetID.toString());
 					targetFinger=localChordNode.findSuccessor(targetID);
-					StringBuilder sb=new StringBuilder();
-					sb.append("rmi://");
-					sb.append(targetFinger.toString());
-					sb.append("/");
-					sb.append("unipi.p2p.chord.ChordNode");
-					log.info("rmiNodeUri: "+sb.toString());
-					targetNode=(RemoteChordNode) Naming.lookup(sb.toString());
+					targetNode=(RemoteChordNode) Naming.lookup("rmi://"+targetFinger.toString()+
+							"/unipi.p2p.chord.ChordNode");
 					if(targetNode.hasKey(dataID)){
 						storageObj=targetNode.get(dataID);
 						log.info("fstree chunk found on: "+targetNode.getIPAddress());
