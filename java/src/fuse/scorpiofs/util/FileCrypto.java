@@ -163,7 +163,10 @@ public class FileCrypto {
 		}catch(IllegalBlockSizeException e9){
 			e9.printStackTrace();
 		}catch(BadPaddingException e10){
-			e10.printStackTrace();
+			//e10.printStackTrace();
+			System.err.println("Wrong password");
+			new File(Constants.personalDir.concat("/secretDir.zip")).delete();
+			System.exit(0);
 		}catch(InvalidAlgorithmParameterException e11){
 			e11.printStackTrace();
 		}catch(IOException e12){

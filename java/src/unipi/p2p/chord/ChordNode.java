@@ -523,28 +523,29 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	}
 	public void loadHashtableFromFile(){
 		//if file exists, load it
-		ObjectDiskIO objectReader = new ObjectDiskIO();
-		try {
-			this.data_hash = (Hashtable<BigInteger, String>) objectReader.loadObject(new File(this.metadataFile));
-			
-			
-
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-		//check if files exist
-		File f;
-		for (Enumeration e = data_hash.keys(); e.hasMoreElements();){
-			Object currentElement = e.nextElement();
-			f = new File(data_hash.get(currentElement));
-			if (!f.exists()){
-				//System.out.println("Removing " + data_hash.get(currentElement));
-				data_hash.remove(currentElement);
+		File metaDataFile=new File(this.metadataFile);
+		if(metaDataFile.exists()){
+			ObjectDiskIO objectReader = new ObjectDiskIO();
+			try {
+				this.data_hash = (Hashtable<BigInteger, String>) objectReader.loadObject(metaDataFile);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
 			}
-	    }
+			//check if files exist
+			File f;
+			for (Enumeration e = data_hash.keys(); e.hasMoreElements();){
+				Object currentElement = e.nextElement();
+				f = new File(data_hash.get(currentElement));
+				if (!f.exists()){
+					//System.out.println("Removing " + data_hash.get(currentElement));
+					data_hash.remove(currentElement);
+				}
+			}
+		}else{
+			System.out.println("Could not find metadata file. Creating a new one.");
+		}
 	}
 	public void saveRoutingState() {
 		try {
