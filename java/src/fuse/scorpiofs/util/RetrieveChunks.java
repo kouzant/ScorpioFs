@@ -4,14 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import fuse.scorpiofs.ScorpioFS;
 
 import unipi.p2p.chord.ObjectDiskIO;
 import unipi.p2p.chord.RemoteChordNode;
@@ -20,7 +17,7 @@ import fuse.scorpiofs.util.Constants;
 public class RetrieveChunks{
 	private static final Log log = LogFactory.getLog(RetrieveChunks.class);
 
-	public File koko(RemoteChordNode localChordNode,File interFileName){
+	public File retrieve(RemoteChordNode localChordNode,File interFileName){
 		ObjectDiskIO objectReader=new ObjectDiskIO();
 		File newFsTree=null;
 		

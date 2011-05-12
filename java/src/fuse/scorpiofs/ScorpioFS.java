@@ -580,10 +580,10 @@ public class ScorpioFS implements Filesystem3{
 			new Initialize();
 		}else{
 			String zipFileName=Constants.personalDir.concat("/secretDir.zip");
-			FileCrypto fc=new FileCrypto();
 			try{
 				FileInputStream fis=new FileInputStream(zipFileName.concat(".enc"));
 				FileOutputStream fos=new FileOutputStream(zipFileName);
+				FileCrypto fc=new FileCrypto();
 				fc.decrypt(fis, fos);
 				try{
 					fos.flush();
@@ -594,18 +594,19 @@ public class ScorpioFS implements Filesystem3{
 					System.exit(1);
 				}
 			}catch(FileNotFoundException e){
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.err.println("Probably you've forgotten the -init switch");
 				System.exit(1);
 			}
 			ZipCompress zc=new ZipCompress();
 			zc.unZip(zipFileName);
-			
-			//new method
+
+			//Retrieve fstree chunks from the network
 			File ifn=new File(Constants.interFileName);
 			if(ifn.exists()){
 				log.info("Just before revoking fstree chunks");
-				RetrieveChunks lala=new RetrieveChunks();
-				File newFsTree=lala.koko(localChordNode,ifn);
+				RetrieveChunks retrieveChunks=new RetrieveChunks();
+				File newFsTree=retrieveChunks.retrieve(localChordNode,ifn);
 				log.info("After retrieving fstree chunks");
 				ObjectDiskIO objectReader=new ObjectDiskIO();
 				if(newFsTree==null){
