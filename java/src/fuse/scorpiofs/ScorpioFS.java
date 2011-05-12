@@ -396,6 +396,7 @@ public class ScorpioFS implements Filesystem3{
 	void tokenize(String fsTreeName){
 		File fsTree=new File(fsTreeName);
 		System.out.println("fsTree size: "+fsTree.length());
+		//byte[] buffer=new byte[1048576];
 		byte[] buffer=new byte[1048576];
 		FsTreeChunks fsc=new FsTreeChunks();
 		try{
@@ -414,7 +415,7 @@ public class ScorpioFS implements Filesystem3{
 				fsc.delIDs();
 				if(fis.available()>1048576){
 					while(fis.available()>0){
-						fis.read(buffer);
+						int c=fis.read(buffer);
 						//Send chunks to network
 						//Make use of localChordNode
 						//The try block is temporary. Here will send packets to the network
@@ -432,14 +433,20 @@ public class ScorpioFS implements Filesystem3{
 						}catch(SecurityException e1){
 							e1.printStackTrace();
 						}*/
-						
-						BigInteger dataID=ChunkNetwork.toNetwork(buffer, localChordNode);
+						byte[] tmpBuffer=new byte[c];
+						for(int i=0;i<c;i++)
+							tmpBuffer[i]=buffer[i];
+						BigInteger dataID=ChunkNetwork.toNetwork(tmpBuffer, localChordNode);
 						fsc.setID(dataID);
 					}
 				}else{
 					//fstree less than 1MB
-					fis.read(buffer);
-					BigInteger dataID=ChunkNetwork.toNetwork(buffer, localChordNode);
+					int c=fis.read(buffer);
+					byte[] tmpBuffer=new byte[c];
+					for(int i=0;i<c;i++)
+						tmpBuffer[i]=buffer[i];
+					log.info("tmpBuffer size: "+tmpBuffer.length);
+					BigInteger dataID=ChunkNetwork.toNetwork(tmpBuffer, localChordNode);
 					fsc.setID(dataID);
 				}
 				/*Iterator<BigInteger> it=fsc.getIDs();
@@ -598,8 +605,8 @@ public class ScorpioFS implements Filesystem3{
 			if(ifn.exists()){
 				log.info("Just before revoking fstree chunks");
 				RetrieveChunks lala=new RetrieveChunks();
-				log.info("After retrieving fstree chunks");
 				File newFsTree=lala.koko(localChordNode,ifn);
+				log.info("After retrieving fstree chunks");
 				ObjectDiskIO objectReader=new ObjectDiskIO();
 				if(newFsTree==null){
 					log.info("NEWFSTREE IS NULL!");

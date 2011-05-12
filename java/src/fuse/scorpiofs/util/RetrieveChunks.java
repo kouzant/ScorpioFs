@@ -22,7 +22,6 @@ public class RetrieveChunks{
 
 	public File koko(RemoteChordNode localChordNode,File interFileName){
 		ObjectDiskIO objectReader=new ObjectDiskIO();
-		byte[] buffer=new byte[1048576];
 		File newFsTree=null;
 		
 		try{
@@ -34,10 +33,14 @@ public class RetrieveChunks{
 			while(it.hasNext()){
 				BigInteger idTemp=it.next();
 				log.info("Chunk id: "+idTemp);
-				//Here revoke chunks from network
+				//Here retrieve chunks from network
+				byte[] buffer=null;
 				buffer=ChunkNetwork.getChunks(idTemp, localChordNode);
+
+				int bufferSize=buffer.length;
+				log.info("size of buffer: "+bufferSize);
 				try{
-					fos.write(buffer);
+					fos.write(buffer,0,bufferSize);
 					fos.flush();
 				}catch(IOException e0){
 					e0.printStackTrace();
@@ -58,8 +61,5 @@ public class RetrieveChunks{
 		}
 		
 		return newFsTree;
-	}
-	public void dummy(){
-		System.out.println("Just been called");
 	}
 }

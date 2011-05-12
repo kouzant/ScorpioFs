@@ -123,9 +123,6 @@ public class FileCrypto {
 			ivFis.read(iv);
 			ivFis.close();
 
-			System.out.println("Initialization Vector: "+new String(iv)+"size: "+iv.length);
-			System.out.println("Salt: "+new String(salt));
-
 			SecretKeyFactory factory=SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			KeySpec spec=new PBEKeySpec(Constants.password,salt,1024,128);
 			SecretKey tmp=factory.generateSecret(spec);

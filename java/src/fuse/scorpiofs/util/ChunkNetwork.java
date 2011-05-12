@@ -66,6 +66,7 @@ public class ChunkNetwork {
 			if(targetNode.hasKey(dataID)){
 				storageObj=targetNode.get(dataID);
 				log.info("fstree chunk found first on: "+targetNode.getIPAddress());
+				buffer=null;
 				buffer=storageObj.getData();
 			}else{
 				BigInteger targetID=dataID;
@@ -78,6 +79,7 @@ public class ChunkNetwork {
 					if(targetNode.hasKey(dataID)){
 						storageObj=targetNode.get(dataID);
 						log.info("fstree chunk found on: "+targetNode.getIPAddress());
+						buffer=null;
 						buffer=storageObj.getData();
 						break;
 					}

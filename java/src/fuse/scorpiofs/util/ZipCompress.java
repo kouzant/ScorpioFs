@@ -5,7 +5,7 @@ import java.util.zip.*;
 import java.io.*;
 
 public class ZipCompress {
-	private static byte[] buffer=new byte[256];
+	private static byte[] buffer;
 	public void zip(List<String> args){
 		Iterator<String> it=args.iterator();
 		String zipFileName=it.next();
