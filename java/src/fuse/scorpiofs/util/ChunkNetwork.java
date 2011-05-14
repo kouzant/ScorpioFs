@@ -1,7 +1,9 @@
 package fuse.scorpiofs.util;
 
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -33,6 +35,10 @@ public class ChunkNetwork {
 			if(!targetNode.hasKey(dataID)){
 				log.info("Storing fstree chunk");
 				targetNode.put(storageObj);
+				InetAddress addr=InetAddress.getLocalHost();
+				String ipAddress=new String(addr.getHostAddress());
+				targetNode.getStoringList().add(ipAddress);
+				log.info("Local ip address: "+ipAddress);
 				log.info("Storing on node: "+targetNode.getIPAddress());
 			}
 			//Give a hint to garbage collector
@@ -44,6 +50,8 @@ public class ChunkNetwork {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch(UnknownHostException e){
 			e.printStackTrace();
 		}finally{
 			System.gc();

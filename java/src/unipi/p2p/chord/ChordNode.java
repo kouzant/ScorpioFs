@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -33,6 +34,8 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private static Statistics stats = new Statistics();
 	private static String outputFolder;
 	private String metadataFile;
+	private HashSet<String> storingList=new HashSet<String>();
+	private HashSet<String> retrievingList=new HashSet<String>();
 	LinkedList successorList = new LinkedList();
 	Finger[] fingerTable = new Finger[Constants.IDENTIFIER_LENGTH];
 	
@@ -45,6 +48,12 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public Hashtable<BigInteger, String> data_hash = new Hashtable();
 	public HashMap<BigInteger, Integer> dataPopularity;
 	
+	public HashSet<String> getStoringList(){
+		return storingList;
+	}
+	public HashSet<String> getRetrievingList(){
+		return retrievingList;
+	}
 	public String getIPAddress() throws RemoteException{
 		return (String) this.localNode.getIPAddress();
 	}
