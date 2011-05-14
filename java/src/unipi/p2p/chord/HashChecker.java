@@ -19,6 +19,7 @@ public class HashChecker implements Runnable {
 		this.chordobj = chordObject;
 		Thread hashCheckerThread = new Thread(this, "hashCheckerThread");
 		hashCheckerThread.setPriority(1);
+		System.out.println("New HashChecker Thread: "+hashCheckerThread.getId());
 		hashCheckerThread.start();
 		
 	}

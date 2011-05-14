@@ -102,6 +102,7 @@ public class StartChordService {
         	Thread.currentThread();
         	Thread.sleep(2000);
         	Thread updateThread = new Thread(chordobj, "updateThread");
+        	System.out.println("New ChordNode Thread: "+updateThread.getId());
         	updateThread.start();
         	
         

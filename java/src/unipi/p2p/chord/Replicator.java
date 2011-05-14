@@ -15,6 +15,7 @@ public class Replicator implements Runnable {
 		chordObj = localChord;
 		currentObj = 0;
 		Thread replicationThread = new Thread(this, "replicationThread");
+		System.out.println("New Replicator Thread: "+replicationThread.getId());
 		replicationThread.start();
 	}
 	public void run(){
