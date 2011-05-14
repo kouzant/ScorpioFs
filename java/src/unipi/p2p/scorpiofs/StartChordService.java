@@ -12,6 +12,7 @@ import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
 import unipi.p2p.chord.Replicator;
+import unipi.p2p.chord.Statistics;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.visualization.ChordViewer;
 import unipi.p2p.scorpiofs.util.ConfigParser;
@@ -104,13 +105,14 @@ public class StartChordService {
         	Thread updateThread = new Thread(chordobj, "updateThread");
         	updateThread.start();
         	
-        
-        	
-        	
         	Replicator chordReplicator = new Replicator(chordobj); //attach Replicator
         	HashChecker hashCheck = new HashChecker(chordobj); //attach HashChecker
        
         	System.out.println("Service running at "+localIP+":"+servicePort);
+        	//Print statistics thread.
+        	Thread statThread=new Thread(new Statistics(chordobj),"statThread");
+        	statThread.setPriority(Thread.MIN_PRIORITY);
+        	statThread.start();
         	//System.out.println(Util.getMac());
         	Finger la;
 

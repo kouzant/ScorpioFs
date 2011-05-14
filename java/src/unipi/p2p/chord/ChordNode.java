@@ -12,9 +12,11 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -45,6 +47,9 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	
 	public String getIPAddress() throws RemoteException{
 		return (String) this.localNode.getIPAddress();
+	}
+	public ChordNode() throws RemoteException{
+		super();
 	}
 	public ChordNode(Finger localNode, boolean startupNew, Finger workingChordNode) throws RemoteException{
 		super();
@@ -350,6 +355,12 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		return stats;
 	}
 	
+	public Iterator<String> getHashChunks(){
+		Collection<String> chunkHash=data_hash.values();
+		Iterator<String> itChunkHash=chunkHash.iterator();
+		
+		return itChunkHash;
+	}
 	/**
 	 * Called periodically to check whether predecessor has failed
 	 * 
