@@ -34,9 +34,11 @@ public class Statistics implements Runnable {
 				System.out.println("Total disk usage: "+totalSize+"MB");
 				totalSize=0;
 				chunkCounter=0;
-				System.out.println("Clients who have stored data:");
+				System.out.println("Clients who have stored data: "+chordNode
+						.getStoringList().size());
 				System.out.println(chordNode.getStoringList());
-				System.out.println("Clients who have retrieved data:");
+				System.out.println("Clients who have retrieved data: "+chordNode
+						.getRetrievingList().size());
 				System.out.println(chordNode.getRetrievingList());
 				Thread.yield();
 				//Every ten minutes display the statistics
