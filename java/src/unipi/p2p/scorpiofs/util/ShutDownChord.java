@@ -21,6 +21,7 @@ public class ShutDownChord extends Thread{
 				e1.printStackTrace();
 			}
 			this.chordobj.writeMetadataFileToDisk();
+			chordobj.writeClientsList();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

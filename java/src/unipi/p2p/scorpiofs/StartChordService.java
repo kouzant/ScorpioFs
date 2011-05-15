@@ -28,6 +28,8 @@ public class StartChordService {
         String outputFolder = "/tmp/";
         String realIP=null;
         String hashFile = "/tmp/chord.hashtable";
+        String storingListFilename="/tmp/chord.storing";
+        String retrievingListFilename="/tmp/chord.retrieving";
         boolean startNewChord = false;
         Finger bootstrapFinger = null;
 
@@ -65,7 +67,8 @@ public class StartChordService {
         	else{
         		System.out.println("Starting new chord ring...");
         	}
-        	
+        	storingListFilename=conf.getStoringList();
+        	retrievingListFilename=conf.getRetrievingList();
         } catch (IOException e) {
         	System.err.println("Cannot read from configuration file");
         	System.exit(-1);
@@ -96,7 +99,10 @@ public class StartChordService {
         	Registry registry = LocateRegistry.createRegistry(servicePort);
         	chordobj.setOutputDirectory(outputFolder);
         	chordobj.setMetadataFile(hashFile);
+        	chordobj.setStoringListFilename(storingListFilename);
+        	chordobj.setRetrievingListFilename(retrievingListFilename);
         	chordobj.loadHashtableFromFile();
+        	chordobj.loadClientsList();
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
         	Naming.rebind("rmi://" + "localhost" + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);

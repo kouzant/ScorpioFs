@@ -34,6 +34,8 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private static Statistics stats = new Statistics();
 	private static String outputFolder;
 	private String metadataFile;
+	private String storingListFilename;
+	private String retrievingListFilename;
 	HashSet<String> storingList=new HashSet<String>();
 	HashSet<String> retrievingList=new HashSet<String>();
 	LinkedList successorList = new LinkedList();
@@ -62,6 +64,12 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	}
 	public String getIPAddress() throws RemoteException{
 		return (String) this.localNode.getIPAddress();
+	}
+	public void setStoringListFilename(String storingListFilename){
+		this.storingListFilename=storingListFilename;
+	}
+	public void setRetrievingListFilename(String retrievingListFilename){
+		this.retrievingListFilename=retrievingListFilename;
 	}
 	public ChordNode() throws RemoteException{
 		super();
@@ -311,6 +319,15 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		try {
 			objectWriter.saveObject(this.data_hash, new File(this.metadataFile));
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void writeClientsList(){
+		ObjectDiskIO objectWriter=new ObjectDiskIO();
+		try{
+			objectWriter.saveObject(storingList, new File(storingListFilename));
+			objectWriter.saveObject(retrievingList, new File(retrievingListFilename));
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -571,6 +588,23 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			}
 		}else{
 			System.out.println("Could not find metadata file. Creating a new one.");
+		}
+	}
+	
+	public void loadClientsList(){
+		File storingListFile=new File(storingListFilename);
+		File retrievingListFile=new File(retrievingListFilename);
+		if(storingListFile.exists() && retrievingListFile.exists()){
+			ObjectDiskIO objectReader=new ObjectDiskIO();
+			try{
+				storingList=(HashSet<String>) objectReader.loadObject(storingListFile);
+				retrievingList=(HashSet<String>) objectReader.loadObject(retrievingListFile);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}else{
+			System.err.println("Could not find storingList file or retrievingList" +
+					"file. Creating new ones.");
 		}
 	}
 	public void saveRoutingState() {
