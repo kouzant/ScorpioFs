@@ -1,6 +1,7 @@
 package unipi.p2p.chord;
 
 import java.io.File;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
@@ -33,12 +34,18 @@ public class Statistics implements Runnable {
 				System.out.println("Total disk usage: "+totalSize+"MB");
 				totalSize=0;
 				chunkCounter=0;
-				System.out.println("Storing List: "+chordNode.getStoringList().isEmpty());
+				System.out.println("Clients who have stored data:");
+				System.out.println(chordNode.getStoringList());
+				System.out.println("Clients who have retrieved data:");
+				System.out.println(chordNode.getRetrievingList());
 				Thread.yield();
 				//Every ten minutes display the statistics
-				TimeUnit.MINUTES.sleep(10);
+				//TimeUnit.MINUTES.sleep(10);
+				TimeUnit.SECONDS.sleep(10);
 			}
 		} catch(InterruptedException e){
+			e.printStackTrace();
+		} catch(RemoteException e){
 			e.printStackTrace();
 		}
 	}

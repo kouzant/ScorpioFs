@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.rmi.Naming;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -220,8 +221,11 @@ public class DataObject implements Serializable {
 			log.info("Just before finding a successor");
 			target_finger = localChordObj.findSuccessor(dataID);
 			RemoteChordNode target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
+			InetAddress addr=InetAddress.getLocalHost();
+			String ipAddress=new String(addr.getHostAddress());
 			if (!target_node.hasKey(dataID)){
-				log.info("Storing chunk at target node");
+				log.info("Storing chunk at target node: "+target_node.getIPAddress());
+				target_node.setStoringList(ipAddress);
 				target_node.put(stor_obj);
 			}
 			onNetwork = true;
@@ -255,9 +259,12 @@ public class DataObject implements Serializable {
 			//if (this.theData == null) throw new Exception("data = null!!!");
 			
 			//loop Constants.REPLICATION_FACTOR
+			InetAddress addr=InetAddress.getLocalHost();
+			String ipAddress=new String(addr.getHostAddress());
 			target_finger = localChordObj.findSuccessor(dataID);
 			RemoteChordNode target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
 			if (target_node.hasKey(dataID)) {
+				target_node.setRetrievingList(ipAddress);
 				stor_obj = target_node.get(dataID);
 				log.info("Found first on: "+target_node.getIPAddress());
 				theData = stor_obj.getData();
@@ -270,6 +277,7 @@ public class DataObject implements Serializable {
 					target_finger = localChordObj.findSuccessor(target_id);
 					target_node = (RemoteChordNode) Naming.lookup("rmi://" + target_finger.toString() + "/unipi.p2p.chord.ChordNode");
 					if (target_node.hasKey(dataID)) {
+						target_node.setRetrievingList(ipAddress);
 						stor_obj = target_node.get(dataID);
 						log.info("Found on: "+target_node.getIPAddress());
 						theData = stor_obj.getData();

@@ -20,6 +20,8 @@ public interface RemoteChordNode extends Remote {
 	
 	public HashSet<String> getStoringList() throws RemoteException;
 	public HashSet<String> getRetrievingList() throws RemoteException;
+	public void setStoringList(String ipAddress) throws RemoteException;
+	public void setRetrievingList(String ipAddress) throws RemoteException;
 	
 	/**
 	 * 

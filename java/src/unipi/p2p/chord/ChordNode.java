@@ -34,8 +34,8 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private static Statistics stats = new Statistics();
 	private static String outputFolder;
 	private String metadataFile;
-	private HashSet<String> storingList=new HashSet<String>();
-	private HashSet<String> retrievingList=new HashSet<String>();
+	HashSet<String> storingList=new HashSet<String>();
+	HashSet<String> retrievingList=new HashSet<String>();
 	LinkedList successorList = new LinkedList();
 	Finger[] fingerTable = new Finger[Constants.IDENTIFIER_LENGTH];
 	
@@ -48,11 +48,17 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public Hashtable<BigInteger, String> data_hash = new Hashtable();
 	public HashMap<BigInteger, Integer> dataPopularity;
 	
-	public HashSet<String> getStoringList(){
+	public HashSet<String> getStoringList() throws RemoteException{
 		return storingList;
 	}
-	public HashSet<String> getRetrievingList(){
+	public HashSet<String> getRetrievingList() throws RemoteException{
 		return retrievingList;
+	}
+	public void setStoringList(String ipAddress) throws RemoteException{
+		storingList.add(ipAddress);
+	}
+	public void setRetrievingList(String ipAddress) throws RemoteException{
+		retrievingList.add(ipAddress);
 	}
 	public String getIPAddress() throws RemoteException{
 		return (String) this.localNode.getIPAddress();

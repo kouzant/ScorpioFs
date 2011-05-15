@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.omg.CORBA.portable.UnknownException;
 
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.RemoteChordNode;
@@ -34,10 +35,11 @@ public class ChunkNetwork {
 					"/unipi.p2p.chord.ChordNode");
 			if(!targetNode.hasKey(dataID)){
 				log.info("Storing fstree chunk");
-				targetNode.put(storageObj);
 				InetAddress addr=InetAddress.getLocalHost();
 				String ipAddress=new String(addr.getHostAddress());
-				targetNode.getStoringList().add(ipAddress);
+				targetNode.setStoringList(ipAddress);
+				log.info("Is storing list empty? "+targetNode.getStoringList().isEmpty());
+				targetNode.put(storageObj);
 				log.info("Local ip address: "+ipAddress);
 				log.info("Storing on node: "+targetNode.getIPAddress());
 			}
@@ -71,7 +73,10 @@ public class ChunkNetwork {
 			targetFinger=localChordNode.findSuccessor(dataID);
 			RemoteChordNode targetNode=(RemoteChordNode) Naming.lookup("rmi://"+targetFinger.toString()+
 					"/unipi.p2p.chord.ChordNode");
+			InetAddress addr=InetAddress.getLocalHost();
+			String ipAddress=new String(addr.getHostAddress());
 			if(targetNode.hasKey(dataID)){
+				targetNode.setRetrievingList(ipAddress);
 				storageObj=targetNode.get(dataID);
 				log.info("fstree chunk found first on: "+targetNode.getIPAddress());
 				buffer=null;
@@ -85,6 +90,7 @@ public class ChunkNetwork {
 					targetNode=(RemoteChordNode) Naming.lookup("rmi://"+targetFinger.toString()+
 							"/unipi.p2p.chord.ChordNode");
 					if(targetNode.hasKey(dataID)){
+						targetNode.setRetrievingList(ipAddress);
 						storageObj=targetNode.get(dataID);
 						log.info("fstree chunk found on: "+targetNode.getIPAddress());
 						buffer=null;
@@ -97,6 +103,8 @@ public class ChunkNetwork {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch(UnknownHostException e){
 			e.printStackTrace();
 		} catch (NotBoundException e) {
 			// TODO Auto-generated catch block
