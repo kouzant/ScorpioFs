@@ -1,7 +1,7 @@
-bootstrap=localhost:6789
-external_ip=localhost
+bootstrap=192.168.1.2:6789
+external_ip=192.168.1.4
 port=6788
-outputdir=/home/antonis/localhost:6788/
-hashtable=/home/antonis/localhost:6788/chord.hashtable
-storing_list=/home/antonis/localhost:6788/chord.storing
-retrieving_list=/home/antonis/localhost:6788/chord.retrieving
+outputdir=/home/antonis/192.168.1.4:6788/
+hashtable=/home/antonis/192.168.1.4:6788/chord.hashtable
+storing_list=/home/antonis/192.168.1.4:6788/chord.storing
+retrieving_list=/home/antonis/192.168.1.4:6788/chord.retrieving
