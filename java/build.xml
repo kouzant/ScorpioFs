@@ -16,6 +16,10 @@
     <!-- Create the libjavafs.so -->
     <ant antfile="${src}/jni/build.xml" target="all" output="${build}"/>
      <move file="libjavafs.so" todir="${build}"/>
+    <!-- Change architecture paths -->
+    <exec executable="/bin/bash">
+        <arg value="arch.sh"/>
+    </exec>
   </target>
 
   <target name="compile" depends="init"

@@ -6,3 +6,6 @@ java/my_5mb_file
 java/log
 *.log
 *.aux
+java/config/jvm_ldpath.def
+java/src/jvm_ldpath.def
+
