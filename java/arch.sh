@@ -9,7 +9,6 @@ function baha {
     COUNTER=0
     while [ $COUNTER -lt 2 ];
     do
-        echo ${files[$COUNTER]}
         if [ "$1" == "i386" ]; then
             diff0=`grep i386 ${files[$COUNTER]}`
             if [ "$diff0" == "" ]; then
