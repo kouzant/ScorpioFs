@@ -11,7 +11,7 @@
    <target name="init">
 
       <!-- if not inherited from parent build.xml -->
-      <property name="fuse.home" value="/usr/local"/>
+      <property name="fuse.home" value="/lib/"/>
       <property name="jdk.home" value="${java.home}/.."/>
       <property name="lib.so" value="libjavafs.so"/>
 
@@ -30,7 +30,7 @@
 
       <property
          name="includes"
-         value="-I${fuse.home}/include -I${jdk.home}/include -I${jdk.home}/include/linux"/>
+         value="-I/usr/include -I${jdk.home}/include -I${jdk.home}/include/linux"/>
 
       <pathconvert pathsep=" -L" property="_ldpath">
          <path path="${java.library.path}"/>

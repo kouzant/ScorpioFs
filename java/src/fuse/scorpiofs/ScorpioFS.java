@@ -658,11 +658,11 @@ public class ScorpioFS implements Filesystem3{
 		
 		try {
 			FuseMount.mount(fuseArgs,fs, null);
+			log.info("After mounting");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR:\tmounting scorpiofs failed");
 		}
-		
 		
 		System.gc();
 		fs.my_tree.calcTotalBlocksAndInodes();

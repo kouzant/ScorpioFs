@@ -1,1 +1,1 @@
-LDPATH := -L/usr/lib/jvm/default-java/jre/lib/amd64/server -L/usr/lib/jvm/default-java/jre/lib/amd64/server -L/usr/lib/jvm/default-java/jre/../lib/amd64 -L/usr/java/packages/lib/amd64 -L/lib -L/usr/lib
+LDPATH := -L/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server -L/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server  -L/usr/java/packages/lib/amd64 -L/lib -L/usr/
