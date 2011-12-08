@@ -536,12 +536,12 @@ public class ScorpioFS implements Filesystem3{
 				if (i == (args.length - 1)) {
 					argCount++;
 					mountpoint = args[i];
-
 				}
 			}
 		}
 		if ((i != argCount) || (i < 5)) {
 			System.out.println("Invalid number of arguments");
+			System.out.println("usage: scorpiofs.sh [-init] -port PORT -config CONFIG MOUNT_POINT");
 			System.exit(-1);
 		}
 

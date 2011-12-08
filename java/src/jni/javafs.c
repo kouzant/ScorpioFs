@@ -1298,12 +1298,9 @@ JNIEXPORT void JNICALL Java_fuse_FuseMount_mount(JNIEnv *env, jclass class, jobj
       for (i = 0; i < n; i++)
       {
          jstring jArg = (*env)->GetObjectArrayElement(env, jArgs, i);
-            printf("Before GetStringUTFChars\n");
          const char *arg = (*env)->GetStringUTFChars(env, jArg, NULL);
-            printf("arg pointer is: %c\n", arg);
-            if(arg == NULL)
-                printf("I failed to convert the string: %s\n", arg);
-            printf("After GetStringUTFChars\n");
+         if(arg == NULL)
+            printf("I failed to convert the string: %s\n", arg);
          char *fuseArg = (char *)malloc(strlen(arg) + 1);
          strcpy(fuseArg, arg);
          (*env)->ReleaseStringUTFChars(env, jArg, arg);
