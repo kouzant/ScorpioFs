@@ -20,6 +20,7 @@ conf_files[1]="config/scorpiofs.properties"
 conf_files[2]="config/chord.propertiesClient1"
 conf_files[3]="config/chord.propertiesClient2"
 
+# Change between i386 and amd64 architecture
 function sed_arch {
     COUNTER=0
     while [ $COUNTER -lt 2 ];
@@ -42,6 +43,7 @@ function sed_arch {
     exit 0
 }
 
+# Change home directories
 function sed_conf {
     COUNTER=0
     while [ $COUNTER -lt 4 ];
