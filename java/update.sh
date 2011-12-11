@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+## Script that changes the paths from i386 to amd64 and vice versa and updates 
+## absolute paths to new ones.
 
 GREP=/bin/grep
 SED=/bin/sed
@@ -12,8 +14,8 @@ machine_arch=`$UNAME -m`
 file_home=`$CAT config/chord.properties | $GREP -m 1 home | $AWK -F/ '{print $3}'`
 user_home=`$ECHO $HOME | $AWK -F/ '{print $3}'`
 
-jvmld_files[0]="/home/antonis/ScorpioFs/java/config/jvm_ldpath.def"
-jvmld_files[1]="/home/antonis/ScorpioFs/java/src/jvm_ldpath.def"
+jvmld_files[0]="config/jvm_ldpath.def"
+jvmld_files[1]="src/jvm_ldpath.def"
 
 conf_files[0]="config/chord.properties"
 conf_files[1]="config/scorpiofs.properties"
@@ -55,7 +57,11 @@ function sed_conf {
     exit 0
 }
 
-sed_conf
+echo "Updating files..."
+
+if [ "$file_home" != "" ]; then
+    sed_conf
+fi
 
 if [ "$machine_arch" == "i686" ]; then
     sed_arch i386
