@@ -536,12 +536,12 @@ public class ScorpioFS implements Filesystem3{
 				if (i == (args.length - 1)) {
 					argCount++;
 					mountpoint = args[i];
-
 				}
 			}
 		}
 		if ((i != argCount) || (i < 5)) {
 			System.out.println("Invalid number of arguments");
+			System.out.println("usage: scorpiofs.sh [-init] -port PORT -config CONFIG MOUNT_POINT");
 			System.exit(-1);
 		}
 
@@ -658,11 +658,11 @@ public class ScorpioFS implements Filesystem3{
 		
 		try {
 			FuseMount.mount(fuseArgs,fs, null);
+			log.info("After mounting");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR:\tmounting scorpiofs failed");
 		}
-		
 		
 		System.gc();
 		fs.my_tree.calcTotalBlocksAndInodes();

@@ -2,6 +2,7 @@ package unipi.p2p.chord;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.math.BigInteger;
 
@@ -16,6 +17,11 @@ import java.math.BigInteger;
  *
  */
 public interface RemoteChordNode extends Remote {
+	
+	public HashSet<String> getStoringList() throws RemoteException;
+	public HashSet<String> getRetrievingList() throws RemoteException;
+	public void setStoringList(String ipAddress) throws RemoteException;
+	public void setRetrievingList(String ipAddress) throws RemoteException;
 	
 	/**
 	 * 

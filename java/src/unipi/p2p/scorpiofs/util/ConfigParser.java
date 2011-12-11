@@ -66,4 +66,12 @@ public class ConfigParser {
 			return realIP;
 		}
 	}
+	
+	public String getStoringList(){
+		return props.getProperty("storing_list");
+	}
+	
+	public String getRetrievingList(){
+		return props.getProperty("retrieving_list");
+	}
 }

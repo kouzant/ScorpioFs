@@ -12,9 +12,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -31,6 +34,10 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private static Statistics stats = new Statistics();
 	private static String outputFolder;
 	private String metadataFile;
+	private String storingListFilename;
+	private String retrievingListFilename;
+	HashSet<String> storingList=new HashSet<String>();
+	HashSet<String> retrievingList=new HashSet<String>();
 	LinkedList successorList = new LinkedList();
 	Finger[] fingerTable = new Finger[Constants.IDENTIFIER_LENGTH];
 	
@@ -43,8 +50,29 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public Hashtable<BigInteger, String> data_hash = new Hashtable();
 	public HashMap<BigInteger, Integer> dataPopularity;
 	
+	public HashSet<String> getStoringList() throws RemoteException{
+		return storingList;
+	}
+	public HashSet<String> getRetrievingList() throws RemoteException{
+		return retrievingList;
+	}
+	public void setStoringList(String ipAddress) throws RemoteException{
+		storingList.add(ipAddress);
+	}
+	public void setRetrievingList(String ipAddress) throws RemoteException{
+		retrievingList.add(ipAddress);
+	}
 	public String getIPAddress() throws RemoteException{
 		return (String) this.localNode.getIPAddress();
+	}
+	public void setStoringListFilename(String storingListFilename){
+		this.storingListFilename=storingListFilename;
+	}
+	public void setRetrievingListFilename(String retrievingListFilename){
+		this.retrievingListFilename=retrievingListFilename;
+	}
+	public ChordNode() throws RemoteException{
+		super();
 	}
 	public ChordNode(Finger localNode, boolean startupNew, Finger workingChordNode) throws RemoteException{
 		super();
@@ -294,6 +322,15 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			e.printStackTrace();
 		}
 	}
+	public void writeClientsList(){
+		ObjectDiskIO objectWriter=new ObjectDiskIO();
+		try{
+			objectWriter.saveObject(storingList, new File(storingListFilename));
+			objectWriter.saveObject(retrievingList, new File(retrievingListFilename));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	public boolean alive() throws RemoteException {
 		return true;
 	}
@@ -350,6 +387,12 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		return stats;
 	}
 	
+	public Iterator<String> getHashChunks(){
+		Collection<String> chunkHash=data_hash.values();
+		Iterator<String> itChunkHash=chunkHash.iterator();
+		
+		return itChunkHash;
+	}
 	/**
 	 * Called periodically to check whether predecessor has failed
 	 * 
@@ -545,6 +588,23 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			}
 		}else{
 			System.out.println("Could not find metadata file. Creating a new one.");
+		}
+	}
+	
+	public void loadClientsList(){
+		File storingListFile=new File(storingListFilename);
+		File retrievingListFile=new File(retrievingListFilename);
+		if(storingListFile.exists() && retrievingListFile.exists()){
+			ObjectDiskIO objectReader=new ObjectDiskIO();
+			try{
+				storingList=(HashSet<String>) objectReader.loadObject(storingListFile);
+				retrievingList=(HashSet<String>) objectReader.loadObject(retrievingListFile);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}else{
+			System.err.println("Could not find storingList file or retrievingList" +
+					"file. Creating new ones.");
 		}
 	}
 	public void saveRoutingState() {

@@ -13,9 +13,13 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
-    <!-- Create the libjavafs.so -->
+    <!-- Create the libjavafs.so --> 
     <ant antfile="${src}/jni/build.xml" target="all" output="${build}"/>
-     <move file="libjavafs.so" todir="${build}"/>
+     <move file="libjavafs.so" todir="${build}"/> 
+    <!-- Change architecture and home paths -->
+    <exec executable="/bin/bash">
+        <arg value="update.sh"/>
+    </exec>
   </target>
 
   <target name="compile" depends="init"

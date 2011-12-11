@@ -12,6 +12,7 @@ import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
 import unipi.p2p.chord.Replicator;
+import unipi.p2p.chord.Statistics;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.visualization.ChordViewer;
 import unipi.p2p.scorpiofs.util.ConfigParser;
@@ -27,6 +28,8 @@ public class StartChordService {
         String outputFolder = "/tmp/";
         String realIP=null;
         String hashFile = "/tmp/chord.hashtable";
+        String storingListFilename="/tmp/chord.storing";
+        String retrievingListFilename="/tmp/chord.retrieving";
         boolean startNewChord = false;
         Finger bootstrapFinger = null;
 
@@ -64,7 +67,8 @@ public class StartChordService {
         	else{
         		System.out.println("Starting new chord ring...");
         	}
-        	
+        	storingListFilename=conf.getStoringList();
+        	retrievingListFilename=conf.getRetrievingList();
         } catch (IOException e) {
         	System.err.println("Cannot read from configuration file");
         	System.exit(-1);
@@ -95,7 +99,10 @@ public class StartChordService {
         	Registry registry = LocateRegistry.createRegistry(servicePort);
         	chordobj.setOutputDirectory(outputFolder);
         	chordobj.setMetadataFile(hashFile);
+        	chordobj.setStoringListFilename(storingListFilename);
+        	chordobj.setRetrievingListFilename(retrievingListFilename);
         	chordobj.loadHashtableFromFile();
+        	chordobj.loadClientsList();
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
         	Naming.rebind("rmi://" + "localhost" + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
@@ -104,13 +111,14 @@ public class StartChordService {
         	Thread updateThread = new Thread(chordobj, "updateThread");
         	updateThread.start();
         	
-        
-        	
-        	
         	Replicator chordReplicator = new Replicator(chordobj); //attach Replicator
         	HashChecker hashCheck = new HashChecker(chordobj); //attach HashChecker
        
         	System.out.println("Service running at "+localIP+":"+servicePort);
+        	//Print statistics thread.
+        	Thread statThread=new Thread(new Statistics(chordobj),"statThread");
+        	statThread.setPriority(Thread.MIN_PRIORITY);
+        	statThread.start();
         	//System.out.println(Util.getMac());
         	Finger la;
 
