@@ -20,22 +20,41 @@ public class ConsoleServer {
 		}
 		Socket cSocket = null;
 		boolean proxyUp = true;
+		
 		try{
 			cSocket = sSocket.accept();
 			BufferedReader bin = new BufferedReader(new InputStreamReader 
 					(cSocket.getInputStream()));
 			while(proxyUp){
 				int request = Integer.parseInt(bin.readLine());
-				//Just playing here
 				log.info("The request is: "+request);
-				if(request == ConsoleProtocol.NODE_STOP){
-					log.info("Choice 1");
-				}else if(request == ConsoleProtocol.NODE_STAT){
-					log.info("Choice 2");
-				}else {
+				
+				//Available operations
+				switch(request){
+				case ConsoleProtocol.NODE_CREATE:
+					log.info("node create IP_ADDR");
+					break;
+				case ConsoleProtocol.NODE_STOP:
+					log.info("node stop IP_ADDR");
+					break;
+				case ConsoleProtocol.NODE_STAT:
+					log.info("node stat IP_ADDR");
+					break;
+				case ConsoleProtocol.NODE_ALIVE:
+					log.info("node alive IP_ADDR");
+					break;
+				case ConsoleProtocol.NODE_LIST:
+					log.info("node list");
+					break;
+				case ConsoleProtocol.TERMINATE:
+					log.info("Terminate");
 					bin.close();
 					cSocket.close();
 					proxyUp = false;
+					break;
+				default:
+					log.info("Operation not found!");
+					break;
 				}
 			}
 			System.out.println("Ciao amore!");
