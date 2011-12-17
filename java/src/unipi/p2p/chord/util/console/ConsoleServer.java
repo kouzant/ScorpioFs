@@ -6,9 +6,11 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.sun.imageio.plugins.common.InputStreamAdapter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class ConsoleServer {
+	private static final Log log = LogFactory.getLog(ConsoleServer.class);
 	public static void main(String[] args) {
 		ServerSocket sSocket = null;
 		try{
@@ -18,25 +20,29 @@ public class ConsoleServer {
 		}
 		Socket cSocket = null;
 		boolean proxyUp = true;
-		while(proxyUp){
-			try{
-				cSocket = sSocket.accept();
-				BufferedReader bin = new BufferedReader(new InputStreamReader (cSocket.getInputStream()));
+		try{
+			cSocket = sSocket.accept();
+			BufferedReader bin = new BufferedReader(new InputStreamReader 
+					(cSocket.getInputStream()));
+			while(proxyUp){
 				int request = Integer.parseInt(bin.readLine());
 				//Just playing here
-				if(request == 1){
-					System.out.println("1");
-				}else if(request == 2){
-					System.out.println("2");
+				log.info("The request is: "+request);
+				if(request == ConsoleProtocol.NODE_STOP){
+					log.info("Choice 1");
+				}else if(request == ConsoleProtocol.NODE_STAT){
+					log.info("Choice 2");
 				}else {
-					System.out.println("Ciao amore!");
 					bin.close();
 					cSocket.close();
+					proxyUp = false;
 				}
-			}catch (IOException e1){
-				e1.printStackTrace();
 			}
-			
+			System.out.println("Ciao amore!");
+			System.exit(1);
+		}catch (IOException e1){
+			e1.printStackTrace();
 		}
+		
 	}
 }

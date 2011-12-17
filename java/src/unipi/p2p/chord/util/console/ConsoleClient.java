@@ -5,22 +5,36 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ConsoleClient {
 	public static void main(String[] args) {
 		InetAddress iAddr = null;
+		boolean consoleUp = true;
+		
 		try{
 			iAddr = InetAddress.getByName(args[0]);
 			Socket socket = new Socket(iAddr, ConsoleProtocol.PROXY_PORT);
 			PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
-			pw.print("1");
-			System.out.println("Just sent 1");
-			pw.print("2");
-			System.out.println("Just sent 2");
-			pw.print("3");
-			System.out.println("Just sent something");
-			pw.close();
-			socket.close();
+			System.out.println("Welcome to ScorpioFS administration console");
+			Scanner in = new Scanner(System.in);
+			while(consoleUp){
+				String command = in.nextLine();
+				
+				if(command.equals("lala")){
+					pw.println(ConsoleProtocol.NODE_STOP);
+				}else if(command.equals("koko")){
+					pw.println(ConsoleProtocol.NODE_STAT);
+				}else if(command.equals("exit")){
+					pw.println(ConsoleProtocol.NODE_ALIVE);
+					pw.flush();
+					pw.close();
+					socket.close();
+					consoleUp = false;
+				}
+			}
+			System.out.println("GoodBye!");
+			System.exit(1);
 		}catch (UnknownHostException e0){
 			e0.printStackTrace();
 		}catch (IOException e1){
