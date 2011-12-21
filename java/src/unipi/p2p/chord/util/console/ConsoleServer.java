@@ -5,14 +5,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import unipi.p2p.scorpiofs.StartChordService;
 
 public class ConsoleServer {
 	private static final Log log = LogFactory.getLog(ConsoleServer.class);
 	public static void main(String[] args) {
 		ServerSocket sSocket = null;
+		ThreadFactory daemonFactory = new DaemonFactory();
+		ExecutorService exec = Executors.newCachedThreadPool(daemonFactory);
+
 		try{
 			if(args.length == 2){
 				sSocket = new ServerSocket(Integer.parseInt(args[1]));
@@ -43,6 +51,8 @@ public class ConsoleServer {
 				switch(code){
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
+					StartChordService chorSrv = new StartChordService(chPort);
+					exec.execute(chorSrv);
 					bin.close();
 					cSocket.close();
 					break;

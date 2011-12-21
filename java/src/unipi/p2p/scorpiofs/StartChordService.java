@@ -18,13 +18,19 @@ import unipi.p2p.chord.visualization.ChordViewer;
 import unipi.p2p.scorpiofs.util.ConfigParser;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
 
-public class StartChordService {
-	public static void main (String [] args){
+public class StartChordService implements Runnable{
+	private static int port = 0;
+	
+	public StartChordService(int port){
+		this.port = port;
+	}
+	public void run (){
 		int i = 0, j;
         String arg;
         int servicePort=0;
         String bootstrapURL = null;
-        String configFile = null;
+        //String configFile = null;
+        String configFile = "config/chord.properties";
         String outputFolder = "/tmp/";
         String realIP=null;
         String hashFile = "/tmp/chord.hashtable";
@@ -33,7 +39,7 @@ public class StartChordService {
         boolean startNewChord = false;
         Finger bootstrapFinger = null;
 
-        while (i < args.length && args[i].startsWith("-")) {
+        /*while (i < args.length && args[i].startsWith("-")) {
             arg = args[i++];
             
             if (arg.equals("-config")) {
@@ -51,11 +57,12 @@ public class StartChordService {
         	System.err.println("Usage: StartChordService [-config configFile]");
         
         	System.exit(-1);
-        }
+        }*/
         
         try {
         	ConfigParser conf = new ConfigParser(configFile);
-        	servicePort=conf.getPort();
+        	//servicePort=conf.getPort();
+        	servicePort = port;
             System.out.println("Property Port: "+servicePort);
         	realIP=conf.getRealIP();
         	bootstrapURL = conf.getBootstrap();
