@@ -20,19 +20,24 @@ public class ConsoleServer {
 		}
 		Socket cSocket = null;
 		boolean proxyUp = true;
-		
+		int request = -1;
+		BufferedReader bin = null;
 		try{
-			cSocket = sSocket.accept();
-			BufferedReader bin = new BufferedReader(new InputStreamReader 
-					(cSocket.getInputStream()));
+			
 			while(proxyUp){
-				int request = Integer.parseInt(bin.readLine());
+				cSocket = sSocket.accept();
+				bin = new BufferedReader(new InputStreamReader 
+						(cSocket.getInputStream()));
+				
+				request = Integer.parseInt(bin.readLine());
 				log.info("The request is: "+request);
 				
 				//Available operations
 				switch(request){
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
+					bin.close();
+					cSocket.close();
 					break;
 				case ConsoleProtocol.NODE_STOP:
 					log.info("node stop IP_ADDR");
