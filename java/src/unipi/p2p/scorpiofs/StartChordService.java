@@ -19,18 +19,20 @@ import unipi.p2p.scorpiofs.util.ConfigParser;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
 
 public class StartChordService implements Runnable{
-	private static int port = 0;
+	private static int srvPort = 0;
+	private static String config = null;
 	
-	public StartChordService(int port){
-		this.port = port;
+	public StartChordService(int port, String config){
+		this.srvPort = port;
+		this.config = config;
 	}
 	public void run (){
 		int i = 0, j;
         String arg;
         int servicePort=0;
         String bootstrapURL = null;
-        //String configFile = null;
-        String configFile = "config/chord.properties";
+        String configFile = config;
+        //String configFile = "config/chord.properties";
         String outputFolder = "/tmp/";
         String realIP=null;
         String hashFile = "/tmp/chord.hashtable";
@@ -62,7 +64,7 @@ public class StartChordService implements Runnable{
         try {
         	ConfigParser conf = new ConfigParser(configFile);
         	//servicePort=conf.getPort();
-        	servicePort = port;
+        	servicePort = srvPort;
             System.out.println("Property Port: "+servicePort);
         	realIP=conf.getRealIP();
         	bootstrapURL = conf.getBootstrap();
@@ -123,9 +125,9 @@ public class StartChordService implements Runnable{
        
         	System.out.println("Service running at "+localIP+":"+servicePort);
         	//Print statistics thread.
-        	Thread statThread=new Thread(new Statistics(chordobj),"statThread");
-        	statThread.setPriority(Thread.MIN_PRIORITY);
-        	statThread.start();
+        	//Thread statThread=new Thread(new Statistics(chordobj),"statThread");
+        	//statThread.setPriority(Thread.MIN_PRIORITY);
+        	//statThread.start();
         	//System.out.println(Util.getMac());
         	Finger la;
 

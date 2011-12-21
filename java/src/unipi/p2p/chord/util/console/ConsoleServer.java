@@ -34,6 +34,7 @@ public class ConsoleServer {
 		boolean proxyUp = true;
 		int code = -1;
 		int chPort = -1;
+		String chordConfig = null;
 		BufferedReader bin = null;
 		try{
 			
@@ -44,14 +45,17 @@ public class ConsoleServer {
 				
 				code = Integer.parseInt(bin.readLine());
 				chPort = Integer.parseInt(bin.readLine());
+				chordConfig = bin.readLine();
 				log.info("Code is: "+code);
 				log.info("Chord Port is: "+chPort);
+				log.info("Chord config: " + chordConfig);
 				
 				//Available operations
 				switch(code){
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
-					StartChordService chorSrv = new StartChordService(chPort);
+					StartChordService chorSrv = new StartChordService(chPort, 
+							chordConfig);
 					exec.execute(chorSrv);
 					bin.close();
 					cSocket.close();

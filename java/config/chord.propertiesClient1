@@ -1,0 +1,5 @@
+bootstrap=localhost:6788
+external_ip=localhost
+port=6784
+outputdir=/home/antonis/localhost:6784/
+hashtable=/home/antonis/localhost:6784/chord.hashtable

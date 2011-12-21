@@ -47,14 +47,37 @@ public class ConsoleClient {
 				if(tokens[1].equals("create")){
 					if(tokens.length < 3){
 						System.err.println("Usage: node start IP_ADDR[:port]" +
-								" -chordport PORT");
+								" -chordport PORT -config CONFIG");
 					}else{
 						int chordPort = -1;
+						String chordConfig = null;
+						int i;
+						int chPortIndex = -1;
+						int configIndex = -1;
+						for(i = 0; i < tokens.length; i++){
+							if(tokens[i].equals("-chordport"))
+								chPortIndex = i;
+							if(tokens[i].equals("-config"))
+								configIndex = i;
+						}
+						
+						/*System.err.println("Index of chord port is: "+chPortIndex+
+								" and chord port is: "+tokens[chPortIndex + 1]);
+						System.err.println("Index of chord config is: "+configIndex+
+								" and config is: "+tokens[configIndex + 1]);*/
+						
 						//Create chord node on a non default port
-						if(tokens.length == 5){
-							chordPort = Integer.parseInt(tokens[4]);
+						if(chPortIndex != -1){
+							chordPort = Integer.parseInt(tokens[chPortIndex + 1]);
 						}else{
 							chordPort = ConsoleProtocol.CHORD_PORT;
+						}
+						
+						//Explicit define chord properties file
+						if(configIndex != -1){
+							chordConfig = tokens[configIndex + 1];
+						}else{
+							chordConfig = "config/chord.properties";
 						}
 						
 						//Proxy running on a non default port
@@ -63,11 +86,14 @@ public class ConsoleClient {
 							connect(ipPort[0], Integer.parseInt(ipPort[1]));
 							pw.println(ConsoleProtocol.NODE_CREATE);
 							pw.println(chordPort);
+							pw.println(chordConfig);
 						}else{
 							//Proxy running on default port
 							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
 							pw.println(ConsoleProtocol.NODE_CREATE);
+							System.err.println("config: "+chordConfig);
 							pw.println(chordPort);
+							pw.println(chordConfig);
 						}
 						disconnect();
 					}
