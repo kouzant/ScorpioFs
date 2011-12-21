@@ -14,13 +14,18 @@ public class ConsoleServer {
 	public static void main(String[] args) {
 		ServerSocket sSocket = null;
 		try{
-			sSocket = new ServerSocket(ConsoleProtocol.PROXY_PORT);
+			if(args.length == 2){
+				sSocket = new ServerSocket(Integer.parseInt(args[1]));
+			}else{
+				sSocket = new ServerSocket(ConsoleProtocol.PROXY_PORT);
+			}
 		}catch (IOException e0){
 			e0.printStackTrace();
 		}
 		Socket cSocket = null;
 		boolean proxyUp = true;
-		int request = -1;
+		int code = -1;
+		int chPort = -1;
 		BufferedReader bin = null;
 		try{
 			
@@ -29,11 +34,13 @@ public class ConsoleServer {
 				bin = new BufferedReader(new InputStreamReader 
 						(cSocket.getInputStream()));
 				
-				request = Integer.parseInt(bin.readLine());
-				log.info("The request is: "+request);
+				code = Integer.parseInt(bin.readLine());
+				chPort = Integer.parseInt(bin.readLine());
+				log.info("Code is: "+code);
+				log.info("Chord Port is: "+chPort);
 				
 				//Available operations
-				switch(request){
+				switch(code){
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
 					bin.close();

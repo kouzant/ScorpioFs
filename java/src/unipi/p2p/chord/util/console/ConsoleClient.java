@@ -49,18 +49,28 @@ public class ConsoleClient {
 						System.err.println("Usage: node start IP_ADDR[:port]" +
 								" -chordport PORT");
 					}else{
+						int chordPort = -1;
+						//Create chord node on a non default port
+						if(tokens.length == 5){
+							chordPort = Integer.parseInt(tokens[4]);
+						}else{
+							chordPort = ConsoleProtocol.CHORD_PORT;
+						}
+						
+						//Proxy running on a non default port
 						if(tokens[2].contains(":")){
-							//Proxy running on a non default port
 							String ipPort[] = tokens[2].split(":");
 							connect(ipPort[0], Integer.parseInt(ipPort[1]));
 							pw.println(ConsoleProtocol.NODE_CREATE);
+							pw.println(chordPort);
 						}else{
 							//Proxy running on default port
 							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
 							pw.println(ConsoleProtocol.NODE_CREATE);
+							pw.println(chordPort);
 						}
+						disconnect();
 					}
-					disconnect();
 				}else if(tokens[1].equals("stop")){
 					pw.println(ConsoleProtocol.NODE_STOP);
 				}else if(tokens[1].equals("stat")){
