@@ -7,18 +7,22 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.Callable;
 
 import unipi.p2p.chord.ChordNode;
+import unipi.p2p.chord.Constants;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
 import unipi.p2p.chord.Replicator;
 import unipi.p2p.chord.Statistics;
 import unipi.p2p.chord.util.Util;
+import unipi.p2p.chord.util.console.NodeInfo;
 import unipi.p2p.chord.visualization.ChordViewer;
 import unipi.p2p.scorpiofs.util.ConfigParser;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
 
-public class StartChordService implements Runnable{
+public class StartChordService implements Callable<NodeInfo>{
 	private static int srvPort = 0;
 	private static String config = null;
 	
@@ -26,7 +30,7 @@ public class StartChordService implements Runnable{
 		this.srvPort = port;
 		this.config = config;
 	}
-	public void run (){
+	public NodeInfo call (){
 		int i = 0, j;
         String arg;
         int servicePort=0;
@@ -40,7 +44,9 @@ public class StartChordService implements Runnable{
         String retrievingListFilename="/tmp/chord.retrieving";
         boolean startNewChord = false;
         Finger bootstrapFinger = null;
-
+        ChordNode chordobj = null;
+        NodeInfo nodeInfo = null;
+        
         /*while (i < args.length && args[i].startsWith("-")) {
             arg = args[i++];
             
@@ -100,8 +106,6 @@ public class StartChordService implements Runnable{
         	if (realIP != null){
         		System.getProperties().put("java.rmi.server.hostname", realIP);
         	}
-
-        	ChordNode chordobj = null;
         	
         	//chordobj = new ChordNode(new Finger(localIP + ":" + servicePort), startNewChord, bootstrapFinger);
         	chordobj = new ChordNode(new Finger(realIP + ":" + servicePort), startNewChord, bootstrapFinger);
@@ -115,14 +119,15 @@ public class StartChordService implements Runnable{
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
         	Naming.rebind("rmi://" + "localhost" + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
-        	Thread.currentThread();
-        	Thread.sleep(2000);
+        	//Thread.currentThread();
+        	Thread.sleep(5000);
         	Thread updateThread = new Thread(chordobj, "updateThread");
         	updateThread.start();
         	
         	Replicator chordReplicator = new Replicator(chordobj); //attach Replicator
         	HashChecker hashCheck = new HashChecker(chordobj); //attach HashChecker
-       
+        	nodeInfo = new NodeInfo(chordReplicator, chordobj, servicePort,
+        			registry);
         	System.out.println("Service running at "+localIP+":"+servicePort);
         	//Print statistics thread.
         	//Thread statThread=new Thread(new Statistics(chordobj),"statThread");
@@ -134,16 +139,15 @@ public class StartChordService implements Runnable{
         	la = chordobj.getLocalNode();
         	//System.out.println("IP="+la.getIPAddress());
         	//System.out.println("ID="+la.getBigIntValue());
-        	Runtime.getRuntime().addShutdownHook(new ShutDownChord(chordobj)); 
+        	//Runtime.getRuntime().addShutdownHook(new ShutDownChord(chordobj)); 
 
         	//new ChordViewer(chordobj);
-
 
         } catch(Exception e) {
         	e.printStackTrace();
         	System.out.println("Error starting service (is port already in use?)");
         }
  
-
+        return nodeInfo;
 	}	
 }

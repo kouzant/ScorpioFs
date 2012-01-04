@@ -36,6 +36,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private String metadataFile;
 	private String storingListFilename;
 	private String retrievingListFilename;
+	private boolean running = true;
 	HashSet<String> storingList=new HashSet<String>();
 	HashSet<String> retrievingList=new HashSet<String>();
 	LinkedList successorList = new LinkedList();
@@ -70,6 +71,9 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	}
 	public void setRetrievingListFilename(String retrievingListFilename){
 		this.retrievingListFilename=retrievingListFilename;
+	}
+	public void stopRunning(){
+		this.running = false;
 	}
 	public ChordNode() throws RemoteException{
 		super();
@@ -115,7 +119,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	}
 	
 	public void run() {
-		while (true) {
+		while (running) {
 			checkPredecessor();
 			stabilizeSuccessorList();
 			stabilize();

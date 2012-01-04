@@ -46,7 +46,7 @@ public class ConsoleClient {
 			if(tokens[0].equals("node")){
 				if(tokens[1].equals("create")){
 					if(tokens.length < 3){
-						System.err.println("Usage: node start IP_ADDR[:port]" +
+						System.err.println("Usage: node create IP_ADDR[:port]" +
 								" -chordport PORT -config CONFIG");
 					}else{
 						int chordPort = -1;
@@ -98,7 +98,10 @@ public class ConsoleClient {
 						disconnect();
 					}
 				}else if(tokens[1].equals("stop")){
+					connect(tokens[2], ConsoleProtocol.PROXY_PORT);
 					pw.println(ConsoleProtocol.NODE_STOP);
+					pw.println(ConsoleProtocol.CHORD_PORT);
+					disconnect();
 				}else if(tokens[1].equals("stat")){
 					pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){

@@ -11,14 +11,18 @@ public class Replicator implements Runnable {
 	private int currentObj;
 	private int replicationFactor = Constants.REPLICATION_FACTOR;
 	private ChordNode chordObj;
+	private boolean running = true;
 	public Replicator(ChordNode localChord){
 		chordObj = localChord;
 		currentObj = 0;
 		Thread replicationThread = new Thread(this, "replicationThread");
 		replicationThread.start();
 	}
+	public void stopRunning(){
+		this.running = false;
+	}
 	public void run(){
-		while (true){
+		while (running){
 			//System.out.println("I Replicate!");
 			replicateOnce(this.getObjToReplicate());
 			try {
