@@ -29,7 +29,7 @@ public class ConsoleClientReceiver implements Runnable {
 						(cSocket.getInputStream()));
 				code = Integer.parseInt(bin.readLine());
 				port = Integer.parseInt(bin.readLine());
-				senderIp = cSocket.getInetAddress().toString();
+				senderIp = cSocket.getInetAddress().toString().substring(1);
 				
 				switch(code){
 					case ConsoleProtocol.CREATED:
