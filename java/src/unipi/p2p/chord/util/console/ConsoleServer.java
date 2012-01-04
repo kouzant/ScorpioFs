@@ -3,23 +3,20 @@ package unipi.p2p.chord.util.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import unipi.p2p.chord.ChordNode;
 import unipi.p2p.scorpiofs.StartChordService;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
 
@@ -45,7 +42,6 @@ public class ConsoleServer {
 		Set<NodeInfo> nodes = new HashSet<NodeInfo>();
 		//HashMap<Integer, ChordNode> nodes = new HashMap<Integer, ChordNode>();
 		try{
-			
 			while(proxyUp){
 				int code = -1;
 				int chPort = -1;
@@ -70,10 +66,21 @@ public class ConsoleServer {
 							chordConfig)).get();
 					if(nodeInfo != null)
 						nodes.add(nodeInfo);
-					String lala = cSocket.getInetAddress().toString();
-					log.info("Connected client: "+lala);
 					bin.close();
 					cSocket.close();
+					//Connect to console receiver for return messages
+					Socket crSocket = new Socket(cSocket.getInetAddress(),
+							ConsoleProtocol.CLREC_PORT);
+					PrintWriter pwc = new PrintWriter(crSocket.getOutputStream(),
+							true);
+					if(nodeInfo != null){
+						pwc.println(ConsoleProtocol.CREATED);
+					}else{
+						pwc.println(ConsoleProtocol.NOT_CREATED);
+					}
+					pwc.println(chPort);
+					pwc.close();
+					crSocket.close();
 					break;
 				case ConsoleProtocol.NODE_STOP:
 					log.info("node stop IP_ADDR");
@@ -88,10 +95,25 @@ public class ConsoleServer {
 							break;
 						}
 					}
-					if(curNode != null)
-						System.out.println("Hashmap chordobj not null");
-						exec.execute(new ShutDownChord(curNode));
+					//Connect to console receiver for return messages
+					crSocket = new Socket(cSocket.getInetAddress(),
+							ConsoleProtocol.CLREC_PORT);
+					pwc = new PrintWriter(crSocket.getOutputStream(),
+							true);
+					if(curNode != null){
+						Integer result = exec.submit(new ShutDownChord(curNode))
+								.get();
 						nodes.remove(curNode);
+						if(result == 1)
+							pwc.println(ConsoleProtocol.STOPPED);
+						else
+							pwc.println(ConsoleProtocol.NOT_STOPPED);
+					}else{
+						pwc.println(ConsoleProtocol.NOT_STOPPED);
+					}
+					pwc.println(chPort);
+					pwc.close();
+					crSocket.close();
 					break;
 				case ConsoleProtocol.NODE_STAT:
 					log.info("node stat IP_ADDR");

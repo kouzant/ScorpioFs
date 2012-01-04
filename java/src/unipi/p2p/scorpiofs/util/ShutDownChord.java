@@ -6,13 +6,14 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Replicator;
 import unipi.p2p.chord.util.console.NodeInfo;
 
-public class ShutDownChord extends Thread{
+public class ShutDownChord implements Callable<Integer>{
 		private Replicator replicator;
 		private ChordNode chordobj;
 		private int servicePort;
@@ -25,7 +26,7 @@ public class ShutDownChord extends Thread{
 			this.registry = curNode.getRegistry();
 		}
 	
-		public void run() {
+		public Integer call() {
 			try {
 				
 				this.chordobj.setMetadataFile("/tmp/chord.hashtable");
@@ -53,6 +54,7 @@ public class ShutDownChord extends Thread{
 			} catch (NotBoundException e3) {
 				e3.printStackTrace();
 			}
+			
+			return 1;
 		}
-	
 }

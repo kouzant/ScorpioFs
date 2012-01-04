@@ -40,7 +40,8 @@ public class ConsoleClient {
 		System.out.println("Welcome to ScorpioFS administration console");
 		Scanner in = new Scanner(System.in);
 		ExecutorService exec = Executors.newCachedThreadPool();
-		exec.execute(new ConsoleClientReceiver());
+		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver();
+		exec.execute(consoleRec);
 		
 		while(consoleUp){
 			System.out.print("$>");
@@ -91,7 +92,6 @@ public class ConsoleClient {
 							//Proxy running on default port
 							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
 							pw.println(ConsoleProtocol.NODE_CREATE);
-							System.err.println("config: "+chordConfig);
 							pw.println(chordPort);
 							pw.println(chordConfig);
 						}
@@ -159,8 +159,9 @@ public class ConsoleClient {
 			}else if(tokens[0].equals("help")){
 				System.out.println("help!");
 				//exit
-			}else if(tokens[0].equals("terminate")){
+			}else if(tokens[0].equals("exit")){
 				disconnect();
+				consoleRec.stopRunning();
 				consoleUp = false;
 			}else{
 				System.out.println("Command not found!");

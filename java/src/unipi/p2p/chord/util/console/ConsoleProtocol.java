@@ -11,9 +11,9 @@ public class ConsoleProtocol {
 	public static final int TERMINATE = 7;
 	public static final int CREATED = 8;
 	public static final int NOT_CREATED = 9;
-	public static final int STOPED = 10;
-	public static final int NOT_STOPED = 11;
+	public static final int STOPPED = 10;
+	public static final int NOT_STOPPED = 11;
 	public static final int CHORD_PORT = 6788;
 	public static final int PROXY_PORT = 6789;
-	public static final int CL_REC = 7891;
+	public static final int CLREC_PORT = 7891;
 }
