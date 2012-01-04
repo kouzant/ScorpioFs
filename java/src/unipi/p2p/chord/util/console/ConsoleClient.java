@@ -6,6 +6,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConsoleClient {
 	static InetAddress iAddr = null;
@@ -37,6 +39,9 @@ public class ConsoleClient {
 
 		System.out.println("Welcome to ScorpioFS administration console");
 		Scanner in = new Scanner(System.in);
+		ExecutorService exec = Executors.newCachedThreadPool();
+		exec.execute(new ConsoleClientReceiver());
+		
 		while(consoleUp){
 			System.out.print("$>");
 			String command = in.nextLine();

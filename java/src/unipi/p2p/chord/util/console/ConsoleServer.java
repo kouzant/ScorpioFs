@@ -70,7 +70,8 @@ public class ConsoleServer {
 							chordConfig)).get();
 					if(nodeInfo != null)
 						nodes.add(nodeInfo);
-					Thread.sleep(3000);
+					String lala = cSocket.getInetAddress().toString();
+					log.info("Connected client: "+lala);
 					bin.close();
 					cSocket.close();
 					break;

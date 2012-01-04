@@ -9,6 +9,11 @@ public class ConsoleProtocol {
 	public static final int SCORPIOFS_MOUNT = 5;
 	public static final int SCORPIOFS_UNMOUNT = 6;
 	public static final int TERMINATE = 7;
+	public static final int CREATED = 8;
+	public static final int NOT_CREATED = 9;
+	public static final int STOPED = 10;
+	public static final int NOT_STOPED = 11;
 	public static final int CHORD_PORT = 6788;
 	public static final int PROXY_PORT = 6789;
+	public static final int CL_REC = 7891;
 }
