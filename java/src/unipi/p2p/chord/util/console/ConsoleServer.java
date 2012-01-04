@@ -41,15 +41,16 @@ public class ConsoleServer {
 		}
 		Socket cSocket = null;
 		boolean proxyUp = true;
-		int code = -1;
-		int chPort = -1;
-		String chordConfig = null;
-		BufferedReader bin = null;
+		
 		Set<NodeInfo> nodes = new HashSet<NodeInfo>();
 		//HashMap<Integer, ChordNode> nodes = new HashMap<Integer, ChordNode>();
 		try{
 			
 			while(proxyUp){
+				int code = -1;
+				int chPort = -1;
+				String chordConfig = null;
+				BufferedReader bin = null;
 				cSocket = sSocket.accept();
 				bin = new BufferedReader(new InputStreamReader 
 						(cSocket.getInputStream()));
@@ -68,7 +69,6 @@ public class ConsoleServer {
 					NodeInfo nodeInfo = exec.submit(new StartChordService(chPort, 
 							chordConfig)).get();
 					if(nodeInfo != null)
-						System.out.println("chordobj not null");
 						nodes.add(nodeInfo);
 					Thread.sleep(3000);
 					bin.close();

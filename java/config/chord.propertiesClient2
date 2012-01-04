@@ -1,0 +1,6 @@
+bootstrap=localhost:6788
+external_ip=localhost
+outputdir=/home/antonis/localhost:6783/
+hashtable=/home/antonis/localhost:6783/chord.hashtable
+storing_list=/home/antonis/localhost:6783/chord.storing
+retrieving_list=/home/antonis/localhost:6783/chord.retrieving

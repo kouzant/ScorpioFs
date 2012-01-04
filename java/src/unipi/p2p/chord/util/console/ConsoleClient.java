@@ -61,11 +61,6 @@ public class ConsoleClient {
 								configIndex = i;
 						}
 						
-						/*System.err.println("Index of chord port is: "+chPortIndex+
-								" and chord port is: "+tokens[chPortIndex + 1]);
-						System.err.println("Index of chord config is: "+configIndex+
-								" and config is: "+tokens[configIndex + 1]);*/
-						
 						//Create chord node on a non default port
 						if(chPortIndex != -1){
 							chordPort = Integer.parseInt(tokens[chPortIndex + 1]);
@@ -98,10 +93,41 @@ public class ConsoleClient {
 						disconnect();
 					}
 				}else if(tokens[1].equals("stop")){
-					connect(tokens[2], ConsoleProtocol.PROXY_PORT);
-					pw.println(ConsoleProtocol.NODE_STOP);
-					pw.println(ConsoleProtocol.CHORD_PORT);
-					disconnect();
+					if(tokens.length < 3){
+						System.err.println("Usage: node stop IP_ADDR[:port]"+
+								" -chordport PORT");
+					}else{
+						String config = null;
+						int chordPort = -1;
+						int chPortIndex = -1;
+						int i;
+						for(i = 0; i < tokens.length; i++){
+							if(tokens[i].equals("-chordport"))
+								chPortIndex = i;
+						}
+						
+						if(chPortIndex != -1){
+							chordPort = Integer.parseInt(tokens[chPortIndex + 1]);
+						}else{
+							chordPort = ConsoleProtocol.CHORD_PORT;
+						}
+						
+						//Proxy running on a non default port
+						if(tokens[2].contains(":")){
+							String ipPort[] = tokens[2].split(":");
+							connect(ipPort[0], Integer.parseInt(ipPort[1]));
+							pw.println(ConsoleProtocol.NODE_STOP);
+							pw.println(chordPort);
+							pw.println(config);
+						}else{
+							//Proxy running on default port
+							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
+							pw.println(ConsoleProtocol.NODE_STOP);
+							pw.println(chordPort);
+							pw.println(config);
+						}
+						disconnect();
+					}
 				}else if(tokens[1].equals("stat")){
 					pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){
