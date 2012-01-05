@@ -37,23 +37,22 @@ public class ConsoleClientReceiver implements Runnable {
 				code = Integer.parseInt(bin.readLine());
 				port = Integer.parseInt(bin.readLine());
 				senderIp = cSocket.getInetAddress().toString().substring(1);
-				System.out.println("proxyPort: "+proxyPort);
 				
 				switch(code){
 					case ConsoleProtocol.CREATED:
-						System.out.println("Chord node on "+senderIp+" on port "+
+						System.out.println("--> Chord node on "+senderIp+" on port "+
 								port+" created successfully");
 						System.out.print("$>");
 						Nodes newNode = new Nodes(senderIp, port, proxyPort);
 						nodesList.add(newNode);
 						break;
 					case ConsoleProtocol.NOT_CREATED:
-						System.out.println("Chord node on "+senderIp+" on port "+
+						System.out.println("--> Chord node on "+senderIp+" on port "+
 								port+" did not created");
 						System.out.print("$>");
 						break;
 					case ConsoleProtocol.STOPPED:
-						System.out.println("Chord node on "+senderIp+" on port "+
+						System.out.println("--> Chord node on "+senderIp+" on port "+
 								port+" stopped successfully");
 						System.out.print("$>");
 						Nodes tmpNode = null;
@@ -70,7 +69,7 @@ public class ConsoleClientReceiver implements Runnable {
 						nodesList.remove(curNode);
 						break;
 					case ConsoleProtocol.NOT_STOPPED:
-						System.out.println("Chord node on "+senderIp+" on port "+
+						System.out.println("--> Chord node on "+senderIp+" on port "+
 								port+" did not stopped");
 						System.out.print("$>");
 						break;

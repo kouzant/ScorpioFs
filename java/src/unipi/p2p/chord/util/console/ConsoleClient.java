@@ -163,17 +163,22 @@ public class ConsoleClient {
 					pw.println(ConsoleProtocol.NODE_ALIVE);
 				}else if(tokens[1].equals("list")){
 					if(nodesList.size() == 0){
-						System.out.println("There are no working chord nodes");
 						System.out.print("$>");
+						System.out.println("--> There are no working chord nodes");
 					}else{
 						Nodes tmpNode = null;
 						Iterator<Nodes> nodesIt = nodesList.iterator();
+						System.out.print("$>");
+						int size = nodesList.size();
+						int i = 1;
 						while(nodesIt.hasNext()){
 							tmpNode = nodesIt.next();
-							System.out.println("Chord node on ip "+tmpNode
+							System.out.println("--> Chord node on ip "+tmpNode
 									.getIpAddr()+" and on port "+tmpNode
 									.getPort()+" is up");
-							System.out.print("$>");
+							if(i < size)
+								System.out.print("$>");
+							i++;
 						}
 					}
 				}else if(tokens.length < 2){
