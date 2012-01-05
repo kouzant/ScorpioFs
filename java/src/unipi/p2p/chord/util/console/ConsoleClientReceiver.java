@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class ConsoleClientReceiver implements Runnable {
 	private static boolean running = true;
-	
+	private LinkedList<Nodes> nodesList;
+	public ConsoleClientReceiver(LinkedList<Nodes> nodesList){
+		this.nodesList = nodesList;
+	}
 	public void stopRunning(){
 		running = false;
 	}
@@ -22,20 +27,25 @@ public class ConsoleClientReceiver implements Runnable {
 			while(running){
 				int code = -1;
 				int port = -1;
+				int proxyPort = -1;
 				String senderIp = null;
 				bin = null;
 				cSocket = sSocket.accept();
 				bin = new BufferedReader(new InputStreamReader
 						(cSocket.getInputStream()));
+				proxyPort = Integer.parseInt(bin.readLine());
 				code = Integer.parseInt(bin.readLine());
 				port = Integer.parseInt(bin.readLine());
 				senderIp = cSocket.getInetAddress().toString().substring(1);
+				System.out.println("proxyPort: "+proxyPort);
 				
 				switch(code){
 					case ConsoleProtocol.CREATED:
 						System.out.println("Chord node on "+senderIp+" on port "+
 								port+" created successfully");
 						System.out.print("$>");
+						Nodes newNode = new Nodes(senderIp, port, proxyPort);
+						nodesList.add(newNode);
 						break;
 					case ConsoleProtocol.NOT_CREATED:
 						System.out.println("Chord node on "+senderIp+" on port "+
@@ -46,6 +56,18 @@ public class ConsoleClientReceiver implements Runnable {
 						System.out.println("Chord node on "+senderIp+" on port "+
 								port+" stopped successfully");
 						System.out.print("$>");
+						Nodes tmpNode = null;
+						Nodes curNode = null;
+						Iterator<Nodes> nodesIt = nodesList.iterator();
+						while(nodesIt.hasNext()){
+							tmpNode = nodesIt.next();
+							if(tmpNode.getIpAddr().equals(senderIp) && tmpNode
+									.getPort() == port){
+								curNode = tmpNode;
+								break;
+							}
+						}
+						nodesList.remove(curNode);
 						break;
 					case ConsoleProtocol.NOT_STOPPED:
 						System.out.println("Chord node on "+senderIp+" on port "+
@@ -60,5 +82,4 @@ public class ConsoleClientReceiver implements Runnable {
 			e0.printStackTrace();
 		}
 	}
-
 }

@@ -2,25 +2,17 @@ package unipi.p2p.scorpiofs;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.Callable;
 
 import unipi.p2p.chord.ChordNode;
-import unipi.p2p.chord.Constants;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
 import unipi.p2p.chord.Replicator;
-import unipi.p2p.chord.Statistics;
-import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.util.console.NodeInfo;
-import unipi.p2p.chord.visualization.ChordViewer;
 import unipi.p2p.scorpiofs.util.ConfigParser;
-import unipi.p2p.scorpiofs.util.ShutDownChord;
 
 public class StartChordService implements Callable<NodeInfo>{
 	private static int srvPort = 0;
@@ -119,7 +111,6 @@ public class StartChordService implements Callable<NodeInfo>{
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
         	Naming.rebind("rmi://" + "localhost" + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
-        	//Thread.currentThread();
         	Thread.sleep(5000);
         	Thread updateThread = new Thread(chordobj, "updateThread");
         	updateThread.start();

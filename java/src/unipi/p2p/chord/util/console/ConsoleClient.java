@@ -5,10 +5,31 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+class Nodes{
+	private String ipAddr;
+	private int port;
+	private int proxyPort;
+	public Nodes(String ipAddr, int port, int proxyPort){
+		this.ipAddr = ipAddr;
+		this.port = port;
+		this.proxyPort = proxyPort;
+	}
+	public String getIpAddr(){
+		return ipAddr;
+	}
+	public int getPort(){
+		return port;
+	}
+	public int getProxyPort(){
+		return proxyPort;
+	}
+}
 public class ConsoleClient {
 	static InetAddress iAddr = null;
 	static Socket socket = null;
@@ -27,9 +48,11 @@ public class ConsoleClient {
 	}
 	
 	private static void disconnect(){
-		pw.close();
+		if(pw != null)
+			pw.close();
 		try{
-			socket.close();
+			if(socket != null)
+				socket.close();
 		}catch (IOException e0){
 			e0.printStackTrace();
 		}
@@ -39,8 +62,9 @@ public class ConsoleClient {
 
 		System.out.println("Welcome to ScorpioFS administration console");
 		Scanner in = new Scanner(System.in);
+		LinkedList<Nodes> nodesList = new LinkedList<Nodes>();
 		ExecutorService exec = Executors.newCachedThreadPool();
-		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver();
+		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver(nodesList);
 		exec.execute(consoleRec);
 		
 		while(consoleUp){
@@ -138,7 +162,20 @@ public class ConsoleClient {
 				}else if(tokens[1].equals("alive")){
 					pw.println(ConsoleProtocol.NODE_ALIVE);
 				}else if(tokens[1].equals("list")){
-					pw.println(ConsoleProtocol.NODE_LIST);
+					if(nodesList.size() == 0){
+						System.out.println("There are no working chord nodes");
+						System.out.print("$>");
+					}else{
+						Nodes tmpNode = null;
+						Iterator<Nodes> nodesIt = nodesList.iterator();
+						while(nodesIt.hasNext()){
+							tmpNode = nodesIt.next();
+							System.out.println("Chord node on ip "+tmpNode
+									.getIpAddr()+" and on port "+tmpNode
+									.getPort()+" is up");
+							System.out.print("$>");
+						}
+					}
 				}else if(tokens.length < 2){
 					System.out.println("Command not found!");
 				}else{

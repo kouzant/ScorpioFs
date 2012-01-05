@@ -30,8 +30,11 @@ public class ConsoleServer {
 		try{
 			if(args.length == 2){
 				sSocket = new ServerSocket(Integer.parseInt(args[1]));
+				System.out.println("Proxy server started on port "+args[1]);
 			}else{
 				sSocket = new ServerSocket(ConsoleProtocol.PROXY_PORT);
+				System.out.println("Proxy server started on port "+ConsoleProtocol
+						.PROXY_PORT);
 			}
 		}catch (IOException e0){
 			e0.printStackTrace();
@@ -40,7 +43,6 @@ public class ConsoleServer {
 		boolean proxyUp = true;
 		
 		Set<NodeInfo> nodes = new HashSet<NodeInfo>();
-		//HashMap<Integer, ChordNode> nodes = new HashMap<Integer, ChordNode>();
 		try{
 			while(proxyUp){
 				int code = -1;
@@ -73,6 +75,7 @@ public class ConsoleServer {
 							ConsoleProtocol.CLREC_PORT);
 					PrintWriter pwc = new PrintWriter(crSocket.getOutputStream(),
 							true);
+					pwc.println(sSocket.getLocalPort());
 					if(nodeInfo != null){
 						pwc.println(ConsoleProtocol.CREATED);
 					}else{
@@ -100,6 +103,7 @@ public class ConsoleServer {
 							ConsoleProtocol.CLREC_PORT);
 					pwc = new PrintWriter(crSocket.getOutputStream(),
 							true);
+					pwc.println(sSocket.getLocalPort());
 					if(curNode != null){
 						Integer result = exec.submit(new ShutDownChord(curNode))
 								.get();
@@ -120,9 +124,6 @@ public class ConsoleServer {
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
 					log.info("node alive IP_ADDR");
-					break;
-				case ConsoleProtocol.NODE_LIST:
-					log.info("node list");
 					break;
 				case ConsoleProtocol.TERMINATE:
 					log.info("Terminate");

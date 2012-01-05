@@ -5,7 +5,6 @@ public class ConsoleProtocol {
 	public static final int NODE_STOP = 1;
 	public static final int NODE_STAT = 2;
 	public static final int NODE_ALIVE = 3;
-	public static final int NODE_LIST = 4;
 	public static final int SCORPIOFS_MOUNT = 5;
 	public static final int SCORPIOFS_UNMOUNT = 6;
 	public static final int TERMINATE = 7;

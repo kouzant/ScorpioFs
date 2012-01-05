@@ -31,7 +31,6 @@ public class ShutDownChord implements Callable<Integer>{
 				
 				this.chordobj.setMetadataFile("/tmp/chord.hashtable");
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			this.chordobj.writeMetadataFileToDisk();
