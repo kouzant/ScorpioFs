@@ -39,12 +39,18 @@ Building (Compiling and packaging)
 Running
 1. Edit the config/chord.properties and set the external_ip property to the ip address of your host. In case where this chord node joins to an existing network provide the ip address and port of the bootstrap node by setting the bootstrap property (e.g.bootstrap=195.251.230.112:6789) (See sample below)
 2. Edit the config/scorpiofs.properties respectively (See sample below)
-3. Run './chord.sh -config config/chord.properties
-4. Create the directory where the scorpioFs file system should be mounted (e.g. mkdir   /tmp/tmp)
-5. Run './scorpio.sh -port 6789 -config SCORPIOFS_CONF MOUNT_POINT
+3. Each chord node should run a proxy server. Multiple proxies can run on the same
+   machine on different ports.
+   Usage: ./proxy [OPTIONS]
+                    -port PORT -- port of proxy server, Default is 6789.
+4. You can administer chord nodes from the administration console.
+   Usage: ./console
+                    Type help for commands
+5. Create the directory where the scorpioFs file system should be mounted (e.g. mkdir   /tmp/tmp)
+6. Run './scorpio.sh -port PORT -config SCORPIOFS_CONF MOUNT_POINT
    The first time you run scorpiofs you should include the switch -init
-6. Enjoy or die
-7. Run 'fusermount -u /tmp/tmp' to unmount the scorpioFS. 
+7. Enjoy or die
+8. Run 'fusermount -u /tmp/tmp' to unmount the scorpioFS. 
 
 +---------------------+
 | Configuration files |
@@ -59,16 +65,20 @@ First Node:
 #bootstrap=localhost
 #port=6789
 external_ip=localhost
-outputdir=/tmp/localhost:6789/
-hashtable=/tmp/localhost.6789/chord.hashtable
+outputdir=/tmp/localhost:6788/
+hashtable=/tmp/localhost.6788/chord.hashtable
+storing_list=/tmp/localhost:6788/chord.storing
+retrieving_list=/tmp/localhost:6788/chord.retrieving
 
 Bootstrapping Nodes:
 -------------------- 
-bootstrap=localhost:6789
+bootstrap=localhost:6788
 external_ip=localhost
-port=6788
-outputdir=/tmp/localhost:6788/
-hashtable=/tmp/localhost:6788/chord.hashtable
+port=6784
+outputdir=/tmp/localhost:6784/
+hashtable=/tmp/localhost:6784/chord.hashtable
+storing_list=/tmp/localhost:6784/chord.storing
+retrieving_list=/tmp/localhost:6784/chord.retrieving
 
 $ scorpiofs.properties sample: $
 

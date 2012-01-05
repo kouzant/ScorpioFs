@@ -57,10 +57,49 @@ public class ConsoleClient {
 			e0.printStackTrace();
 		}
 	}
+	private static String help(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("+------------+").append("\n");
+		sb.append("|Help Section|").append("\n");
+		sb.append("+------------+").append("\n").append("\n");
+		sb.append(">Available commands:").append("\n");
+		sb.append(">node create IP_ADDR[:PORT] [OPTIONS] - creates a new chord node")
+		.append("\n");
+		sb.append(">\t").append("IP_ADDR[:PORT] - ip address of chord's proxy.");
+		sb.append("\n>\t\t");
+		sb.append("If proxy is running on a non standard port you should define");
+		sb.append("\n>\t\t");
+		sb.append("it with the PORT option.").append("\n");
+		sb.append(">\t").append("-chordport PORT - if you want to run a chord");
+		sb.append("\n>\t\t").append("node on a non standard port you should define it");
+		sb.append("\n>\t\t").append("with this option. Default chord port is 6788");
+		sb.append("\n>\t").append("-config CONFIG - If the chord node should use");
+		sb.append("\n>\t\t").append("a non standard configuration file, define it here");
+		sb.append("\n>\t\t").append("Default configuration file is: config/chord.properties");
+		sb.append("\n").append(">\n");
+		
+		sb.append(">node stop IP_ADDR[:PORT] [OPTIONS] - Stops an already running")
+		.append(" chord node").append("\n");
+		sb.append(">\t").append("IP_ADDR[:PORT] - ip address of chord's proxy.");
+		sb.append("\n>\t\t");
+		sb.append("If proxy is running on a non standard port you should define");
+		sb.append("\n>\t\t").append("it with the PORT option.").append("\n");
+		sb.append(">\t").append("-chordport PORT - If chord node is running on a");
+		sb.append("\n>\t\t").append("non standard port you should define it here.");
+		sb.append("\n");
+		sb.append(">\n").append(">node list - Lists all running chord nodes.");
+		sb.append("\n").append(">\n");
+		
+		sb.append(">exit - exits from administration console.");
+		
+		return sb.toString();
+	}
 	public static void main(String[] args) {
 		boolean consoleUp = true;
 
 		System.out.println("Welcome to ScorpioFS administration console");
+		System.out.println("Type help for more info");
 		Scanner in = new Scanner(System.in);
 		LinkedList<Nodes> nodesList = new LinkedList<Nodes>();
 		ExecutorService exec = Executors.newCachedThreadPool();
@@ -199,7 +238,7 @@ public class ConsoleClient {
 				}
 				//help
 			}else if(tokens[0].equals("help")){
-				System.out.println("help!");
+				System.out.println(help());
 				//exit
 			}else if(tokens[0].equals("exit")){
 				disconnect();
