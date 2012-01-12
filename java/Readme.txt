@@ -15,7 +15,7 @@ Directory structure
 
 Prerequisites 
 1. sun-java6-jdk or (open-jdk)
-2. ant
+2. ant 1.8 (or greater)
 3. fuse-utils and libfuse2 and libfuse-dev
 4. The user running the scorpiofs.sh must belong to the group fuse
 
