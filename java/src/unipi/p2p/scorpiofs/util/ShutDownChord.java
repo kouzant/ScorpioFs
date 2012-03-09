@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Replicator;
 import unipi.p2p.chord.util.console.NodeInfo;
+import unipi.p2p.chord.Constants;
 
 public class ShutDownChord implements Callable<Integer>{
 		private Replicator replicator;
@@ -36,6 +37,7 @@ public class ShutDownChord implements Callable<Integer>{
 			this.chordobj.writeMetadataFileToDisk();
 			this.chordobj.writeClientsList();
 			try {
+				Constants.statsThread = false;
 				TimeUnit.SECONDS.sleep(1);
 				this.chordobj.stopRunning();
 				this.replicator.stopRunning();

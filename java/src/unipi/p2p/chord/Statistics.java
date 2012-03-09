@@ -21,7 +21,7 @@ public class Statistics implements Runnable {
 		
 		try {
 			DecimalFormat df = new DecimalFormat("##.#");
-			while(true){
+			while(Constants.statsThread){
 				hashChunks=chordNode.getHashChunks();
 				while(hashChunks.hasNext()){
 					chunkCounter++;

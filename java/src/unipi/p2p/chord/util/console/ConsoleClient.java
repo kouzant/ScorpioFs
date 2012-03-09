@@ -202,7 +202,6 @@ public class ConsoleClient {
 							pw.println(chordPort);
 							pw.println(chordConfig);
 						}
-						System.out.println(proxies);
 						disconnect();
 					}
 				}else if(tokens[1].equals("stop")){
@@ -262,7 +261,6 @@ public class ConsoleClient {
 							pw.println(chordPort);
 							pw.println(config);
 						}
-						System.out.println(proxies);
 						disconnect();
 					}
 				}else if(tokens[1].equals("stat")){
