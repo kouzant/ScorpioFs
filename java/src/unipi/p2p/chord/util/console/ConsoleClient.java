@@ -202,6 +202,7 @@ public class ConsoleClient {
 							pw.println(chordPort);
 							pw.println(chordConfig);
 						}
+						System.out.println(proxies);
 						disconnect();
 					}
 				}else if(tokens[1].equals("stop")){
@@ -224,20 +225,44 @@ public class ConsoleClient {
 							chordPort = ConsoleProtocol.CHORD_PORT;
 						}
 						
+						Iterator<Proxies> proxiesIt = proxies.iterator();
+						int index = 0;
+						Proxies prox =null;
+						
 						//Proxy running on a non default port
 						if(tokens[2].contains(":")){
 							String ipPort[] = tokens[2].split(":");
 							connect(ipPort[0], Integer.parseInt(ipPort[1]));
+							while(proxiesIt.hasNext()){
+								prox = proxiesIt.next();
+								if(prox.getIpAddr().equals(ipPort[0]) && 
+										prox.getPort() == Integer.parseInt(
+												ipPort[1])){
+									break;
+								}
+								index++;
+							}
+							proxies.remove(index);
 							pw.println(ConsoleProtocol.NODE_STOP);
 							pw.println(chordPort);
 							pw.println(config);
 						}else{
 							//Proxy running on default port
 							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
+							while(proxiesIt.hasNext()){
+								prox = proxiesIt.next();
+								if(prox.getIpAddr().equals(tokens[2]) && 
+										prox.getPort() == ConsoleProtocol.PROXY_PORT){
+									break;
+								}
+								index++;
+							}
+							proxies.remove(index);
 							pw.println(ConsoleProtocol.NODE_STOP);
 							pw.println(chordPort);
 							pw.println(config);
 						}
+						System.out.println(proxies);
 						disconnect();
 					}
 				}else if(tokens[1].equals("stat")){
