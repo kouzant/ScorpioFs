@@ -2,6 +2,7 @@ package unipi.p2p.chord;
 
 import java.io.File;
 import java.rmi.RemoteException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
@@ -16,9 +17,10 @@ public class Statistics implements Runnable {
 		Iterator<String> hashChunks;
 		int chunkCounter=0;
 		File tmpFile;
-		long totalSize=0;
+		float totalSize=0;
 		
 		try {
+			DecimalFormat df = new DecimalFormat("##.#");
 			while(true){
 				hashChunks=chordNode.getHashChunks();
 				while(hashChunks.hasNext()){
@@ -31,7 +33,8 @@ public class Statistics implements Runnable {
 				//Convert from bytes to megabytes
 				totalSize=totalSize/1048576;
 				System.out.println("Total number of chunks: "+chunkCounter);
-				System.out.println("Total disk usage: "+totalSize+"MB");
+				System.out.println("Total disk usage: "+
+				df.format(totalSize)+"MB");
 				totalSize=0;
 				chunkCounter=0;
 				System.out.println("Clients who have stored data: "+chordNode

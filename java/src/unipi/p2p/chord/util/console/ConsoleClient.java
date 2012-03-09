@@ -30,6 +30,20 @@ class Nodes{
 		return proxyPort;
 	}
 }
+class Proxies{
+	private String ipAddr;
+	private int port;
+	public Proxies(String ipAddr, int port){
+		this.ipAddr = ipAddr;
+		this.port = port;
+	}
+	public String getIpAddr(){
+		return ipAddr;
+	}
+	public int getPort(){
+		return port;
+	}
+}
 public class ConsoleClient {
 	static InetAddress iAddr = null;
 	static Socket socket = null;
@@ -102,6 +116,7 @@ public class ConsoleClient {
 		System.out.println("Type help for more info");
 		Scanner in = new Scanner(System.in);
 		LinkedList<Nodes> nodesList = new LinkedList<Nodes>();
+		LinkedList<Proxies> proxies = new LinkedList<Proxies>();
 		ExecutorService exec = Executors.newCachedThreadPool();
 		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver(nodesList);
 		exec.execute(consoleRec);
@@ -144,16 +159,45 @@ public class ConsoleClient {
 							chordConfig = "config/chord.properties";
 						}
 						
+						Iterator<Proxies> proxiesIt = proxies.iterator();
+						Proxies prox = null;
+						boolean found = false;
+						
 						//Proxy running on a non default port
 						if(tokens[2].contains(":")){
 							String ipPort[] = tokens[2].split(":");
 							connect(ipPort[0], Integer.parseInt(ipPort[1]));
+							while(proxiesIt.hasNext()){
+								prox = proxiesIt.next();
+								if(prox.getIpAddr().equals(ipPort[0]) && 
+										prox.getPort() == Integer.parseInt(
+												ipPort[1])){
+									found = true;
+								}
+							}
+							if(!found){
+								Proxies tmpProxy = new Proxies(ipPort[0], Integer.
+										parseInt(ipPort[1]));
+								proxies.add(tmpProxy);
+							}
 							pw.println(ConsoleProtocol.NODE_CREATE);
 							pw.println(chordPort);
 							pw.println(chordConfig);
 						}else{
 							//Proxy running on default port
 							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
+							while(proxiesIt.hasNext()){
+								prox = proxiesIt.next();
+								if(prox.getIpAddr().equals(tokens[2]) && 
+										prox.getPort() == ConsoleProtocol.PROXY_PORT){
+									found = true;
+								}
+							}
+							if(!found){
+								Proxies tmpProxy = new Proxies(tokens[2], 
+										ConsoleProtocol.PROXY_PORT);
+								proxies.add(tmpProxy);
+							}
 							pw.println(ConsoleProtocol.NODE_CREATE);
 							pw.println(chordPort);
 							pw.println(chordConfig);
@@ -224,6 +268,13 @@ public class ConsoleClient {
 					System.out.println("Command not found!");
 				}else{
 					System.out.println("Command not found!");
+				}
+				//Statistics block
+			}else if(tokens[0].equals("stats")){
+				if(tokens[1].equals("get")){
+					//Get statistics
+				}else if(tokens[1].equals("gen")){
+					//Generate statistics
 				}
 				//ScorpioFS block
 			}else if(tokens[0].equals("scorpiofs")){
