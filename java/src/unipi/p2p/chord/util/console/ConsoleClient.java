@@ -296,6 +296,19 @@ public class ConsoleClient {
 			}else if(tokens[0].equals("stats")){
 				if(tokens[1].equals("get")){
 					//Get statistics
+					//Iterate throuth proxies list and send
+					//messages
+					Iterator<Proxies> proxiesIt = proxies.iterator();
+					Proxies prox = null;
+					while(proxiesIt.hasNext()){
+						prox = proxiesIt.next();
+						connect(prox.getIpAddr(), prox.getPort());
+						pw.println(ConsoleProtocol.STATS_GET);
+						//Don't care values
+						pw.println(0);
+						pw.println("dontcare");
+						disconnect();
+					}
 				}else if(tokens[1].equals("gen")){
 					//Generate statistics
 				}

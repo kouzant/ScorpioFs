@@ -119,8 +119,8 @@ public class ConsoleServer {
 					pwc.close();
 					crSocket.close();
 					break;
-				case ConsoleProtocol.NODE_STAT:
-					log.info("node stat IP_ADDR");
+				case ConsoleProtocol.STATS_GET:
+					log.info("stats get");
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
 					log.info("node alive IP_ADDR");
