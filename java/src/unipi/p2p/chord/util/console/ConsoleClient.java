@@ -1,6 +1,11 @@
 package unipi.p2p.chord.util.console;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -135,6 +140,55 @@ public class ConsoleClient {
 					if(tokens.length < 3){
 						System.err.println("Usage: node create IP_ADDR[:port]" +
 								" -chordport PORT -config CONFIG");
+					}else if((tokens.length == 4) && tokens[2].equals("-f")){
+						System.out.println("Load from file!");
+						//load from file
+						try{
+							FileInputStream istream = new FileInputStream(tokens[3]);
+							DataInputStream distream = new DataInputStream(istream);
+							BufferedReader br = new BufferedReader(
+									new InputStreamReader(distream));
+							String line;
+							br.readLine();
+							while ((line = br.readLine()) != null){
+								String ftokens[] = line.split(",");
+								String proxyIp = ftokens[0];
+								int proxyPort = Integer.parseInt(ftokens[1]);
+								int chordPort = Integer.parseInt(ftokens[2]);
+								String chordConfig = ftokens[3];
+								
+								connect(proxyIp, proxyPort);
+								
+								Iterator<Proxies> proxiesIt = proxies.iterator();
+								Proxies prox = null;
+								boolean found = false;
+								
+								while(proxiesIt.hasNext()){
+									prox = proxiesIt.next();
+									if(prox.getIpAddr().equals(proxyIp) && 
+											prox.getPort() == proxyPort){
+										found = true;
+									}
+								}
+								if(!found){
+									Proxies tmpProxy = new Proxies(proxyIp, 
+											proxyPort);
+									proxies.add(tmpProxy);
+								}
+								
+								pw.println(ConsoleProtocol.NODE_CREATE);
+								pw.println(chordPort);
+								pw.println(chordConfig);
+								disconnect();
+							}
+							br.close();
+							distream.close();
+							istream.close();
+						}catch(FileNotFoundException e){
+							e.printStackTrace();
+						}catch(IOException e){
+							e.printStackTrace();
+						}
 					}else{
 						int chordPort = -1;
 						String chordConfig = null;
