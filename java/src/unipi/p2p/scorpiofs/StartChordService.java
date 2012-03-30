@@ -122,9 +122,9 @@ public class StartChordService implements Callable<NodeInfo>{
         			registry);
         	System.out.println("Service running at "+localIP+":"+servicePort);
         	//Start statistics thread.
-        	Thread statThread=new Thread(new Statistics(chordobj),"statThread");
+        	/*Thread statThread=new Thread(new Statistics(chordobj),"statThread");
         	statThread.setPriority(Thread.MIN_PRIORITY);
-        	statThread.start();
+        	statThread.start();*/
         	//System.out.println(Util.getMac());
         	Finger la;
 

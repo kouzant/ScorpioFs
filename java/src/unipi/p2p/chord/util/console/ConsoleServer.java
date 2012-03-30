@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import unipi.p2p.scorpiofs.StartChordService;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
+import unipi.p2p.chord.util.Statistics;
 
 /*
  * Class which implements the proxy server
@@ -123,6 +124,16 @@ public class ConsoleServer {
 					crSocket.close();
 					break;
 				case ConsoleProtocol.NODE_STAT:
+					//Spawn methods to receive statistics
+					Iterator<NodeInfo> nodesIt = nodes.iterator();
+					NodeInfo node = null;
+					
+					while(nodesIt.hasNext()){
+						node = nodesIt.next();
+						Statistics stats = node.getChordobj().getStatistics();
+						//test
+						System.out.println("Stats: "+stats.getSuccessorListCalls());
+					}
 					log.info("stats get");
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
