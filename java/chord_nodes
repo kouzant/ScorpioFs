@@ -1,2 +1,3 @@
 #Proxy IP,Proxy port,chord node port,configuration file
 localhost,6790,6784,config/chord.propertiesClient1
+localhost,6791,6785,config/chord.propertiesClient2

@@ -86,6 +86,7 @@ public class ConsoleClient {
 		sb.append("|Help Section|").append("\n");
 		sb.append("+------------+").append("\n").append("\n");
 		sb.append(">Available commands:").append("\n");
+		
 		sb.append(">node create IP_ADDR[:PORT] [OPTIONS] - creates a new chord node")
 		.append("\n");
 		sb.append(">\t").append("IP_ADDR[:PORT] - ip address of chord's proxy.");
@@ -99,6 +100,12 @@ public class ConsoleClient {
 		sb.append("\n>\t").append("-config CONFIG - If the chord node should use");
 		sb.append("\n>\t\t").append("a non standard configuration file, define it here");
 		sb.append("\n>\t\t").append("Default configuration file is: config/chord.properties");
+		sb.append("\n").append(">\n");
+		
+		sb.append(">node create -f FILE - creates chord nodes from a comma" +
+				"separated file").append("\n");
+		sb.append(">\t").append("FILE - comma separated file with the following" +
+				"format: proxyip,proxyport,chordport,chord config file");
 		sb.append("\n").append(">\n");
 		
 		sb.append(">node stop IP_ADDR[:PORT] [OPTIONS] - Stops an already running")
@@ -265,6 +272,52 @@ public class ConsoleClient {
 					if(tokens.length < 3){
 						System.err.println("Usage: node stop IP_ADDR[:port]"+
 								" -chordport PORT");
+					}else if((tokens.length == 4) && tokens[2].equals("-f")){
+						System.out.println("Load from file!");
+						//load from file
+						try{
+							FileInputStream istream = new FileInputStream(tokens[3]);
+							DataInputStream distream = new DataInputStream(istream);
+							BufferedReader br = new BufferedReader(
+									new InputStreamReader(distream));
+							String line;
+							br.readLine();
+							while ((line = br.readLine()) != null){
+								String ftokens[] = line.split(",");
+								String proxyIp = ftokens[0];
+								int proxyPort = Integer.parseInt(ftokens[1]);
+								int chordPort = Integer.parseInt(ftokens[2]);
+								String chordConfig = ftokens[3];
+								
+								connect(proxyIp, proxyPort);
+								
+								Iterator<Proxies> proxiesIt = proxies.iterator();
+								Proxies prox = null;
+								int index = 0;
+								
+								while(proxiesIt.hasNext()){
+									prox = proxiesIt.next();
+									if(prox.getIpAddr().equals(proxyIp) && 
+											prox.getPort() == proxyPort){
+										break;
+									}
+									index++;
+								}
+								proxies.remove(index);
+								
+								pw.println(ConsoleProtocol.NODE_STOP);
+								pw.println(chordPort);
+								pw.println(chordConfig);
+								disconnect();
+							}
+							br.close();
+							distream.close();
+							istream.close();
+						}catch(FileNotFoundException e){
+							e.printStackTrace();
+						}catch(IOException e){
+							e.printStackTrace();
+						}
 					}else{
 						String config = null;
 						int chordPort = -1;
