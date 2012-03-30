@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+ * Class which implements the tcp server for return messages
+ */
 public class ConsoleClientReceiver implements Runnable {
 	private static boolean running = true;
 	private volatile LinkedList<Nodes> nodesList;

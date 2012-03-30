@@ -44,6 +44,9 @@ class Proxies{
 		return port;
 	}
 }
+/*
+ * Class which implements the console interface
+ */
 public class ConsoleClient {
 	static InetAddress iAddr = null;
 	static Socket socket = null;
@@ -264,7 +267,27 @@ public class ConsoleClient {
 						disconnect();
 					}
 				}else if(tokens[1].equals("stat")){
-					pw.println(ConsoleProtocol.NODE_STAT);
+					if(tokens.length < 3){
+						System.out.println("Usage: node stat PROXY_ADDR[:port]");
+					}else{
+						System.out.println("Go ahead!");
+						int chordPort = -1;
+						String config = "dontcare";
+						if(tokens[2].contains(":")){
+							String ipPort[] = tokens[2].split(":");
+							connect(ipPort[0], Integer.parseInt(ipPort[1]));
+							pw.println(ConsoleProtocol.NODE_STAT);
+							pw.println(chordPort);
+							pw.println(config);
+						}else{
+							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
+							pw.println(ConsoleProtocol.NODE_STAT);
+							pw.println(chordPort);
+							pw.println(config);
+						}
+						disconnect();
+					}
+					//pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){
 					pw.println(ConsoleProtocol.NODE_ALIVE);
 				}else if(tokens[1].equals("list")){

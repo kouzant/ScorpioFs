@@ -20,6 +20,9 @@ import org.apache.commons.logging.LogFactory;
 import unipi.p2p.scorpiofs.StartChordService;
 import unipi.p2p.scorpiofs.util.ShutDownChord;
 
+/*
+ * Class which implements the proxy server
+ */
 public class ConsoleServer {
 	private static final Log log = LogFactory.getLog(ConsoleServer.class);
 	public static void main(String[] args) {
@@ -119,7 +122,7 @@ public class ConsoleServer {
 					pwc.close();
 					crSocket.close();
 					break;
-				case ConsoleProtocol.STATS_GET:
+				case ConsoleProtocol.NODE_STAT:
 					log.info("stats get");
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
