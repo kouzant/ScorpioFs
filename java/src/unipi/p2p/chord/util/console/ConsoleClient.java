@@ -102,10 +102,11 @@ public class ConsoleClient {
 		sb.append("\n>\t\t").append("Default configuration file is: config/chord.properties");
 		sb.append("\n").append(">\n");
 		
-		sb.append(">node create -f FILE - creates chord nodes from a comma" +
+		sb.append(">node create -f FILE - creates chord nodes from a comma " +
 				"separated file").append("\n");
-		sb.append(">\t").append("FILE - comma separated file with the following" +
-				"format: proxyip,proxyport,chordport,chord config file");
+		sb.append(">\t").append("FILE - comma separated file with the following " +
+				"format: proxyip,");
+		sb.append("\n>\t\t").append("proxyport,chordport,chord config file");
 		sb.append("\n").append(">\n");
 		
 		sb.append(">node stop IP_ADDR[:PORT] [OPTIONS] - Stops an already running")
@@ -116,8 +117,16 @@ public class ConsoleClient {
 		sb.append("\n>\t\t").append("it with the PORT option.").append("\n");
 		sb.append(">\t").append("-chordport PORT - If chord node is running on a");
 		sb.append("\n>\t\t").append("non standard port you should define it here.");
-		sb.append("\n");
-		sb.append(">\n").append(">node list - Lists all running chord nodes.");
+		sb.append("\n").append(">\n");
+		
+		sb.append(">node stop -f FILE - stops all chord nodes listed in a comma " +
+				"separated file").append("\n");
+		sb.append(">\t").append("FILE - comma separated file with the following " +
+				"format: proxyip,");
+		sb.append("\n>\t\t").append("proxyport,chordport,chord config file");
+		sb.append("\n").append(">\n");
+		
+		sb.append(">node list - Lists all running chord nodes.");
 		sb.append("\n").append(">\n");
 		
 		sb.append(">exit - exits from administration console.");
