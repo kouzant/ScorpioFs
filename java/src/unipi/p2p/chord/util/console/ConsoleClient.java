@@ -305,8 +305,9 @@ public class ConsoleClient {
 							BufferedReader br = new BufferedReader(
 									new InputStreamReader(distream));
 							String line;
-							br.readLine();
 							while ((line = br.readLine()) != null){
+								if (line.startsWith("#"))
+									continue;
 								String ftokens[] = line.split(",");
 								String proxyIp = ftokens[0];
 								int proxyPort = Integer.parseInt(ftokens[1]);
@@ -407,19 +408,17 @@ public class ConsoleClient {
 						System.out.println("Go ahead!");
 						int chordPort = -1;
 						String config = "dontcare";
-						if(tokens[2].contains(":")){
-							String ipPort[] = tokens[2].split(":");
-							connect(ipPort[0], Integer.parseInt(ipPort[1]));
+						Iterator<Proxies> proxiesIt = proxies.iterator();
+						Proxies tmpProxy = null;
+						
+						while (proxiesIt.hasNext()){
+							tmpProxy = proxiesIt.next();
+							connect(tmpProxy.getIpAddr(), tmpProxy.getPort());
 							pw.println(ConsoleProtocol.NODE_STAT);
 							pw.println(chordPort);
 							pw.println(config);
-						}else{
-							connect(tokens[2], ConsoleProtocol.PROXY_PORT);
-							pw.println(ConsoleProtocol.NODE_STAT);
-							pw.println(chordPort);
-							pw.println(config);
+							disconnect();
 						}
-						disconnect();
 					}
 					//pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){
