@@ -46,7 +46,8 @@ public class ConsoleServer {
 		Socket cSocket = null;
 		boolean proxyUp = true;
 		
-		Set<NodeInfo> nodes = new HashSet<NodeInfo>();
+		//Set<NodeInfo> nodes = new HashSet<NodeInfo>();
+		NodeInfo chordNode = null;
 		try{
 			while(proxyUp){
 				int code = -1;
@@ -68,10 +69,8 @@ public class ConsoleServer {
 				switch(code){
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
-					NodeInfo nodeInfo = exec.submit(new StartChordService(chPort, 
+					chordNode = exec.submit(new StartChordService(chPort, 
 							chordConfig)).get();
-					if(nodeInfo != null)
-						nodes.add(nodeInfo);
 					bin.close();
 					cSocket.close();
 					//Connect to console receiver for return messages
@@ -80,7 +79,7 @@ public class ConsoleServer {
 					PrintWriter pwc = new PrintWriter(crSocket.getOutputStream(),
 							true);
 					pwc.println(sSocket.getLocalPort());
-					if(nodeInfo != null){
+					if(chordNode != null){
 						pwc.println(ConsoleProtocol.CREATED);
 					}else{
 						pwc.println(ConsoleProtocol.NOT_CREATED);
@@ -91,30 +90,20 @@ public class ConsoleServer {
 					break;
 				case ConsoleProtocol.NODE_STOP:
 					log.info("node stop IP_ADDR");
-					//Iterate through node info list
-					Iterator<NodeInfo> nodeIt = nodes.iterator();
-					NodeInfo curNode = null;
-					NodeInfo tmpNode = null;
-					while(nodeIt.hasNext()){
-						tmpNode = nodeIt.next();
-						if(tmpNode.getServicePort() == chPort){
-							curNode = tmpNode;
-							break;
-						}
-					}
+					
 					//Connect to console receiver for return messages
 					crSocket = new Socket(cSocket.getInetAddress(),
 							ConsoleProtocol.CLREC_PORT);
 					pwc = new PrintWriter(crSocket.getOutputStream(),
 							true);
 					pwc.println(sSocket.getLocalPort());
-					if(curNode != null){
-						Integer result = exec.submit(new ShutDownChord(curNode))
+					if(chordNode != null){
+						Integer result = exec.submit(new ShutDownChord(chordNode))
 								.get();
-						nodes.remove(curNode);
-						if(result == 1)
+						if(result == 1){
 							pwc.println(ConsoleProtocol.STOPPED);
-						else
+							chordNode = null;
+						}else
 							pwc.println(ConsoleProtocol.NOT_STOPPED);
 					}else{
 						pwc.println(ConsoleProtocol.NOT_STOPPED);
@@ -124,17 +113,14 @@ public class ConsoleServer {
 					crSocket.close();
 					break;
 				case ConsoleProtocol.NODE_STAT:
-					//Spawn methods to receive statistics
-					Iterator<NodeInfo> nodesIt = nodes.iterator();
-					NodeInfo node = null;
+					log.info("stats get");
 					
-					while(nodesIt.hasNext()){
-						node = nodesIt.next();
-						Statistics stats = node.getChordobj().getStatistics();
+					//Spawn methods to receive statistics
+					if (chordNode != null){
+						Statistics stats = chordNode.getChordobj().getStatistics();
 						//test
 						System.out.println("Stats: "+stats.getSuccessorListCalls());
 					}
-					log.info("stats get");
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
 					log.info("node alive IP_ADDR");
