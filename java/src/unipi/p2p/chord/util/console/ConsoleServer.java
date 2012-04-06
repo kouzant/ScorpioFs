@@ -64,6 +64,9 @@ public class ConsoleServer {
 				
 				//Available operations
 				switch(code){
+				/*
+				 * Create a chord node
+				 */
 				case ConsoleProtocol.NODE_CREATE:
 					log.info("node create IP_ADDR");
 					chordNode = exec.submit(new StartChordService(chPort, 
@@ -85,6 +88,9 @@ public class ConsoleServer {
 					pwc.close();
 					crSocket.close();
 					break;
+					/*
+					 * Stop a chord node
+					 */
 				case ConsoleProtocol.NODE_STOP:
 					log.info("node stop IP_ADDR");
 					
@@ -109,6 +115,9 @@ public class ConsoleServer {
 					pwc.close();
 					crSocket.close();
 					break;
+					/*
+					 * Get statistics from a chord node
+					 */
 				case ConsoleProtocol.NODE_STAT:
 					log.info("stats get");
 					
@@ -122,6 +131,9 @@ public class ConsoleServer {
 				case ConsoleProtocol.NODE_ALIVE:
 					log.info("node alive IP_ADDR");
 					break;
+					/*
+					 * Terminate proxy server
+					 */
 				case ConsoleProtocol.TERMINATE:
 					log.info("Terminate");
 					bin.close();
