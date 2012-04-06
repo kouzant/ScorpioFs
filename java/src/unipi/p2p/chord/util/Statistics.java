@@ -1,6 +1,9 @@
 package unipi.p2p.chord.util;
 
-public class Statistics {
+import java.io.Serializable;
+
+public class Statistics implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private long remoteCalls = 0;
 	private long checkPredecessorCalls = 0;
 	private long successorListCalls = 0;

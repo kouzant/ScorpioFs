@@ -3,12 +3,15 @@ package unipi.p2p.chord.util.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import unipi.p2p.chord.util.Statistics;
 
 /*
  * Class which implements the tcp server for return messages
@@ -48,6 +51,7 @@ class ThreadedServer implements Runnable{
 	private Socket cSocket = null;
 	private volatile LinkedList<Nodes> nodesList = null;
 	BufferedReader bin = null;
+	ObjectInputStream objIn = null;
 	
 	public ThreadedServer(Socket cSocket, LinkedList<Nodes> nodesList){
 		this.cSocket = cSocket;
@@ -59,16 +63,21 @@ class ThreadedServer implements Runnable{
 		int port = -1;
 		int proxyPort = -1;
 		String senderIp = null;
+		Statistics stats = null;
 		bin = null;
 		try{
 		bin = new BufferedReader(new InputStreamReader
 				(cSocket.getInputStream()));
+		
 		proxyPort = Integer.parseInt(bin.readLine());
 		code = Integer.parseInt(bin.readLine());
 		port = Integer.parseInt(bin.readLine());
 		senderIp = cSocket.getInetAddress().toString().substring(1);
 		
 		switch(code){
+			/*
+			 * Chord node created
+			 */
 			case ConsoleProtocol.CREATED:
 				System.out.println("--> Chord node on "+senderIp+" on port "+
 						port+" created successfully");
@@ -76,11 +85,17 @@ class ThreadedServer implements Runnable{
 				Nodes newNode = new Nodes(senderIp, port, proxyPort);
 				nodesList.add(newNode);
 				break;
+			/*
+			 * Chord node not created
+			 */
 			case ConsoleProtocol.NOT_CREATED:
 				System.out.println("--> Chord node on "+senderIp+" on port "+
 						port+" did not created");
 				System.out.print("$>");
 				break;
+			/*
+			 * Chord node stopped
+			 */
 			case ConsoleProtocol.STOPPED:
 				System.out.println("--> Chord node on "+senderIp+" on port "+
 						port+" stopped successfully");
@@ -98,14 +113,28 @@ class ThreadedServer implements Runnable{
 				}
 				nodesList.remove(curNode);
 				break;
+			/*
+			 * Chord node not stopped
+			 */
 			case ConsoleProtocol.NOT_STOPPED:
 				System.out.println("--> Chord node on "+senderIp+" on port "+
 						port+" did not stopped");
 				System.out.print("$>");
 				break;
+			/*
+			 * Get statistics from chord node
+			 */
+			case ConsoleProtocol.NODE_STAT:
+				System.out.println("Statistics Received");
+				objIn = new ObjectInputStream(cSocket.getInputStream());
+				stats = (Statistics) objIn.readObject();
+				System.out.println("Stats: "+stats.getStabilizeCalls());
+				break;
 		}
 		bin.close();
 		}catch(IOException ex){
+			ex.printStackTrace();
+		}catch(ClassNotFoundException ex){
 			ex.printStackTrace();
 		}
 	}

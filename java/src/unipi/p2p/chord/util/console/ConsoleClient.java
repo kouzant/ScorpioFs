@@ -402,8 +402,8 @@ public class ConsoleClient {
 					 * Get statistics from a chord node
 					 */
 				}else if(tokens[1].equals("stat")){
-					if(tokens.length < 3){
-						System.out.println("Usage: node stat PROXY_ADDR[:port]");
+					if(tokens.length < 2){
+						System.out.println("Usage: node stat");
 					}else{
 						System.out.println("Go ahead!");
 						int chordPort = -1;
@@ -420,7 +420,6 @@ public class ConsoleClient {
 							disconnect();
 						}
 					}
-					//pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){
 					pw.println(ConsoleProtocol.NODE_ALIVE);
 					/*

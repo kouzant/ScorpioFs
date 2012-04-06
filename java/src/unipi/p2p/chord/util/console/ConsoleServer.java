@@ -3,6 +3,7 @@ package unipi.p2p.chord.util.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -126,6 +127,21 @@ public class ConsoleServer {
 						Statistics stats = chordNode.getChordobj().getStatistics();
 						//test
 						System.out.println("Stats: "+stats.getSuccessorListCalls());
+						
+						//Connect to console receiver to return statistics
+						crSocket = new Socket(cSocket.getInetAddress(),
+								ConsoleProtocol.CLREC_PORT);
+						pwc = new PrintWriter(crSocket.getOutputStream(), true);
+						pwc.println(sSocket.getLocalPort());
+						pwc.println(ConsoleProtocol.NODE_STAT);
+						pwc.println(chPort);
+						//pwc.close();
+						//Serialize statistics object
+						ObjectOutputStream objStream = new ObjectOutputStream(
+								crSocket.getOutputStream());
+						objStream.writeObject(stats);
+						objStream.close();
+						crSocket.close();
 					}
 					break;
 				case ConsoleProtocol.NODE_ALIVE:
