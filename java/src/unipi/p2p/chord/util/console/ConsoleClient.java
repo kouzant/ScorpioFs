@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 class Nodes{
 	private String ipAddr;
@@ -152,12 +153,14 @@ public class ConsoleClient {
 
 			//Chord node block
 			if(tokens[0].equals("node")){
+				/*
+				 * Create a chord node
+				 */
 				if(tokens[1].equals("create")){
 					if(tokens.length < 3){
 						System.err.println("Usage: node create IP_ADDR[:port]" +
 								" -chordport PORT -config CONFIG");
 					}else if((tokens.length == 4) && tokens[2].equals("-f")){
-						System.out.println("Load from file!");
 						//load from file
 						try{
 							FileInputStream istream = new FileInputStream(tokens[3]);
@@ -165,8 +168,9 @@ public class ConsoleClient {
 							BufferedReader br = new BufferedReader(
 									new InputStreamReader(distream));
 							String line;
-							br.readLine();
 							while ((line = br.readLine()) != null){
+								if(line.startsWith("#"))
+									continue;
 								String ftokens[] = line.split(",");
 								String proxyIp = ftokens[0];
 								int proxyPort = Integer.parseInt(ftokens[1]);
@@ -196,6 +200,14 @@ public class ConsoleClient {
 								pw.println(chordPort);
 								pw.println(chordConfig);
 								disconnect();
+								//wait for bootstrap node to get ready
+								while(nodesList.size() < 1){
+									try{
+										TimeUnit.SECONDS.sleep(2);
+									}catch(InterruptedException ex){
+										ex.printStackTrace();
+									}
+								}
 							}
 							br.close();
 							distream.close();
@@ -277,6 +289,9 @@ public class ConsoleClient {
 						}
 						disconnect();
 					}
+					/*
+					 * Stop a chord node
+					 */
 				}else if(tokens[1].equals("stop")){
 					if(tokens.length < 3){
 						System.err.println("Usage: node stop IP_ADDR[:port]"+
@@ -382,6 +397,9 @@ public class ConsoleClient {
 						}
 						disconnect();
 					}
+					/*
+					 * Get statistics from a chord node
+					 */
 				}else if(tokens[1].equals("stat")){
 					if(tokens.length < 3){
 						System.out.println("Usage: node stat PROXY_ADDR[:port]");
@@ -406,6 +424,9 @@ public class ConsoleClient {
 					//pw.println(ConsoleProtocol.NODE_STAT);
 				}else if(tokens[1].equals("alive")){
 					pw.println(ConsoleProtocol.NODE_ALIVE);
+					/*
+					 * List all alive chord nodes
+					 */
 				}else if(tokens[1].equals("list")){
 					if(nodesList.size() == 0){
 						System.out.print("$>");
@@ -431,26 +452,6 @@ public class ConsoleClient {
 				}else{
 					System.out.println("Command not found!");
 				}
-				//Statistics block
-			}else if(tokens[0].equals("stats")){
-				if(tokens[1].equals("get")){
-					//Get statistics
-					//Iterate throuth proxies list and send
-					//messages
-					Iterator<Proxies> proxiesIt = proxies.iterator();
-					Proxies prox = null;
-					while(proxiesIt.hasNext()){
-						prox = proxiesIt.next();
-						connect(prox.getIpAddr(), prox.getPort());
-						pw.println(ConsoleProtocol.STATS_GET);
-						//Don't care values
-						pw.println(0);
-						pw.println("dontcare");
-						disconnect();
-					}
-				}else if(tokens[1].equals("gen")){
-					//Generate statistics
-				}
 				//ScorpioFS block
 			}else if(tokens[0].equals("scorpiofs")){
 				if(tokens[1].equals("mount")){
@@ -462,10 +463,14 @@ public class ConsoleClient {
 				}else{
 					System.out.println("Command not found!");
 				}
-				//help
+				/*
+				 * Print help
+				 */
 			}else if(tokens[0].equals("help")){
 				System.out.println(help());
-				//exit
+				/*
+				 * Exit from console
+				 */
 			}else if(tokens[0].equals("exit")){
 				disconnect();
 				consoleRec.stopRunning();
