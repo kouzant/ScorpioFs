@@ -19,14 +19,18 @@ import unipi.p2p.chord.util.Statistics;
 public class ConsoleClientReceiver implements Runnable {
 	private static boolean running = true;
 	private volatile LinkedList<Nodes> nodesList;
+	private volatile LinkedList<Statistics> nodeStats;
 	private ExecutorService exec = null;
 	public ConsoleClientReceiver(LinkedList<Nodes> nodesList){
 		this.nodesList = nodesList;
+		nodeStats = new LinkedList<Statistics>();
 		exec = Executors.newCachedThreadPool();
 	}
 	public void stopRunning(){
 		running = false;
 	}
+	
+	
 	@Override
 	public void run() {
 		ServerSocket sSocket = null;
@@ -36,7 +40,8 @@ public class ConsoleClientReceiver implements Runnable {
 			while(running){
 				cSocket = sSocket.accept();
 				if(cSocket != null){
-					ThreadedServer tServer = new ThreadedServer(cSocket, nodesList);
+					ThreadedServer tServer = new ThreadedServer(cSocket,
+							nodesList, nodeStats);
 					exec.execute(tServer);
 				}
 			}
@@ -50,12 +55,20 @@ public class ConsoleClientReceiver implements Runnable {
 class ThreadedServer implements Runnable{
 	private Socket cSocket = null;
 	private volatile LinkedList<Nodes> nodesList = null;
+	private volatile LinkedList<Statistics> nodeStats = null;
 	BufferedReader bin = null;
 	ObjectInputStream objIn = null;
 	
-	public ThreadedServer(Socket cSocket, LinkedList<Nodes> nodesList){
+	public ThreadedServer(Socket cSocket, LinkedList<Nodes> nodesList,
+			LinkedList<Statistics> nodeStats){
 		this.cSocket = cSocket;
 		this.nodesList = nodesList;
+		this.nodeStats = nodeStats;
+	}
+	//Store every statistics object to a linked list
+	public synchronized void storeStats(Statistics stats){
+		nodeStats.add(stats);
+		System.err.println("nodeStats size: "+nodeStats.size());
 	}
 	@Override
 	public void run(){
@@ -63,7 +76,6 @@ class ThreadedServer implements Runnable{
 		int port = -1;
 		int proxyPort = -1;
 		String senderIp = null;
-		Statistics stats = null;
 		bin = null;
 		try{
 		bin = new BufferedReader(new InputStreamReader
@@ -127,8 +139,7 @@ class ThreadedServer implements Runnable{
 			case ConsoleProtocol.NODE_STAT:
 				System.out.println("Statistics Received");
 				objIn = new ObjectInputStream(cSocket.getInputStream());
-				stats = (Statistics) objIn.readObject();
-				System.out.println("Stats: "+stats.getStabilizeCalls());
+				storeStats((Statistics) objIn.readObject());
 				break;
 		}
 		bin.close();
