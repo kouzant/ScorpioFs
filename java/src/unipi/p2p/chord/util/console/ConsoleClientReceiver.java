@@ -2,6 +2,7 @@ package unipi.p2p.chord.util.console;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
@@ -78,8 +79,8 @@ class ThreadedServer implements Runnable{
 		String senderIp = null;
 		bin = null;
 		try{
-		bin = new BufferedReader(new InputStreamReader
-				(cSocket.getInputStream()));
+			InputStream inStream = cSocket.getInputStream();
+		bin = new BufferedReader(new InputStreamReader(inStream));
 		
 		proxyPort = Integer.parseInt(bin.readLine());
 		code = Integer.parseInt(bin.readLine());
@@ -138,8 +139,9 @@ class ThreadedServer implements Runnable{
 			 */
 			case ConsoleProtocol.NODE_STAT:
 				System.out.println("Statistics Received");
-				objIn = new ObjectInputStream(cSocket.getInputStream());
+				objIn = new ObjectInputStream(inStream);
 				storeStats((Statistics) objIn.readObject());
+				objIn.close();
 				break;
 		}
 		bin.close();

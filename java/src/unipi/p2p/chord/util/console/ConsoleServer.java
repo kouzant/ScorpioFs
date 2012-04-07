@@ -141,8 +141,8 @@ public class ConsoleServer {
 						ObjectOutputStream objStream = new ObjectOutputStream(
 								outStream);
 						objStream.writeObject(stats);
-						objStream.close();
 						pwc.close();
+						objStream.close();
 						crSocket.close();
 					}
 					break;
