@@ -15,6 +15,7 @@ public class Statistics implements Serializable{
 	private InetAddress ipAddr;
 	//Total size in bytes
 	private long totalChunkSize;
+	private int servicePort;
 	
 	public Statistics(){
 		remoteCalls = 0;
@@ -26,8 +27,15 @@ public class Statistics implements Serializable{
 		retrievingListSize = 0;
 		ipAddr = null;
 		totalChunkSize = 0L;
+		servicePort = 0;
 	}
 	
+	public void setServicePort(int servicePort){
+		this.servicePort = servicePort;
+	}
+	public int getServicePort(){
+		return servicePort;
+	}
 	public void setTotalChunkSize(long totalChunkSize){
 		this.totalChunkSize = totalChunkSize;
 	}

@@ -125,6 +125,7 @@ public class ConsoleServer {
 					//Spawn methods to receive statistics
 					if (chordNode != null){
 						Statistics stats = chordNode.getChordobj().getStatistics();
+						stats.setServicePort(chordNode.getServicePort());
 						//test
 						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
 						System.out.println("ip address: "+stats.getIpAddr());

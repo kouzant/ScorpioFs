@@ -25,16 +25,16 @@ public class ExportStats {
 		}
 	}
 
-	private String makeTitle(String ipAddr){
+	private String makeTitle(String ipAddr, int srvPort){
 		Date time = new Date();
 		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-		String title = ipAddr+"_"+dFormat.format(time);
+		String title = ipAddr+":"+srvPort+"_"+dFormat.format(time);
 		
 		return title;
 	}
 	
 	private void write(String title, String ipAddr, long storingSize, 
-			long retrievingSize, float chSizeMB){
+			long retrievingSize, float chSizeMB, int srvPort){
 		String path = "stats/"+title;
 		DecimalFormat df = new DecimalFormat("##.#");
 		try{
@@ -44,6 +44,8 @@ public class ExportStats {
 			bout.write("\tScorpioFS Statistics");
 			bout.newLine();
 			bout.write("IP Address: "+ipAddr);
+			bout.newLine();
+			bout.write("Service Port: "+srvPort);
 			bout.newLine();
 			bout.write("Storing List Size: "+storingSize);
 			bout.newLine();
@@ -68,9 +70,10 @@ public class ExportStats {
 			long retrievingSize = tmpNode.getRetrievingListSize();
 			long totalChunkSize = tmpNode.getTotalChunkSize();
 			float chSizeMB = totalChunkSize / 1048576;
-			String title = makeTitle(ipAddr);
+			int srvPort = tmpNode.getServicePort();
+			String title = makeTitle(ipAddr, srvPort);
 			
-			write(title, ipAddr, storingSize, retrievingSize, chSizeMB);
+			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort);
 		}
 	}
 }
