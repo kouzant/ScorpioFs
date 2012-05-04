@@ -126,7 +126,7 @@ public class ConsoleServer {
 					if (chordNode != null){
 						Statistics stats = chordNode.getChordobj().getStatistics();
 						//test
-						System.out.println("Stats: "+stats.getSuccessorListCalls());
+						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
 						
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),

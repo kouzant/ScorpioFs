@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import unipi.p2p.chord.util.Statistics;
+
 class Nodes{
 	private String ipAddr;
 	private int port;
@@ -142,8 +144,10 @@ public class ConsoleClient {
 		Scanner in = new Scanner(System.in);
 		LinkedList<Nodes> nodesList = new LinkedList<Nodes>();
 		LinkedList<Proxies> proxies = new LinkedList<Proxies>();
+		LinkedList<Statistics> nodeStats = new LinkedList<Statistics>();
 		ExecutorService exec = Executors.newCachedThreadPool();
-		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver(nodesList);
+		ConsoleClientReceiver consoleRec = new ConsoleClientReceiver(nodesList,
+				nodeStats);
 		exec.execute(consoleRec);
 		
 		while(consoleUp){
@@ -297,7 +301,6 @@ public class ConsoleClient {
 						System.err.println("Usage: node stop IP_ADDR[:port]"+
 								" -chordport PORT");
 					}else if((tokens.length == 4) && tokens[2].equals("-f")){
-						System.out.println("Load from file!");
 						//load from file
 						try{
 							FileInputStream istream = new FileInputStream(tokens[3]);
@@ -402,22 +405,27 @@ public class ConsoleClient {
 					 * Get statistics from a chord node
 					 */
 				}else if(tokens[1].equals("stat")){
-					if(tokens.length < 2){
-						System.out.println("Usage: node stat");
+					if(tokens.length < 3){
+						System.out.println("Usage: node stat get, delete");
 					}else{
-						System.out.println("Go ahead!");
-						int chordPort = -1;
-						String config = "dontcare";
-						Iterator<Proxies> proxiesIt = proxies.iterator();
-						Proxies tmpProxy = null;
-						
-						while (proxiesIt.hasNext()){
-							tmpProxy = proxiesIt.next();
-							connect(tmpProxy.getIpAddr(), tmpProxy.getPort());
-							pw.println(ConsoleProtocol.NODE_STAT);
-							pw.println(chordPort);
-							pw.println(config);
-							disconnect();
+						if (tokens[2].equals("get")){
+							int chordPort = -1;
+							String config = "dontcare";
+							Iterator<Proxies> proxiesIt = proxies.iterator();
+							Proxies tmpProxy = null;
+
+							while (proxiesIt.hasNext()){
+								tmpProxy = proxiesIt.next();
+								connect(tmpProxy.getIpAddr(), tmpProxy.getPort());
+								pw.println(ConsoleProtocol.NODE_STAT);
+								pw.println(chordPort);
+								pw.println(config);
+								disconnect();
+							}
+						}else if (tokens[2].equals("clear")){
+							System.err.println("nodeStats size: "+nodeStats.size());
+							nodeStats.clear();
+							System.err.println("nodeStats size: "+nodeStats.size());
 						}
 					}
 				}else if(tokens[1].equals("alive")){

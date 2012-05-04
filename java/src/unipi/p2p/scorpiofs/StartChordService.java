@@ -11,7 +11,6 @@ import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
 import unipi.p2p.chord.Replicator;
-import unipi.p2p.chord.Statistics;
 import unipi.p2p.chord.util.console.NodeInfo;
 import unipi.p2p.scorpiofs.util.ConfigParser;
 
@@ -121,10 +120,7 @@ public class StartChordService implements Callable<NodeInfo>{
         	nodeInfo = new NodeInfo(chordReplicator, chordobj, servicePort,
         			registry);
         	System.out.println("Service running at "+localIP+":"+servicePort);
-        	//Start statistics thread.
-        	/*Thread statThread=new Thread(new Statistics(chordobj),"statThread");
-        	statThread.setPriority(Thread.MIN_PRIORITY);
-        	statThread.start();*/
+        	
         	//System.out.println(Util.getMac());
         	Finger la;
 

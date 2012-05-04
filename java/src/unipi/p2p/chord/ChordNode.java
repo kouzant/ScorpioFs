@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -19,17 +20,16 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import unipi.p2p.chord.util.PropertyFileBootstrapper;
 import unipi.p2p.chord.util.Statistics;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.visualization.ChordViewer;
 
 public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, Runnable{
+	private static final long serialVersionUID = -713653815979171062L;
 	private static final Logger log = Logger.getRootLogger();
 	private static Statistics stats = new Statistics();
 	private static String outputFolder;
@@ -388,6 +388,24 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	
 	
 	public Statistics getStatistics() {
+		stats.setRetrievingListSize(retrievingList.size());
+		stats.setStoringListSize(storingList.size());
+		try{
+			stats.setIpAddr(InetAddress.getLocalHost());
+		}catch(UnknownHostException ex){
+			ex.printStackTrace();
+		}
+		Iterator<String> hashChunk = getHashChunks();
+		File tmpFile = null;
+		long totalSize = 0L;
+		
+		while(hashChunk.hasNext()){
+			tmpFile = new File(hashChunk.next());
+			totalSize += tmpFile.length();
+			tmpFile = null;
+		}
+		stats.setTotalChunkSize(totalSize);
+		
 		return stats;
 	}
 	

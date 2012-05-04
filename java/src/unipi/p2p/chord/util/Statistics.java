@@ -1,15 +1,57 @@
 package unipi.p2p.chord.util;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 
 public class Statistics implements Serializable{
-	private static final long serialVersionUID = 1L;
-	private long remoteCalls = 0;
-	private long checkPredecessorCalls = 0;
-	private long successorListCalls = 0;
-	private long stabilizeCalls = 0;
-	private long fixFingerCalls = 0;
+	private static final long serialVersionUID = 8538684231273750632L;
+	private long remoteCalls;
+	private long checkPredecessorCalls;
+	private long successorListCalls;
+	private long stabilizeCalls;
+	private long fixFingerCalls;
+	private int storingListSize;
+	private int retrievingListSize;
+	private InetAddress ipAddr;
+	//Total size in bytes
+	private long totalChunkSize;
 	
+	public Statistics(){
+		remoteCalls = 0;
+		checkPredecessorCalls = 0;
+		successorListCalls = 0;
+		stabilizeCalls = 0;
+		fixFingerCalls = 0;
+		storingListSize = 0;
+		retrievingListSize = 0;
+		ipAddr = null;
+		totalChunkSize = 0L;
+	}
+	
+	public void setTotalChunkSize(long totalChunkSize){
+		this.totalChunkSize = totalChunkSize;
+	}
+	public long getTotalChunkSize(){
+		return totalChunkSize;
+	}
+	public void setIpAddr(InetAddress ipAddr){
+		this.ipAddr = ipAddr;
+	}
+	public InetAddress getIpAddr(){
+		return ipAddr;
+	}
+	public void setStoringListSize(int storingListSize){
+		this.storingListSize = storingListSize;
+	}
+	public int getStoringListSize(){
+		return storingListSize;
+	}
+	public void setRetrievingListSize(int retrievingListSize){
+		this.retrievingListSize = retrievingListSize;
+	}
+	public int getRetrievingListSize(){
+		return retrievingListSize;
+	}
 	public long getCheckPredecessorCalls() {
 		return checkPredecessorCalls;
 	}

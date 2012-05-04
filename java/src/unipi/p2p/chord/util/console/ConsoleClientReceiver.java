@@ -22,9 +22,10 @@ public class ConsoleClientReceiver implements Runnable {
 	private volatile LinkedList<Nodes> nodesList;
 	private volatile LinkedList<Statistics> nodeStats;
 	private ExecutorService exec = null;
-	public ConsoleClientReceiver(LinkedList<Nodes> nodesList){
+	public ConsoleClientReceiver(LinkedList<Nodes> nodesList, 
+			LinkedList<Statistics> nodeStats){
 		this.nodesList = nodesList;
-		nodeStats = new LinkedList<Statistics>();
+		this.nodeStats = nodeStats;
 		exec = Executors.newCachedThreadPool();
 	}
 	public void stopRunning(){
