@@ -127,6 +127,7 @@ public class ConsoleServer {
 						Statistics stats = chordNode.getChordobj().getStatistics();
 						//test
 						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
+						System.out.println("ip address: "+stats.getIpAddr());
 						
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),

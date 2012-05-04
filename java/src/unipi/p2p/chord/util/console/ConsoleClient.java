@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import unipi.p2p.chord.util.ExportStats;
 import unipi.p2p.chord.util.Statistics;
 
 class Nodes{
@@ -404,7 +405,7 @@ public class ConsoleClient {
 					/*
 					 * Get statistics from a chord node
 					 */
-				}else if(tokens[1].equals("stat")){
+				}else if(tokens[1].equals("stats")){
 					if(tokens.length < 3){
 						System.out.println("Usage: node stat get, delete");
 					}else{
@@ -426,6 +427,9 @@ public class ConsoleClient {
 							System.err.println("nodeStats size: "+nodeStats.size());
 							nodeStats.clear();
 							System.err.println("nodeStats size: "+nodeStats.size());
+						}else if (tokens[2].equals("export")){
+							ExportStats eStats = new ExportStats(nodeStats);
+							eStats.exportStat();
 						}
 					}
 				}else if(tokens[1].equals("alive")){
