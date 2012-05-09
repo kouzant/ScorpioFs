@@ -18,11 +18,11 @@ public class Statistics implements Serializable{
 	private int servicePort;
 	
 	public Statistics(){
-		remoteCalls = 0;
-		checkPredecessorCalls = 0;
-		successorListCalls = 0;
-		stabilizeCalls = 0;
-		fixFingerCalls = 0;
+		remoteCalls = 0L;
+		checkPredecessorCalls = 0L;
+		successorListCalls = 0L;
+		stabilizeCalls = 0L;
+		fixFingerCalls = 0L;
 		storingListSize = 0;
 		retrievingListSize = 0;
 		ipAddr = null;

@@ -123,6 +123,13 @@ public class ConsoleClient {
 		sb.append("\n>\t\t").append("non standard port you should define it here.");
 		sb.append("\n").append(">\n");
 		
+		sb.append(">node stats get").append(" - Gets statistics from all chord nodes.")
+		.append("\n").append(">").append("\n");
+		sb.append(">node stats clear").append(" - Clears statistics buffer")
+		.append("\n").append(">").append("\n");
+		sb.append(">node stats export").append(" - Export statistics to file").append("\n");
+		sb.append(">").append("\n");
+		
 		sb.append(">node stop -f FILE - stops all chord nodes listed in a comma " +
 				"separated file").append("\n");
 		sb.append(">\t").append("FILE - comma separated file with the following " +
