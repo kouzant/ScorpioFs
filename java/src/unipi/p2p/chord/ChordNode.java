@@ -391,7 +391,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		stats.setRetrievingListSize(retrievingList.size());
 		stats.setStoringListSize(storingList.size());
 		try{
-			stats.setIpAddr(InetAddress.getLocalHost());
+			stats.setIpAddr(InetAddress.getLocalHost().getHostAddress().toString());
 		}catch(UnknownHostException ex){
 			ex.printStackTrace();
 		}

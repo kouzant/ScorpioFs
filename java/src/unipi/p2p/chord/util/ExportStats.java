@@ -65,7 +65,7 @@ public class ExportStats {
 		Statistics tmpNode = null;
 		while(statsIt.hasNext()){
 			tmpNode = statsIt.next();
-			String ipAddr = tmpNode.getIpAddr().getHostAddress();
+			String ipAddr = tmpNode.getIpAddr();
 			long storingSize = tmpNode.getStoringListSize();
 			long retrievingSize = tmpNode.getRetrievingListSize();
 			long totalChunkSize = tmpNode.getTotalChunkSize();

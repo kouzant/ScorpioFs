@@ -124,10 +124,10 @@ public class ConsoleServer {
 					//Spawn methods to receive statistics
 					if (chordNode != null){
 						Statistics stats = chordNode.getChordobj().getStatistics();
-						stats.setServicePort(chordNode.getServicePort());
 						int storingListSize = stats.getStoringListSize();
 						int retrievingListSize = stats.getRetrievingListSize();
-						String ipAddr = stats.getIpAddr().getHostAddress();
+						String ipAddr = stats.getIpAddr();
+						int servicePort = chordNode.getServicePort();
 						long totalChunkSize = stats.getTotalChunkSize();
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),
@@ -141,6 +141,7 @@ public class ConsoleServer {
 						pwc.println(storingListSize);
 						pwc.println(retrievingListSize);
 						pwc.println(ipAddr);
+						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
 						//test
 						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);

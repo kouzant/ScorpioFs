@@ -70,6 +70,18 @@ class ThreadedServer implements Runnable{
 		nodeStats.add(stats);
 		System.err.println("nodeStats size: "+nodeStats.size());
 	}
+	//Create Statistcs object
+	private synchronized Statistics createStat(int storingListSize,
+			int retrievingListSize, String ipAddr, int servicePort, long totalChunkSize){
+		Statistics tmpStat = new Statistics();
+		tmpStat.setStoringListSize(storingListSize);
+		tmpStat.setRetrievingListSize(retrievingListSize);
+		tmpStat.setIpAddr(ipAddr);
+		tmpStat.setServicePort(servicePort);
+		tmpStat.setTotalChunkSize(totalChunkSize);
+		
+		return tmpStat;
+	}
 	@Override
 	public void run(){
 		BufferedReader bin = null;
@@ -144,12 +156,17 @@ class ThreadedServer implements Runnable{
 				int storingListSize = Integer.parseInt(bin.readLine());
 				int retrievingListSize = Integer.parseInt(bin.readLine());
 				String ipAddr = bin.readLine();
+				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
 				System.out.println(ipAddr);
+				System.out.println(servicePort);
 				System.out.println(storingListSize);
 				System.out.println(retrievingListSize);
 				System.out.println(totalChunkSize);
-
+				Statistics tmpStat = createStat(storingListSize, 
+						retrievingListSize, ipAddr, servicePort, totalChunkSize);
+				storeStats(tmpStat);
+				
 				break;
 		}
 		bin.close();

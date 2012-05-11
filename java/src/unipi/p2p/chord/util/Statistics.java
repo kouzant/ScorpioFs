@@ -12,7 +12,7 @@ public class Statistics implements Serializable{
 	private long fixFingerCalls;
 	private int storingListSize;
 	private int retrievingListSize;
-	private InetAddress ipAddr;
+	private String ipAddr;
 	//Total size in bytes
 	private long totalChunkSize;
 	private int servicePort;
@@ -42,10 +42,10 @@ public class Statistics implements Serializable{
 	public long getTotalChunkSize(){
 		return totalChunkSize;
 	}
-	public void setIpAddr(InetAddress ipAddr){
+	public void setIpAddr(String ipAddr){
 		this.ipAddr = ipAddr;
 	}
-	public InetAddress getIpAddr(){
+	public String getIpAddr(){
 		return ipAddr;
 	}
 	public void setStoringListSize(int storingListSize){
