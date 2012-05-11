@@ -20,13 +20,13 @@ import unipi.p2p.chord.util.Statistics;
 public class ConsoleClientReceiver implements Runnable {
 	private static boolean running = true;
 	private volatile LinkedList<Nodes> nodesList;
-	private volatile LinkedList<Statistics> nodeStats;
+	private  LinkedList<Statistics> nodeStats;
 	private ExecutorService exec = null;
 	public ConsoleClientReceiver(LinkedList<Nodes> nodesList, 
 			LinkedList<Statistics> nodeStats){
 		this.nodesList = nodesList;
 		this.nodeStats = nodeStats;
-		exec = Executors.newCachedThreadPool();
+		exec = Executors.newFixedThreadPool(10);
 	}
 	public void stopRunning(){
 		running = false;
@@ -57,9 +57,7 @@ public class ConsoleClientReceiver implements Runnable {
 class ThreadedServer implements Runnable{
 	private Socket cSocket = null;
 	private volatile LinkedList<Nodes> nodesList = null;
-	private volatile LinkedList<Statistics> nodeStats = null;
-	BufferedReader bin = null;
-	ObjectInputStream objIn = null;
+	private  LinkedList<Statistics> nodeStats = null;
 	
 	public ThreadedServer(Socket cSocket, LinkedList<Nodes> nodesList,
 			LinkedList<Statistics> nodeStats){
@@ -74,6 +72,9 @@ class ThreadedServer implements Runnable{
 	}
 	@Override
 	public void run(){
+		BufferedReader bin = null;
+		ObjectInputStream objIn = null;
+		
 		int code = -1;
 		int port = -1;
 		int proxyPort = -1;
@@ -140,16 +141,26 @@ class ThreadedServer implements Runnable{
 			 */
 			case ConsoleProtocol.NODE_STAT:
 				System.out.println("Statistics Received");
-				objIn = new ObjectInputStream(inStream);
-				storeStats((Statistics) objIn.readObject());
-				objIn.close();
+				try {
+					objIn = new ObjectInputStream(inStream);
+					Object obj = objIn.readObject();
+					if (obj != null) {
+						Statistics st = (Statistics)obj;
+						storeStats(st);
+					} else {
+						System.out.println("Nothing to read");
+					}
+						
+					objIn.close();
+				} catch(Exception e) {e.printStackTrace();}
+				
 				break;
 		}
 		bin.close();
 		}catch(IOException ex){
 			ex.printStackTrace();
-		}catch(ClassNotFoundException ex){
+		}/*catch(ClassNotFoundException ex){
 			ex.printStackTrace();
-		}
+		}*/
 	}
 }

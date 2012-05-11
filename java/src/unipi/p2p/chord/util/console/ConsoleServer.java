@@ -27,7 +27,7 @@ public class ConsoleServer {
 	public static void main(String[] args) {
 		ServerSocket sSocket = null;
 		ThreadFactory daemonFactory = new DaemonFactory();
-		ExecutorService exec = Executors.newCachedThreadPool(daemonFactory);
+		ExecutorService exec = Executors.newCachedThreadPool();
 
 		try{
 			if(args.length == 2){
