@@ -26,7 +26,7 @@ public class ConsoleClientReceiver implements Runnable {
 			LinkedList<Statistics> nodeStats){
 		this.nodesList = nodesList;
 		this.nodeStats = nodeStats;
-		exec = Executors.newFixedThreadPool(10);
+		exec = Executors.newCachedThreadPool();
 	}
 	public void stopRunning(){
 		running = false;

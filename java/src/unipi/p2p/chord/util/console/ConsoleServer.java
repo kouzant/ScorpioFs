@@ -26,7 +26,6 @@ public class ConsoleServer {
 	private static final Log log = LogFactory.getLog(ConsoleServer.class);
 	public static void main(String[] args) {
 		ServerSocket sSocket = null;
-		ThreadFactory daemonFactory = new DaemonFactory();
 		ExecutorService exec = Executors.newCachedThreadPool();
 
 		try{
