@@ -141,19 +141,15 @@ class ThreadedServer implements Runnable{
 			 */
 			case ConsoleProtocol.NODE_STAT:
 				System.out.println("Statistics Received");
-				try {
-					objIn = new ObjectInputStream(inStream);
-					Object obj = objIn.readObject();
-					if (obj != null) {
-						Statistics st = (Statistics)obj;
-						storeStats(st);
-					} else {
-						System.out.println("Nothing to read");
-					}
-						
-					objIn.close();
-				} catch(Exception e) {e.printStackTrace();}
-				
+				int storingListSize = Integer.parseInt(bin.readLine());
+				int retrievingListSize = Integer.parseInt(bin.readLine());
+				String ipAddr = bin.readLine();
+				long totalChunkSize = Long.parseLong(bin.readLine());
+				System.out.println(ipAddr);
+				System.out.println(storingListSize);
+				System.out.println(retrievingListSize);
+				System.out.println(totalChunkSize);
+
 				break;
 		}
 		bin.close();

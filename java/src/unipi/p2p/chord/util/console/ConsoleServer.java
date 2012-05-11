@@ -125,10 +125,10 @@ public class ConsoleServer {
 					if (chordNode != null){
 						Statistics stats = chordNode.getChordobj().getStatistics();
 						stats.setServicePort(chordNode.getServicePort());
-						//test
-						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
-						System.out.println("ip address: "+stats.getIpAddr());
-						
+						int storingListSize = stats.getStoringListSize();
+						int retrievingListSize = stats.getRetrievingListSize();
+						String ipAddr = stats.getIpAddr().getHostAddress();
+						long totalChunkSize = stats.getTotalChunkSize();
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),
 								ConsoleProtocol.CLREC_PORT);
@@ -137,13 +137,16 @@ public class ConsoleServer {
 						pwc.println(sSocket.getLocalPort());
 						pwc.println(ConsoleProtocol.NODE_STAT);
 						pwc.println(chPort);
-						//pwc.close();
-						//Serialize statistics object
-						ObjectOutputStream objStream = new ObjectOutputStream(
-								outStream);
-						objStream.writeObject(stats);
+						//Stats
+						pwc.println(storingListSize);
+						pwc.println(retrievingListSize);
+						pwc.println(ipAddr);
+						pwc.println(totalChunkSize);
+						//test
+						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
+						System.out.println("ip address: "+stats.getIpAddr());
+						
 						pwc.close();
-						objStream.close();
 						crSocket.close();
 					}
 					break;
