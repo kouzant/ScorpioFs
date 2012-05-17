@@ -155,9 +155,9 @@ class ThreadedServer implements Runnable{
 				System.out.println("Statistics Received");
 				int storingListSize = Integer.parseInt(bin.readLine());
 				int retrievingListSize = Integer.parseInt(bin.readLine());
-				String ipAddr = bin.readLine();
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
+				String ipAddr = cSocket.getInetAddress().toString().substring(1);
 				System.out.println(ipAddr);
 				System.out.println(servicePort);
 				System.out.println(storingListSize);
@@ -172,8 +172,6 @@ class ThreadedServer implements Runnable{
 		bin.close();
 		}catch(IOException ex){
 			ex.printStackTrace();
-		}/*catch(ClassNotFoundException ex){
-			ex.printStackTrace();
-		}*/
+		}
 	}
 }

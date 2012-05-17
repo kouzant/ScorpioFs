@@ -139,7 +139,6 @@ public class ConsoleServer {
 						//Stats
 						pwc.println(storingListSize);
 						pwc.println(retrievingListSize);
-						pwc.println(ipAddr);
 						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
 						//test
