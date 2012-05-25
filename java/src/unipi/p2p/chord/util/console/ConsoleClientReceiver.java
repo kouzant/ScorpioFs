@@ -158,11 +158,6 @@ class ThreadedServer implements Runnable{
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
 				String ipAddr = cSocket.getInetAddress().toString().substring(1);
-				System.out.println(ipAddr);
-				System.out.println(servicePort);
-				System.out.println(storingListSize);
-				System.out.println(retrievingListSize);
-				System.out.println(totalChunkSize);
 				Statistics tmpStat = createStat(storingListSize, 
 						retrievingListSize, ipAddr, servicePort, totalChunkSize);
 				storeStats(tmpStat);

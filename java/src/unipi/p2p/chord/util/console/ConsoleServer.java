@@ -140,11 +140,6 @@ public class ConsoleServer {
 						pwc.println(retrievingListSize);
 						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
-						//test
-						System.out.println("chPort: "+chPort);
-						System.out.println("servicePort: "+servicePort);
-						System.out.println("Stats: "+stats.getTotalChunkSize()/1048576);
-						System.out.println("ip address: "+stats.getIpAddr());
 						
 						pwc.close();
 						crSocket.close();

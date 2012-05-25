@@ -1,11 +1,17 @@
-Ideas for ScorpioFS
---------------------
-* symmetric encrypted metadata
-* serialize metadata file if in lowmem mode
-* chunk popularity for metadata file (load to memory the most popular chunk)
-* fetch random chunks for metadata
-* collaboration--filesharing (groups, permissions etc)
-* traffic information--report (seeders, leechers, files, chunks)
-* trustable peers 
-* anonymity (I2P)
-* disk quota
+ΣΤΑΤΙΣΤΙΚΑ
+-----------
+* Μέγεθος αποθήκης κάθε κόμβου σε MB
+* uptime κόμβων
+* αριθμός chunks που έχει κάθε κόμβος
+(να κοιτάξω αν στην αποθήκη κάθε κόμβου περιέχονται μοναδικά chunks)
+* αριθμός των get requests για τα πιο δημοφιλή chunks (πχ τα 100 )
+* συνολικό αριθμό GET PUT
+
+ΠΕΙΡΑΜΑΤΑ
+---------
+1) Αποθήκευση ενός αρχείου Χ ΜΒ
+    * Π.Χ. πολλά μικρά αρχεία, αρχεία 10ΜΒ, 100ΜΒ κτλ
+2) Συμπεριφορά του replication
+3) Ανάκτηση ενός αρχείου Χ ΜΒ
+    * Πόσα chunks φιλοξενούμε στην τοπική αποθήκη
+4) Δυναμική συμπεριφορά δικτύου (κόμβοι μπαίνουν στο σύστημα και άλλοι αποτυγχάνουν)
