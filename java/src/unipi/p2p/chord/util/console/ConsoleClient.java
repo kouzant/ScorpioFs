@@ -414,7 +414,7 @@ public class ConsoleClient {
 					 */
 				}else if(tokens[1].equals("stats")){
 					if(tokens.length < 3){
-						System.out.println("Usage: node stat get, delete");
+						System.out.println("Usage: node stat get, clear");
 					}else{
 						if (tokens[2].equals("get")){
 							int chordPort = -1;

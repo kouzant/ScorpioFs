@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 import unipi.p2p.chord.ChordNode;
@@ -108,6 +109,9 @@ public class StartChordService implements Callable<NodeInfo>{
         	chordobj.setRetrievingListFilename(retrievingListFilename);
         	chordobj.loadHashtableFromFile();
         	chordobj.loadClientsList();
+        	//Take time used for service uptime
+        	Date now = new Date();
+        	chordobj.setStartTime(now);
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
         	Naming.rebind("rmi://" + "localhost" + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);
@@ -120,7 +124,6 @@ public class StartChordService implements Callable<NodeInfo>{
         	nodeInfo = new NodeInfo(chordReplicator, chordobj, servicePort,
         			registry);
         	System.out.println("Service running at "+localIP+":"+servicePort);
-        	
         	//System.out.println(Util.getMac());
         	Finger la;
 

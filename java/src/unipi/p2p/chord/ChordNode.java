@@ -14,6 +14,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private String metadataFile;
 	private String storingListFilename;
 	private String retrievingListFilename;
+	private Date startTime;
 	private boolean running = true;
 	HashSet<String> storingList=new HashSet<String>();
 	HashSet<String> retrievingList=new HashSet<String>();
@@ -74,6 +76,12 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	}
 	public void stopRunning(){
 		this.running = false;
+	}
+	public void setStartTime(Date startTime){
+		this.startTime = startTime;
+	}
+	public Date getStartTime(){
+		return startTime;
 	}
 	public ChordNode() throws RemoteException{
 		super();
@@ -405,6 +413,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			tmpFile = null;
 		}
 		stats.setTotalChunkSize(totalSize);
+		stats.setStartTime(startTime);
 		
 		return stats;
 	}

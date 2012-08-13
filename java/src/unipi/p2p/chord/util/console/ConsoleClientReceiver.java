@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -72,13 +73,16 @@ class ThreadedServer implements Runnable{
 	}
 	//Create Statistcs object
 	private synchronized Statistics createStat(int storingListSize,
-			int retrievingListSize, String ipAddr, int servicePort, long totalChunkSize){
+			int retrievingListSize, String ipAddr, int servicePort, 
+			long totalChunkSize, Date startTime, Date currentTime){
 		Statistics tmpStat = new Statistics();
 		tmpStat.setStoringListSize(storingListSize);
 		tmpStat.setRetrievingListSize(retrievingListSize);
 		tmpStat.setIpAddr(ipAddr);
 		tmpStat.setServicePort(servicePort);
 		tmpStat.setTotalChunkSize(totalChunkSize);
+		tmpStat.setStartTime(startTime);
+		tmpStat.setCurrentTime(currentTime);
 		
 		return tmpStat;
 	}
@@ -157,9 +161,13 @@ class ThreadedServer implements Runnable{
 				int retrievingListSize = Integer.parseInt(bin.readLine());
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
+				long startTimeLong = Long.parseLong(bin.readLine());
+				Date startTime = new Date(startTimeLong);
+				Date currentTime = new Date();
 				String ipAddr = cSocket.getInetAddress().toString().substring(1);
 				Statistics tmpStat = createStat(storingListSize, 
-						retrievingListSize, ipAddr, servicePort, totalChunkSize);
+						retrievingListSize, ipAddr, servicePort, totalChunkSize,
+						startTime, currentTime);
 				storeStats(tmpStat);
 				
 				break;

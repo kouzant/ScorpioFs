@@ -2,6 +2,7 @@ package unipi.p2p.chord.util;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.Date;
 
 public class Statistics implements Serializable{
 	private static final long serialVersionUID = 8538684231273750632L;
@@ -16,6 +17,8 @@ public class Statistics implements Serializable{
 	//Total size in bytes
 	private long totalChunkSize;
 	private int servicePort;
+	private Date startTime;
+	private Date currentTime;
 	
 	public Statistics(){
 		remoteCalls = 0L;
@@ -28,6 +31,8 @@ public class Statistics implements Serializable{
 		ipAddr = null;
 		totalChunkSize = 0L;
 		servicePort = 0;
+		//startTime = null;
+		currentTime = null;
 	}
 	
 	public void setServicePort(int servicePort){
@@ -90,8 +95,16 @@ public class Statistics implements Serializable{
 	public void incrSuccessorListCalls() {
 		this.successorListCalls++;
 	}
-	
-	
-	
-		
+	public void setStartTime(Date startTime){
+		this.startTime = startTime;
+	}
+	public Date getStartTime(){
+		return startTime;
+	}
+	public void setCurrentTime(Date currentTime){
+		this.currentTime = currentTime;
+	}
+	public Date getCurrentTime(){
+		return currentTime;
+	}
 }

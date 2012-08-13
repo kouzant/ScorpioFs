@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -127,6 +128,7 @@ public class ConsoleServer {
 						int retrievingListSize = stats.getRetrievingListSize();
 						int servicePort = chordNode.getServicePort();
 						long totalChunkSize = stats.getTotalChunkSize();
+						long startTimeLong = stats.getStartTime().getTime();
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),
 								ConsoleProtocol.CLREC_PORT);
@@ -140,6 +142,7 @@ public class ConsoleServer {
 						pwc.println(retrievingListSize);
 						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
+						pwc.println(startTimeLong);
 						
 						pwc.close();
 						crSocket.close();

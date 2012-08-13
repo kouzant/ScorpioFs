@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import unipi.p2p.chord.util.Statistics;
 
@@ -34,7 +35,7 @@ public class ExportStats {
 	}
 	
 	private void write(String title, String ipAddr, long storingSize, 
-			long retrievingSize, float chSizeMB, int srvPort){
+			long retrievingSize, float chSizeMB, int srvPort, String uptime){
 		String path = "stats/"+title;
 		DecimalFormat df = new DecimalFormat("##.#");
 		try{
@@ -46,6 +47,8 @@ public class ExportStats {
 			bout.write("IP Address: "+ipAddr);
 			bout.newLine();
 			bout.write("Service Port: "+srvPort);
+			bout.newLine();
+			bout.write("Uptime: "+uptime);
 			bout.newLine();
 			bout.write("Storing List Size: "+storingSize);
 			bout.newLine();
@@ -72,8 +75,18 @@ public class ExportStats {
 			float chSizeMB = totalChunkSize / 1048576;
 			int srvPort = tmpNode.getServicePort();
 			String title = makeTitle(ipAddr, srvPort);
+			Date startTime = tmpNode.getStartTime();
+			System.out.println("BLA "+startTime);
+			long startTimeLong = startTime.getTime();
+			long currentTime = tmpNode.getCurrentTime().getTime();
+			long interval = currentTime - startTimeLong;
+			System.out.println("Uptime: "+TimeUnit.MILLISECONDS.toSeconds(interval));
+			Date tmpInterval = new Date(interval);
+			SimpleDateFormat sdf = new SimpleDateFormat();
+			String uptime = sdf.format(tmpInterval);
 			
-			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort);
+			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort, 
+					uptime);
 		}
 	}
 }
