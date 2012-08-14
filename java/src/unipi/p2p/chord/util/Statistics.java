@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 public class Statistics implements Serializable{
 	private static final long serialVersionUID = 8538684231273750632L;
 	private long remoteCalls;
@@ -17,8 +19,8 @@ public class Statistics implements Serializable{
 	//Total size in bytes
 	private long totalChunkSize;
 	private int servicePort;
-	private Date startTime;
-	private Date currentTime;
+	private DateTime startTime;
+	private DateTime currentTime;
 	
 	public Statistics(){
 		remoteCalls = 0L;
@@ -95,16 +97,16 @@ public class Statistics implements Serializable{
 	public void incrSuccessorListCalls() {
 		this.successorListCalls++;
 	}
-	public void setStartTime(Date startTime){
+	public void setStartTime(DateTime startTime){
 		this.startTime = startTime;
 	}
-	public Date getStartTime(){
+	public DateTime getStartTime(){
 		return startTime;
 	}
-	public void setCurrentTime(Date currentTime){
+	public void setCurrentTime(DateTime currentTime){
 		this.currentTime = currentTime;
 	}
-	public Date getCurrentTime(){
+	public DateTime getCurrentTime(){
 		return currentTime;
 	}
 }

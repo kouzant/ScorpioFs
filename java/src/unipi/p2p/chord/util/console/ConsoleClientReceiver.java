@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.joda.time.DateTime;
+
 import unipi.p2p.chord.util.Statistics;
 
 /*
@@ -74,7 +76,7 @@ class ThreadedServer implements Runnable{
 	//Create Statistcs object
 	private synchronized Statistics createStat(int storingListSize,
 			int retrievingListSize, String ipAddr, int servicePort, 
-			long totalChunkSize, Date startTime, Date currentTime){
+			long totalChunkSize, DateTime startTime, DateTime currentTime){
 		Statistics tmpStat = new Statistics();
 		tmpStat.setStoringListSize(storingListSize);
 		tmpStat.setRetrievingListSize(retrievingListSize);
@@ -162,8 +164,8 @@ class ThreadedServer implements Runnable{
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
 				long startTimeLong = Long.parseLong(bin.readLine());
-				Date startTime = new Date(startTimeLong);
-				Date currentTime = new Date();
+				DateTime startTime = new DateTime(startTimeLong);
+				DateTime currentTime = new DateTime();
 				String ipAddr = cSocket.getInetAddress().toString().substring(1);
 				Statistics tmpStat = createStat(storingListSize, 
 						retrievingListSize, ipAddr, servicePort, totalChunkSize,

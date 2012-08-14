@@ -25,6 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+
 import unipi.p2p.chord.util.Statistics;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.visualization.ChordViewer;
@@ -37,7 +39,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private String metadataFile;
 	private String storingListFilename;
 	private String retrievingListFilename;
-	private Date startTime;
+	private DateTime startTime;
 	private boolean running = true;
 	HashSet<String> storingList=new HashSet<String>();
 	HashSet<String> retrievingList=new HashSet<String>();
@@ -77,10 +79,10 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public void stopRunning(){
 		this.running = false;
 	}
-	public void setStartTime(Date startTime){
+	public void setStartTime(DateTime startTime){
 		this.startTime = startTime;
 	}
-	public Date getStartTime(){
+	public DateTime getStartTime(){
 		return startTime;
 	}
 	public ChordNode() throws RemoteException{

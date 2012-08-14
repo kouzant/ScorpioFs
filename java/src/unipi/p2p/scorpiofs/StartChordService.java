@@ -8,6 +8,8 @@ import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
+import org.joda.time.DateTime;
+
 import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.HashChecker;
@@ -110,7 +112,7 @@ public class StartChordService implements Callable<NodeInfo>{
         	chordobj.loadHashtableFromFile();
         	chordobj.loadClientsList();
         	//Take time used for service uptime
-        	Date now = new Date();
+        	DateTime now = new DateTime();
         	chordobj.setStartTime(now);
         	
         	//Naming.rebind("rmi://" + localIP + ":" + servicePort + "/unipi.p2p.chord.ChordNode", chordobj);

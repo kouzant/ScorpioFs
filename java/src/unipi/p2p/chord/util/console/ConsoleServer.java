@@ -128,7 +128,7 @@ public class ConsoleServer {
 						int retrievingListSize = stats.getRetrievingListSize();
 						int servicePort = chordNode.getServicePort();
 						long totalChunkSize = stats.getTotalChunkSize();
-						long startTimeLong = stats.getStartTime().getTime();
+						long startTimeLong = stats.getStartTime().getMillis();
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),
 								ConsoleProtocol.CLREC_PORT);

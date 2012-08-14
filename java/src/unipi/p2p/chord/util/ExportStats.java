@@ -12,6 +12,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 import unipi.p2p.chord.util.Statistics;
 
 public class ExportStats {
@@ -75,16 +81,22 @@ public class ExportStats {
 			float chSizeMB = totalChunkSize / 1048576;
 			int srvPort = tmpNode.getServicePort();
 			String title = makeTitle(ipAddr, srvPort);
-			Date startTime = tmpNode.getStartTime();
-			System.out.println("BLA "+startTime);
-			long startTimeLong = startTime.getTime();
-			long currentTime = tmpNode.getCurrentTime().getTime();
-			long interval = currentTime - startTimeLong;
-			System.out.println("Uptime: "+TimeUnit.MILLISECONDS.toSeconds(interval));
-			Date tmpInterval = new Date(interval);
-			SimpleDateFormat sdf = new SimpleDateFormat();
-			String uptime = sdf.format(tmpInterval);
+			DateTime startTime = tmpNode.getStartTime();
+			DateTime currentTime = tmpNode.getCurrentTime();
+			Interval interval = new Interval(startTime, currentTime);
+			PeriodFormatter formater = new PeriodFormatterBuilder()
+		    .appendDays()
+		    .appendSuffix(" day", " days")
+		    .appendSeparator(" : ")
+		    .appendMinutes()
+		    .appendSuffix(" minute", " minutes")
+		    .appendSeparator(" : ")
+		    .appendSeconds()
+		    .appendSuffix(" second", " seconds")
+		    .toFormatter();
 			
+			Period period = interval.toPeriod();
+			String uptime = formater.print(period.normalizedStandard());
 			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort, 
 					uptime);
 		}
