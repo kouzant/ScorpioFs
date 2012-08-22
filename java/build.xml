@@ -7,6 +7,9 @@
   <property name="build" location="build"/>
   <property name="lib" location="lib"/>
   <property name="dist"  location="dist"/>
+  <path id="classpath">
+    <fileset dir="${lib}" includes="**/*.jar"/>
+  </path>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -25,17 +28,8 @@
   <target name="compile" depends="init"
         description="compile the source of jfuse" >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}"
-	   destdir="${build}">
-	   <classpath>
-              <fileset dir="${lib}">
-                <include name="**/*.jar"/>
-              </fileset>
-           </classpath>
-   </javac>	   
+    <javac srcdir="${src}" destdir="${build}" classpathref="classpath"/> 
   </target>
-
- 
 
   <target name="jar" depends="compile"
         description="generate the distribution" >
