@@ -109,6 +109,8 @@ public class ExportStats {
 			String uptime = formater.print(period.normalizedStandard());
 			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort, 
 					uptime, putRequests, getRequests, totalChunks);
+			//After exporting the statistics, clear the buffer
+			nodeStats.clear();
 		}
 	}
 }
