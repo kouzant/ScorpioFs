@@ -76,7 +76,8 @@ class ThreadedServer implements Runnable{
 	//Create Statistcs object
 	private synchronized Statistics createStat(int storingListSize,
 			int retrievingListSize, String ipAddr, int servicePort, 
-			long totalChunkSize, DateTime startTime, DateTime currentTime){
+			long totalChunkSize, DateTime startTime, DateTime currentTime,
+			long putRequests, long getRequests, int totalChunks){
 		Statistics tmpStat = new Statistics();
 		tmpStat.setStoringListSize(storingListSize);
 		tmpStat.setRetrievingListSize(retrievingListSize);
@@ -85,6 +86,9 @@ class ThreadedServer implements Runnable{
 		tmpStat.setTotalChunkSize(totalChunkSize);
 		tmpStat.setStartTime(startTime);
 		tmpStat.setCurrentTime(currentTime);
+		tmpStat.setPutRequests(putRequests);
+		tmpStat.setGetRequests(getRequests);
+		tmpStat.setTotalChunks(totalChunks);
 		
 		return tmpStat;
 	}
@@ -164,12 +168,17 @@ class ThreadedServer implements Runnable{
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
 				long startTimeLong = Long.parseLong(bin.readLine());
+				long putRequests = Long.parseLong(bin.readLine());
+				long getRequests = Long.parseLong(bin.readLine());
+				int totalChunks = Integer.parseInt(bin.readLine());
+				
 				DateTime startTime = new DateTime(startTimeLong);
 				DateTime currentTime = new DateTime();
 				String ipAddr = cSocket.getInetAddress().toString().substring(1);
 				Statistics tmpStat = createStat(storingListSize, 
 						retrievingListSize, ipAddr, servicePort, totalChunkSize,
-						startTime, currentTime);
+						startTime, currentTime, putRequests, getRequests,
+						totalChunks);
 				storeStats(tmpStat);
 				
 				break;

@@ -21,6 +21,9 @@ public class Statistics implements Serializable{
 	private int servicePort;
 	private DateTime startTime;
 	private DateTime currentTime;
+	private long getRequests;
+	private long putRequests;
+	private int totalChunks;
 	
 	public Statistics(){
 		remoteCalls = 0L;
@@ -35,8 +38,29 @@ public class Statistics implements Serializable{
 		servicePort = 0;
 		//startTime = null;
 		currentTime = null;
+		getRequests = 0L;
+		putRequests = 0L;
+		totalChunks = 0;
 	}
 	
+	public void setTotalChunks(int totalChunks){
+		this.totalChunks = totalChunks;
+	}
+	public int getTotalChunks(){
+		return totalChunks;
+	}
+	public void setGetRequests(long getRequests){
+		this.getRequests = getRequests;
+	}
+	public long getGetRequests(){
+		return getRequests;
+	}
+	public void setPutRequests(long putRequests){
+		this.putRequests = putRequests;
+	}
+	public long getPutRequests(){
+		return putRequests;
+	}
 	public void setServicePort(int servicePort){
 		this.servicePort = servicePort;
 	}

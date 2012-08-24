@@ -41,7 +41,8 @@ public class ExportStats {
 	}
 	
 	private void write(String title, String ipAddr, long storingSize, 
-			long retrievingSize, float chSizeMB, int srvPort, String uptime){
+			long retrievingSize, float chSizeMB, int srvPort, String uptime, 
+			long putRequests, long getRequests, int totalChunks){
 		String path = "stats/"+title;
 		DecimalFormat df = new DecimalFormat("##.#");
 		try{
@@ -59,6 +60,12 @@ public class ExportStats {
 			bout.write("Storing List Size: "+storingSize);
 			bout.newLine();
 			bout.write("Retrieving List Size: "+retrievingSize);
+			bout.newLine();
+			bout.write("Put Requests: "+putRequests);
+			bout.newLine();
+			bout.write("Get Requests: "+getRequests);
+			bout.newLine();
+			bout.write("Total Chunks: "+totalChunks);
 			bout.newLine();
 			bout.write("Total Disk Usage: "+df.format(chSizeMB)+"MB");
 			bout.newLine();
@@ -83,6 +90,9 @@ public class ExportStats {
 			String title = makeTitle(ipAddr, srvPort);
 			DateTime startTime = tmpNode.getStartTime();
 			DateTime currentTime = tmpNode.getCurrentTime();
+			long putRequests = tmpNode.getPutRequests();
+			long getRequests = tmpNode.getGetRequests();
+			int totalChunks = tmpNode.getTotalChunks();
 			Interval interval = new Interval(startTime, currentTime);
 			PeriodFormatter formater = new PeriodFormatterBuilder()
 		    .appendDays()
@@ -98,7 +108,7 @@ public class ExportStats {
 			Period period = interval.toPeriod();
 			String uptime = formater.print(period.normalizedStandard());
 			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort, 
-					uptime);
+					uptime, putRequests, getRequests, totalChunks);
 		}
 	}
 }

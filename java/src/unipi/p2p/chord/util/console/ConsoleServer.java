@@ -129,6 +129,9 @@ public class ConsoleServer {
 						int servicePort = chordNode.getServicePort();
 						long totalChunkSize = stats.getTotalChunkSize();
 						long startTimeLong = stats.getStartTime().getMillis();
+						long putRequests = stats.getPutRequests();
+						long getRequests = stats.getGetRequests();
+						int totalChunks = stats.getTotalChunks();
 						//Connect to console receiver to return statistics
 						crSocket = new Socket(cSocket.getInetAddress(),
 								ConsoleProtocol.CLREC_PORT);
@@ -143,6 +146,9 @@ public class ConsoleServer {
 						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
 						pwc.println(startTimeLong);
+						pwc.println(putRequests);
+						pwc.println(getRequests);
+						pwc.println(totalChunks);
 						
 						pwc.close();
 						crSocket.close();

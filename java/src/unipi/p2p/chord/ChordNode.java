@@ -40,6 +40,8 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private String storingListFilename;
 	private String retrievingListFilename;
 	private DateTime startTime;
+	private long getRequests = 0L;
+	private long putRequests = 0L;
 	private boolean running = true;
 	HashSet<String> storingList=new HashSet<String>();
 	HashSet<String> retrievingList=new HashSet<String>();
@@ -407,15 +409,20 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 		}
 		Iterator<String> hashChunk = getHashChunks();
 		File tmpFile = null;
+		int totalChunks = 0;
 		long totalSize = 0L;
 		
 		while(hashChunk.hasNext()){
 			tmpFile = new File(hashChunk.next());
 			totalSize += tmpFile.length();
 			tmpFile = null;
+			totalChunks++;
 		}
 		stats.setTotalChunkSize(totalSize);
 		stats.setStartTime(startTime);
+		stats.setPutRequests(putRequests);
+		stats.setGetRequests(getRequests);
+		stats.setTotalChunks(totalChunks);
 		
 		return stats;
 	}
@@ -480,6 +487,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 				dataPopularity.put(key, currentValue + 50); //each request gets 50 points
 			}*/
 			Storage storageObj = (Storage)objectReader.loadObject(new File(filename));
+			getRequests++;
 			return storageObj;
 		} catch (Exception e) {
 			log.error("Could not retrieve object no. " + key);
@@ -496,6 +504,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 			try {
 				String output=outputFolder+storageObj.getShaHex();
 				objectWriter.saveObject(storageObj, new File(output));
+				putRequests++;
 				data_hash.put(storageObj.getID(), output);
 			} catch (IOException e) {
 				e.printStackTrace();
