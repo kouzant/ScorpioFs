@@ -10,13 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
-
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import unipi.p2p.chord.util.Statistics;
 
@@ -41,7 +35,7 @@ public class ExportStats {
 	}
 	
 	private void write(String title, String ipAddr, long storingSize, 
-			long retrievingSize, float chSizeMB, int srvPort, String uptime, 
+			long retrievingSize, float chSizeMB, int srvPort, String uptimeString, 
 			long putRequests, long getRequests, int totalChunks){
 		String path = "stats/"+title;
 		DecimalFormat df = new DecimalFormat("##.#");
@@ -55,7 +49,7 @@ public class ExportStats {
 			bout.newLine();
 			bout.write("Service Port: "+srvPort);
 			bout.newLine();
-			bout.write("Uptime: "+uptime);
+			bout.write("Uptime: "+uptimeString);
 			bout.newLine();
 			bout.write("Storing List Size: "+storingSize);
 			bout.newLine();
@@ -88,29 +82,16 @@ public class ExportStats {
 			float chSizeMB = totalChunkSize / 1048576;
 			int srvPort = tmpNode.getServicePort();
 			String title = makeTitle(ipAddr, srvPort);
-			DateTime startTime = tmpNode.getStartTime();
-			DateTime currentTime = tmpNode.getCurrentTime();
+			long uptime = tmpNode.getUptime();
 			long putRequests = tmpNode.getPutRequests();
 			long getRequests = tmpNode.getGetRequests();
 			int totalChunks = tmpNode.getTotalChunks();
-			Interval interval = new Interval(startTime, currentTime);
-			PeriodFormatter formater = new PeriodFormatterBuilder()
-		    .appendDays()
-		    .appendSuffix(" day", " days")
-		    .appendSeparator(" : ")
-		    .appendMinutes()
-		    .appendSuffix(" minute", " minutes")
-		    .appendSeparator(" : ")
-		    .appendSeconds()
-		    .appendSuffix(" second", " seconds")
-		    .toFormatter();
-			
-			Period period = interval.toPeriod();
-			String uptime = formater.print(period.normalizedStandard());
+			String uptimeString = DurationFormatUtils.formatDurationWords(uptime,
+					true, false);
 			write(title, ipAddr, storingSize, retrievingSize, chSizeMB, srvPort, 
-					uptime, putRequests, getRequests, totalChunks);
-			//After exporting the statistics, clear the buffer
-			nodeStats.clear();
+					uptimeString, putRequests, getRequests, totalChunks);
 		}
+		//After exporting the statistics, clear the buffer
+		nodeStats.clear();
 	}
 }

@@ -3,16 +3,13 @@ package unipi.p2p.chord.util.console;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -128,7 +125,7 @@ public class ConsoleServer {
 						int retrievingListSize = stats.getRetrievingListSize();
 						int servicePort = chordNode.getServicePort();
 						long totalChunkSize = stats.getTotalChunkSize();
-						long startTimeLong = stats.getStartTime().getMillis();
+						long uptime = stats.getStartTime().getTime();
 						long putRequests = stats.getPutRequests();
 						long getRequests = stats.getGetRequests();
 						int totalChunks = stats.getTotalChunks();
@@ -145,7 +142,7 @@ public class ConsoleServer {
 						pwc.println(retrievingListSize);
 						pwc.println(servicePort);
 						pwc.println(totalChunkSize);
-						pwc.println(startTimeLong);
+						pwc.println(uptime);
 						pwc.println(putRequests);
 						pwc.println(getRequests);
 						pwc.println(totalChunks);

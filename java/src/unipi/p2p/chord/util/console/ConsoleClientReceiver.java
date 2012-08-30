@@ -13,8 +13,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.joda.time.DateTime;
-
 import unipi.p2p.chord.util.Statistics;
 
 /*
@@ -76,16 +74,15 @@ class ThreadedServer implements Runnable{
 	//Create Statistcs object
 	private synchronized Statistics createStat(int storingListSize,
 			int retrievingListSize, String ipAddr, int servicePort, 
-			long totalChunkSize, DateTime startTime, DateTime currentTime,
-			long putRequests, long getRequests, int totalChunks){
+			long totalChunkSize, long uptime, long putRequests,
+			long getRequests, int totalChunks){
 		Statistics tmpStat = new Statistics();
 		tmpStat.setStoringListSize(storingListSize);
 		tmpStat.setRetrievingListSize(retrievingListSize);
 		tmpStat.setIpAddr(ipAddr);
 		tmpStat.setServicePort(servicePort);
 		tmpStat.setTotalChunkSize(totalChunkSize);
-		tmpStat.setStartTime(startTime);
-		tmpStat.setCurrentTime(currentTime);
+		tmpStat.setUptime(uptime);
 		tmpStat.setPutRequests(putRequests);
 		tmpStat.setGetRequests(getRequests);
 		tmpStat.setTotalChunks(totalChunks);
@@ -167,17 +164,15 @@ class ThreadedServer implements Runnable{
 				int retrievingListSize = Integer.parseInt(bin.readLine());
 				int servicePort = Integer.parseInt(bin.readLine());
 				long totalChunkSize = Long.parseLong(bin.readLine());
-				long startTimeLong = Long.parseLong(bin.readLine());
+				long uptime = Long.parseLong(bin.readLine());
 				long putRequests = Long.parseLong(bin.readLine());
 				long getRequests = Long.parseLong(bin.readLine());
 				int totalChunks = Integer.parseInt(bin.readLine());
 				
-				DateTime startTime = new DateTime(startTimeLong);
-				DateTime currentTime = new DateTime();
 				String ipAddr = cSocket.getInetAddress().toString().substring(1);
 				Statistics tmpStat = createStat(storingListSize, 
 						retrievingListSize, ipAddr, servicePort, totalChunkSize,
-						startTime, currentTime, putRequests, getRequests,
+						uptime, putRequests, getRequests,
 						totalChunks);
 				storeStats(tmpStat);
 				

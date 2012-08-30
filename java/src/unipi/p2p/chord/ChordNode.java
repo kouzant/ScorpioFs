@@ -14,7 +14,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,9 +23,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-
 import unipi.p2p.chord.util.Statistics;
 import unipi.p2p.chord.util.Util;
 import unipi.p2p.chord.visualization.ChordViewer;
@@ -39,7 +37,7 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	private String metadataFile;
 	private String storingListFilename;
 	private String retrievingListFilename;
-	private DateTime startTime;
+	private StopWatch startTime;
 	private long getRequests = 0L;
 	private long putRequests = 0L;
 	private boolean running = true;
@@ -81,10 +79,10 @@ public class ChordNode extends UnicastRemoteObject implements RemoteChordNode, R
 	public void stopRunning(){
 		this.running = false;
 	}
-	public void setStartTime(DateTime startTime){
+	public void setStartTime(StopWatch startTime){
 		this.startTime = startTime;
 	}
-	public DateTime getStartTime(){
+	public StopWatch getStartTime(){
 		return startTime;
 	}
 	public ChordNode() throws RemoteException{

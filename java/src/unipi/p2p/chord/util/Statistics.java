@@ -1,10 +1,7 @@
 package unipi.p2p.chord.util;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.util.Date;
-
-import org.joda.time.DateTime;
+import org.apache.commons.lang3.time.StopWatch;
 
 public class Statistics implements Serializable{
 	private static final long serialVersionUID = 8538684231273750632L;
@@ -19,11 +16,12 @@ public class Statistics implements Serializable{
 	//Total size in bytes
 	private long totalChunkSize;
 	private int servicePort;
-	private DateTime startTime;
-	private DateTime currentTime;
+	private StopWatch startTime;
+	private StopWatch currentTime;
 	private long getRequests;
 	private long putRequests;
 	private int totalChunks;
+	private long uptime;
 	
 	public Statistics(){
 		remoteCalls = 0L;
@@ -41,8 +39,15 @@ public class Statistics implements Serializable{
 		getRequests = 0L;
 		putRequests = 0L;
 		totalChunks = 0;
+		uptime = 0L;
 	}
 	
+	public void setUptime(long uptime){
+		this.uptime = uptime;
+	}
+	public long getUptime(){
+		return uptime;
+	}
 	public void setTotalChunks(int totalChunks){
 		this.totalChunks = totalChunks;
 	}
@@ -121,16 +126,16 @@ public class Statistics implements Serializable{
 	public void incrSuccessorListCalls() {
 		this.successorListCalls++;
 	}
-	public void setStartTime(DateTime startTime){
+	public void setStartTime(StopWatch startTime){
 		this.startTime = startTime;
 	}
-	public DateTime getStartTime(){
+	public StopWatch getStartTime(){
 		return startTime;
 	}
-	public void setCurrentTime(DateTime currentTime){
+	public void setCurrentTime(StopWatch currentTime){
 		this.currentTime = currentTime;
 	}
-	public DateTime getCurrentTime(){
+	public StopWatch getCurrentTime(){
 		return currentTime;
 	}
 }
