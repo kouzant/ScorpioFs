@@ -2,7 +2,6 @@ package unipi.p2p.chord;
 
 import java.math.BigInteger;
 import java.rmi.RemoteException;
-import java.util.Enumeration;
 import java.util.Set;
 
 import unipi.p2p.chord.util.Util;

@@ -2,11 +2,8 @@ package unipi.p2p.chord.visualization;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
-import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.RemoteChordNode;
 import unipi.p2p.chord.util.Util;

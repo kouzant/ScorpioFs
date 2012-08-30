@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -92,8 +90,6 @@ class ThreadedServer implements Runnable{
 	@Override
 	public void run(){
 		BufferedReader bin = null;
-		ObjectInputStream objIn = null;
-		
 		int code = -1;
 		int port = -1;
 		int proxyPort = -1;

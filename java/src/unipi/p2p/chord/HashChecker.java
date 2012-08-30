@@ -2,7 +2,6 @@ package unipi.p2p.chord;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;

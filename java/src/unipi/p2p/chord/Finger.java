@@ -3,8 +3,6 @@ package unipi.p2p.chord;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-import org.apache.log4j.Logger;
-
 import unipi.p2p.chord.util.Util;
 
 /**

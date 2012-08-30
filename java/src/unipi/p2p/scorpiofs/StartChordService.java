@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Date;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.time.StopWatch;

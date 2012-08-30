@@ -1,12 +1,9 @@
 package unipi.p2p.chord.util;
 
-
-
 import org.apache.log4j.Logger;
 
 import unipi.p2p.chord.Bootstrapper;
 import unipi.p2p.chord.Finger;
-import unipi.p2p.chord.ChordNode;
 import unipi.p2p.chord.RemoteChordNode;
 
 import java.io.InputStream;

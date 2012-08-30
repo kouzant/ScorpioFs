@@ -7,11 +7,8 @@ import java.rmi.RemoteException;
 import java.security.*;
 import java.util.BitSet;
 import java.util.Enumeration;
-import java.util.Random;
-
 import org.apache.log4j.Logger;
 
-import unipi.p2p.chord.Constants;
 import unipi.p2p.chord.Finger;
 import unipi.p2p.chord.RemoteChordNode;
 
