@@ -13,6 +13,7 @@ public class ConsoleProtocol {
 	public static final int STOPPED = 10;
 	public static final int NOT_STOPPED = 11;
 	public static final int STATS_GET = 12;
+	public static final int NODE_PING = 13;
 	public static final int CHORD_PORT = 6788;
 	public static final int PROXY_PORT = 6789;
 	public static final int CLREC_PORT = 7891;

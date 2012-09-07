@@ -2,3 +2,4 @@
 #First entry should always be the bootstrap node
 localhost,6789,6788,config/chord.properties
 localhost,6790,6784,config/chord.propertiesClient1
+localhost,6791,6785,config/chord.propertiesClient2
