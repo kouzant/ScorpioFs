@@ -1,0 +1,33 @@
+* Εισαγωγή
+|-* Ευχαριστίες (?)
+|-* Τί είναι το ScorpioFS (bullets)
+|-* Τα τρία μέρη του ScorpioFS (Chord, Fuse, Console. bla bla για αυτά)
+|-* Σχεδιάγραμμα δικτύου με τους κόμβους και τα RMI, TCP calls
+* Chord
+|-* Facts για το πρωτόκολλο
+|-* Key Location (Finger Table)
+|-* Node Joins
+|-* Node Failure
+* FUSE
+|-* VFS (Τί είναι το vfs)
+|-* FUSE (Πώς υλοποιήται το VFS στο linux)
+|-* FUSE calls (Πώς δουλεύουν τα fuse calls)
+|-* FUSE-J (Λίγα λόγια για τα binding του FUSE-J. JNI κτλ)
+* ScorpioFS
+|-* Αναπαράσταση των αρχείων και των καταλόγων (FsNode, FsTree)
+|-* Start ScorpioFS (Decrypt and Get FsTree from network)
+|-* Εγγραφή και Ανάγνωση ενός αρχείου
+|-* Replication (How it works)
+|-* Stop ScorpioFs (encrypt FsTree, send it to network)
+|-* Αρχιτεκτονική Κονσόλας Διαχείρισης (Console, Proxy Server, Console Receiver)
+|-* Λειτουργίες της Κονσόλας Διαχείρισης
+* Πειράματα
+|-* Περιγραφή των στατιστικών που κρατάμε
+|-* Παρουσίαση στατιστικών (Γραφήματα, συμπεράσματα και ότι άλλο σκεφτούμε)
+* Εκτέλεση
+|-* Prerequisites (Δυο λόγια για τις βιβλιοθήκες που χρησιμοποιούμε)
+|-* Compilation (Τί γίνεται compile)
+|-* Εκτέλεση (Chord Nodes, console, scorpiofs)
+* Demonstration (?)
+* Future Work
+* Τέλος
