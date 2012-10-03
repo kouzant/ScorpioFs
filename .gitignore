@@ -9,4 +9,7 @@ java/log
 java/stats
 java/config/jvm_ldpath.def
 java/src/jvm_ldpath.def
-
+*.nav
+*.out
+*.snm
+*.toc
