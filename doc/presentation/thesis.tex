@@ -15,7 +15,7 @@
 \author{Αντώνης Κουζούπης}
 \institute{Πανεπιστήμιο Πειραιώς\\Τμήμα Πληροφορικής}
 \date{\today}
-\logo{\includegraphics[scale=0.5]{unipi_logo.jpg}}
+\logo{\includegraphics[scale=0.5]{images/unipi_logo.jpg}}
 
 \begin{document}
 \frame{
@@ -45,7 +45,6 @@
 \subsection{}
 \frame{
 \frametitle{Τα μέρη του ScorpioFS \\ (Chord)(Σκατά Τίτλος!!!)}
-%\transboxin
 Το μέρος του \emph{ScorpioFS} που υλοποιεί το
 Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεση των κόμβων που είναι
 αποθηκευμένα τα δεδομένα, την εισαγωγή και τη διαγραφή ενός κόμβου από το δίκτυο
@@ -74,14 +73,72 @@ Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεσ
 \frame{
 \frametitle{Σχεδιάγραμμα Δικτύου}
 \begin{figure}
-    \includegraphics[scale=0.4]{scorpio_console.png}
+    \includegraphics[scale=0.4]{images/scorpio_console.png}
 \end{figure}
 }
 
-\frame{
-\frametitle{epe3hghsh sundeseon}
-}
 \section{Chord}
+
+\subsection{}
+\frame{
+\transboxin
+\frametitle{Το πρωτόκολλο Chord}
+\begin{itemize}
+    \item University of California, Berkeley \& MIT Laboratory for Computer
+Science -- SIGCOMM'01
+    \item Επεκτάσιμο πρωτόκολλο για αναζήτηση σε ένα δυναμικό peer--to--peer
+σύστημα με συχνές αφίξεις και αναχωρήσεις κόμβων.
+    \item Αποθηκεύει ζευγάρια key/data στον κατάλληλο κόμβο.
+    \item Δοθέντος ενός κλειδιού το αντιστοιχίζει σε ένα κόμβο.
+    \item \emph{Consistent hashing} για εξισορρόπηση του φόρτου εργασίας, κάθε κόμβος
+είναι υπεύθυνος για περίπου τον ίδιο αριθμό κλειδιών, ελάχιστες μετακινήσεις
+κλειδιών όταν ένας κόμβος μπαίνει ή βγαίνει από το σύστημα.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Το πρωτόκολλο Chord}
+\begin{itemize}
+    \item Σε ένα σύστημα με N κόμβους, κάθε κόμβος κρατάει πληροφορία για μόνο
+$\bigcirc{(\log{N})}$ άλλους κόμβους.
+    \item Επιλύει όλες τις αναζητήσεις μέσω $\bigcirc{(\log{N})}$ μηνυμάτων προς
+άλλους κόμβους.
+    \item Το πρωτόκολλο παρέχει μία $lookup(key)$ συνάρτηση που βρίσκει την IP
+διεύθυνση του κόμβου που είναι υπεύθυνος για το κλειδί.
+    \item Το Chord ενημερώνει τους κόμβους για τις αλλαγές των κλειδιών που
+είναι υπεύθυνοι.
+    \item Όταν ο N-οστός κόμβος έρθει ή φύγει από το σύστημα μόνο
+$\bigcirc{(\frac{1}{N})}$ κλειδιά μετακινούνται.
+\end{itemize}
+}
+
+\subsection{}
+\frame{
+\frametitle{Χαρακτηριστικά του Chord}
+\begin{itemize}
+    \item \textbf{Load balance} -- Το Chord λειτουργεί σαν κατανεμημένη
+συνάρτηση κατακερματισμού διαμοιράζοντας τα κλειδιά σε όλους τους κόμβους.
+    \item \textbf{Decentralization} -- Κανένας κόμβος δεν είναι πιο σημαντικός
+από τους άλλους. Κατάλληλο για χαλαρά συνδεδεμένες peer--to--peer εφαρμογές.
+    \item \textbf{Scalability} -- Το κόστος μιας αναζήτησης αυξάνεται
+λογαριθμικά σε σχέση με το πλήθος των κόμβων.
+    \item \textbf{Availability} -- Ρυθμίζει αυτόματα το δίκτυο ώστε να
+``κρύψει'' από την εφαρμογή τις αποχωρήσεις και τις αφίξεις νέων κόμβων.
+    \item \textbf{Flexible naming} -- Δεν θέτει κάποιο περιορισμό στη μορφή των
+κλειδιών.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Consistent Hashing}
+Ένα κλειδί $\kappa$ ανατίθεται στο πρώτο κόμβο που το αναγνωριστικό του ισούται
+ή ακολουθεί το $\kappa$. Ο κόμβος αυτός ονομάζεται $successor$ κόμβος του
+κλειδιού $\kappa$.
+
+\begin{figure}
+    \includegraphics[scale=2]{images/chord_hashing.jpg}
+\end{figure}
+}
 \section{FUSE}
 \section{ScorpioFS}
 \section{Πειράματα}
