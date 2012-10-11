@@ -236,7 +236,82 @@ successors ($\Omega(\log{N})$) και όχι μόνο έναν. Εάν μία κ
 
 Μία οικειοθελής αποχώρηση μπορεί να χειριστεί σαν μία αποτυχία του κόμβου.
 }
+
 \section{FUSE}
+\subsection{}
+\frame{
+\transboxin
+\frametitle{Virtual File System}
+\begin{itemize}
+    \item Αφαιρετικό επίπεδο πάνω από ένα πιο συμπαγές σύστημα αρχείων.
+    \item Επιτρέπει σε εφαρμογές χρήστη (user space) να έχουν πρόσβαση σε ένα
+συμπαγές σύστημα αρχείων.
+    \item Διαφανής χρήση αποθηκευτικών μέσων χωρίς ο χρήστης να καταλαβαίνει τη
+διαφορά.
+    \item Το VFS προσθέτει μία διεπαφή μεταξύ του πυρήνα και του συμπαγούς
+συστήματος αρχείων. Συνεπώς είναι εύκολη η δημιουργία νέων συστημάτων αρχείων.
+\end{itemize}
+}
+
+\subsection{}
+\frame{
+\frametitle{Filesystem in USErspace}
+\begin{itemize}
+    \item Μέρος του προγράμματος A Virtual Filesystem (AVFS), αλλά τώρα είναι
+ανεξάρτητο.
+    \item Ανοιχτό λογισμικό με άδεια χρήσης GNU GPL και GNU Library GPL.
+    \item Διαθέσιμο για Unix-like λειτουργικά συστήματα, Linux, FreeBSD, NetBSD,
+Mac OS X, OpenSolaris, GNU/Hurd.
+    \item Επίσημα στον πυρήνα του Linux από την έκδοση 2.6.14
+\end{itemize}
+}
+
+\frame{
+\frametitle{Filesystem in USErspace}
+\begin{itemize}
+    \item Unix kernel module που επιτρέπει σε μη εξουσιοδοτημένους χρήστες να
+δημιουργήσουν το δικό τους σύστημα αρχείων.
+    \item Είναι μία ``γέφυρα'' μεταξύ του πυρήνα και της εφαρμογής του χρήστη.
+    \item Χρησιμοποιεί inode cache και data buffers για βελτίωση στην ταχύτητα.
+    \item Απλό API με bindings σε πολλές γλώσσες προγραμματισμού.
+    \item Απλή εγκατάσταση χωρίς την μεταγλώττιση του πυρήνα.
+    \item Ανάπτυξη με γνώμονα την ασφάλεια.
+    \item Σταθερό!
+\end{itemize}
+}
+
+\frame{
+\frametitle{Filesystem in USErspace}
+Εφαρμογές που χρησιμοποιούν το FUSE:
+\begin{itemize}
+    \item Wuala
+    \item SSHFS
+    \item NTFS-3G
+    \item TrueCrypt
+    \item vmware-mount
+    \item ...
+\end{itemize}
+}
+
+\subsection{}
+\frame{
+\frametitle{Filesystem in USErspace}
+Η δομή του FUSE:
+\begin{figure}
+    \includegraphics[scale=0.5]{images/FUSE_struct.svg.png}
+\end{figure}
+}
+
+\frame{
+\frametitle{FUSE-J}
+\begin{itemize}
+    \item Java API που παρέχει στο χρήστη bindings για το FUSE.
+    \item Χρησιμοποιεί το framework Java Native Interface (JNI), που επιτρέπει
+σε κλάσεις Java να καλέσουν ή να καλεστούν (από) native προγράμματα γραμμένα σε
+γλώσσες όπως C, C++, asembly.
+    \item Ανοιχτό λογισμικό με άδεια GNU Library GPL.
+\end{itemize}
+}
 \section{ScorpioFS}
 \section{Πειράματα}
 \section{Εκτέλεση}
