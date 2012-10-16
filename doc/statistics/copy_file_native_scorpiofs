@@ -1,0 +1,6 @@
+#Copy various files and keep track of the time needed in seconds
+    Size       Native          ScorpioFS
+    10mb        0.284           4.479
+    100mb       2.782           24.981
+    500mb       27.077          142.972
+    1gb         61.887          350.048

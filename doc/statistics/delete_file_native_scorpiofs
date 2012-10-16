@@ -1,0 +1,6 @@
+#Delete various size files and keep track of the time needed in seconds
+    Size        Native          ScorpioFS
+    10mb        0.008           0.330
+    100mb       0.037           3.261
+    500mb       0.084           17.503
+    1gb         0.124           37.017
