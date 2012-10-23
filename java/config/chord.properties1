@@ -1,0 +1,6 @@
+#bootstrap=195.251.230.112:6789
+external_ip=localhost
+outputdir=/mnt/scorpiofs/localhost:6789/
+hashtable=/mnt/scorpiofs/localhost:6789/chord.hashtable
+storing_list=/mnt/scorpiofs/localhost:6789/chord.storing
+retrieving_list=/mnt/scorpiofs/localhost:6789/chord.retrieving
