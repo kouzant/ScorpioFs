@@ -1,3 +1,6 @@
+#Proxy IP,Proxy port,chord node port,configuration file
+#First entry should always be the bootstrap node
+localhost,6789,6788,config/chord.properties
 10.1.210.1,6779,6788,config/chord.properties0
 10.1.210.1,6778,6789,config/chord.properties1
 10.1.210.2,6779,6788,config/chord.properties0
@@ -24,8 +27,8 @@
 10.1.210.12,6778,6789,config/chord.properties1
 10.1.210.13,6779,6788,config/chord.properties0
 10.1.210.13,6778,6789,config/chord.properties1
-10.1.210.14,6779,6788,config/chord.properties0
-10.1.210.14,6778,6789,config/chord.properties1
+#10.1.210.14,6779,6788,config/chord.properties0
+#10.1.210.14,6778,6789,config/chord.properties1
 10.1.210.15,6779,6788,config/chord.properties0
 10.1.210.15,6778,6789,config/chord.properties1
 10.1.210.16,6779,6788,config/chord.properties0
@@ -34,18 +37,18 @@
 10.1.210.17,6778,6789,config/chord.properties1
 10.1.210.18,6779,6788,config/chord.properties0
 10.1.210.18,6778,6789,config/chord.properties1
-10.1.210.19,6779,6788,config/chord.properties0
-10.1.210.19,6778,6789,config/chord.properties1
-10.1.210.20,6779,6788,config/chord.properties0
-10.1.210.20,6778,6789,config/chord.properties1
+#10.1.210.19,6779,6788,config/chord.properties0
+#10.1.210.19,6778,6789,config/chord.properties1
+#10.1.210.20,6779,6788,config/chord.properties0
+#10.1.210.20,6778,6789,config/chord.properties1
 10.1.211.1,6779,6788,config/chord.properties0
 10.1.211.1,6778,6789,config/chord.properties1
 10.1.211.2,6779,6788,config/chord.properties0
 10.1.211.2,6778,6789,config/chord.properties1
-10.1.211.3,6779,6788,config/chord.properties0
-10.1.211.3,6778,6789,config/chord.properties1
-10.1.211.4,6779,6788,config/chord.properties0
-10.1.211.4,6778,6789,config/chord.properties1
+#10.1.211.3,6779,6788,config/chord.properties0
+#10.1.211.3,6778,6789,config/chord.properties1
+#10.1.211.4,6779,6788,config/chord.properties0
+#10.1.211.4,6778,6789,config/chord.properties1
 10.1.211.5,6779,6788,config/chord.properties0
 10.1.211.5,6778,6789,config/chord.properties1
 10.1.211.6,6779,6788,config/chord.properties0
