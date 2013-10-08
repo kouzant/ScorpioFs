@@ -1,0 +1,13 @@
+set key inside right top vertical Right noreverse noenhanced autotitles nobox
+set style data histograms
+set style fill solid border -1
+set xtics border in scale 0,0 nomirror rotate by -45  offset character 0, 0, 0 autojustify
+set title "Copy Files"
+set xtic auto
+set ytic auto
+set autoscale
+set xlabel "File Size"
+set ylabel "Time in seconds"
+set output "copy_files.png"
+set terminal pngcairo transparent enhanced font "arial,10" fontscale 1.0 size 500, 400
+plot "copy_file_native_scorpiofs" using 2:xtic(1) ti col, '' u 3 ti col

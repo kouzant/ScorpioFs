@@ -13,3 +13,5 @@ java/src/jvm_ldpath.def
 *.out
 *.snm
 *.toc
+java/bundle
+java/scorpiofs_bundle.tar
