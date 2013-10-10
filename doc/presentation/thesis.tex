@@ -3,6 +3,7 @@
 \usepackage{xltxtra}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{amsmath}
 \useoutertheme{shadow}
 \usetheme{Singapore}
 \setsansfont[Mapping=tex-text]{GFS Didot}
@@ -44,7 +45,7 @@
 }
 \subsection{}
 \frame{
-\frametitle{Τα μέρη του ScorpioFS \\ (Chord)(Σκατά Τίτλος!!!)}
+\frametitle{Οι συνιστώσες του ScorpioFS \\ Chord}
 Το μέρος του \emph{ScorpioFS} που υλοποιεί το
 Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεση των κόμβων που είναι
 αποθηκευμένα τα δεδομένα, την εισαγωγή και τη διαγραφή ενός κόμβου από το
@@ -52,7 +53,7 @@ Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεσ
 }
 
 \frame{
-\frametitle{Τα μέρη του ScorpioFS \\ (Fuse)(Σκατά Τίτλος!!!)}
+\frametitle{Οι συνιστώσες του ScorpioFS \\ Fuse}
 Υλοποιεί το τοπικό σύστημα αρχείων που αντιλαμβάνεται ο
 χρήστης. Υλοποιεί τις περισσότερες λειτουργίες ενός συστήματος αρχείων όπως
 δημιουργία, διαγραφή, επεξεργασία, αντιγραφή κτλ. Χωρίζει μεγάλα αρχεία σε
@@ -61,7 +62,7 @@ Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεσ
 }
 
 \frame{
-\frametitle{Τα μέρη του ScorpioFS \\ (Console)(Σκατά Τίτλος!!!)}
+\frametitle{Οι συνιστώσες του ScorpioFS \\ Console}
 Κονσόλα διαχείρισης των κόμβων του δικτύου. Εκτελεί διάφορες λειτουργίες μαζικά
 στους κόμβους όπως δημιουργία ή καταστροφή, περισυλλογή των στατιστικών.
 Λειτουργεί ανεξάρτητα από το \textbf{Chord} και \textbf{Fuse} κομμάτι και
@@ -377,7 +378,7 @@ Mac OS X, OpenSolaris, GNU/Hurd.
 }
 
 \frame{
-\frametitle{Λήξη ScorpioFS}
+\frametitle{Τερματισμός ScorpioFS}
 \begin{itemize}
     \item Γίνεται serialize το \emph{FsTree}.
     \item Εάν είναι μεγαλύτερο από 1 ΜΒ, σπάει σε μικρότερα chunks και
@@ -463,12 +464,37 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 Οι λειτουργίες που προσφέρει η κονσόλα διαχείρισης είναι:
 \begin{itemize}
     \item Δημιουργία κόμβων μεμονωμένα ή μαζικά.
-    \item Σταμάτημα κόμβων μεμονωμένα ή μαζικά.
+    \item Τερματισμός κόμβων μεμονωμένα ή μαζικά.
     \item Απαρίθμηση των ενεργών κόμβων στο δίκτυο.
-    \item Συγκέντρωση και εξαγωγή σε αρχεία διάφορων στατιστικών από τους κόμβους.
+    \item Συγκέντρωση και εξαγωγή σε αρχεία διάφορων μετρήσεων από τους κόμβους.
 \end{itemize}
 }
-\section{Πειράματα}
+\section{Μετρήσεις}
+\subsection{}
+\frame{
+\frametitle{Μετρήσεις}
+Οι μετρήσεις που παίρνουμε είναι οι παρακάτω:
+\begin{itemize}
+    \item Χρονική διάρκεια που λειτουργεί ο κόμβος
+    \item Αιτήσεις Put
+    \item Αιτήσεις Get
+    \item Συνολικό αριθμό από chunks που εξυπηρετεί ο κόμβος
+    \item Χώρο που καταλαμβάνουν τα παραπάνω chunks
+\end{itemize}
+}
+
+\frame{
+\frametitle{Testbed}
+Χώρος διεξαγωγής των μετρήσεων ήταν τα εργαστήρια του τμήματος
+\begin{itemize}
+    \item 20 φυσικοί κόμβοι
+    \item 58 chord κόμβοι
+    \item Debian GNU/Linux 6.0
+    \item 1 GB RAM
+    \item 1 GbE
+\end{itemize}
+}
+
 \subsection{}
 \frame{
 \frametitle{Αντιγραφή Αρχείων}
@@ -485,19 +511,89 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 }
 
 \frame{
-\frametitle{Put \& Get Requests -- 500mb file}
+\frametitle{Put \& Get Requests -- 500 MB file}
 \begin{figure}
     \includegraphics[scale=0.5]{../statistics/put_get_req_500mb.png}
 \end{figure}
 }
 
 \frame{
-\frametitle{Put \& Get Requests -- 1Gb file}
+\frametitle{Put \& Get Requests -- 1 GB file}
 \begin{figure}
     \includegraphics[scale=0.5]{../statistics/put_get_req_1gb.png}
 \end{figure}
 }
+
+\frame{
+\frametitle{Get Requests -- Ταινία}
+\begin{figure}
+    \includegraphics[scale=0.5]{../statistics/get_req_movie.png}
+\end{figure}
+}
+
+\frame{
+\frametitle{Διαθεσιμότητα}
+Το περιεχόμενο της ταινίας ήταν διαθέσιμο μέχρι και όταν 52/58 $\simeq \log(58)$ κόμβους του δικτύου είχαν τερματίσει τη λειτουργία τους αφού ``έτρεχαν για 30'''
+}
+\frame{
+\frametitle{Διαθεσιμότητα}
+\begin{figure}
+    \includegraphics[scale=0.5]{images/10.1.210.14.png}
+\end{figure}
+}
+\frame{
+\frametitle{Διαθεσιμότητα}
+\begin{figure}
+    \includegraphics[scale=0.5]{images/10.1.210.3.png}
+\end{figure}
+}
+
 \section{Εκτέλεση}
-\section{Επίδειξη}
-\section{Μελλοντική Εργασία}
+\frame{
+\frametitle{Εκτέλεση}
+Για να δημιουργήσουμε την υποδομή για το ScorpioFS θα πρέπει:
+\begin{enumerate}
+    \item Σε κάθε κόμβο να υπάρχει το εκτελέσιμο της εφαρμογής
+    \item Στον κόμβο που θα προσαρτηθεί το ScorpioFS filesystem να υπάρχει
+υποστήριξη για το FUSE
+    \item Προσαρμογή των αρχείων παραμετροποίησης για το Chord σύστημα (ip
+διεύθυνση, πόρτα λειτουργίας, bootstrap κόμβος, κτλ) και για το ScorpioFS
+(τοποθεσία αποθήκευσης αρχείων συστήματος)
+    \item Έναρξη του proxy server σε κάθε κόμβο
+    \item Έναρξη της κονσόλας διαχείρισης και δημιουργία των κόμβων
+    \item Εκτέλεση του ScoprioFS προγράμματος που προσαρτά το σύστημα αρχείων
+    \item Αντίστροφη διαδικασία για το τερματισμό της λειτουργίας του συστήματος
+\end{enumerate}
+}
+
+\section{Τέλος}
+\subsection{}
+\frame{
+\frametitle{Μελλοντική Εργασία}
+\begin{itemize}
+    \item Αυθεντικοποίηση και πιστοποίηση των κόμβων
+    \item Διαγραφή αρχείων από τους κόμβους
+    \item Δημιουργία χρηστών και usergroups
+    \item NAT traversal
+\end{itemize}
+}
+
+\subsection{}
+\frame{
+\frametitle{Ευχαριστίες}
+Θα ήθελα να ευχαριστήσω θερμά:
+\begin{itemize}
+    \item Καθηγητή κ. Δουληγέρη Χρήστο
+    \item Δρ. κ. Αβραμίδη Αγάπιο
+    \item Εργαστήρια Τμ. Πληροφορικής
+\end{itemize}
+}
+
+\subsection{}
+\frame{
+\frametitle{Ευχαριστώ}
+\begin{center}
+    Q\&A\\[2em]
+\end{center}
+}
 \end{document}
