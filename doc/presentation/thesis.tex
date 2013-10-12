@@ -23,8 +23,15 @@
 \frame{
     \titlepage
 }
+
+\frame{
+    \frametitle{Περιεχόμενα}
+    \begin{tiny}
+        \tableofcontents
+    \end{tiny}
+}
 \section{Εισαγωγή}
-\subsection{}
+\subsection{Γενικά}
 \frame{
 \frametitle{Τι είναι το ScorpioFS}
 \begin{itemize}
@@ -43,7 +50,7 @@
 μειονεκτήματα των κατανεμημένων συστημάτων.\normalsize
 \end{itemize}
 }
-\subsection{}
+\subsection{Συνιστώσες του ScorpioFS}
 \frame{
 \frametitle{Οι συνιστώσες του ScorpioFS \\ Chord}
 Το μέρος του \emph{ScorpioFS} που υλοποιεί το
@@ -69,7 +76,7 @@ Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεσ
 επιτελεί επικουρικό ρόλο στο σύστημα.
 }
 
-\subsection{}
+\subsection{Σχεδιάγραμμα Δικτύου}
 \frame{
 \frametitle{Σχεδιάγραμμα Δικτύου}
 \begin{figure}
@@ -79,7 +86,7 @@ Chord πρωτόκολλο. Είναι υπεύθυνο για την εύρεσ
 
 \section{Chord}
 
-\subsection{}
+\subsection{Πληροφορίες για το πρωτόκολλο Chord}
 \frame{
 \transboxin
 \frametitle{Το πρωτόκολλο Chord}
@@ -123,7 +130,7 @@ $\bigcirc{(\frac{1}{N})}$ κλειδιά μετακινούνται.
 \end{itemize}
 }
 
-\subsection{}
+\subsection{Χαρακτηριστικά του Chord}
 \frame{
 \frametitle{Χαρακτηριστικά του Chord}
 \begin{itemize}
@@ -148,10 +155,13 @@ $\bigcirc{(\frac{1}{N})}$ κλειδιά μετακινούνται.
 
 \begin{figure}
     \includegraphics[scale=2]{images/chord_hashing.jpg}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
 \end{figure}
 }
 
-\subsection{}
+\subsection{Μηχανισμός δρομολόγησης του Chord}
 \frame{
 \frametitle{Finger Table}
 Κάθε κόμβος $n$ κρατάει ένα πίνακα δρομολόγησης με $m (\bigcirc{(log{N})})$
@@ -161,6 +171,9 @@ $\bigcirc{(\frac{1}{N})}$ κλειδιά μετακινούνται.
 
 \begin{figure}
     \includegraphics[scale=0.3]{images/chord_finger.png}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
 \end{figure}
 }
 
@@ -200,7 +213,7 @@ $(8+2^5)\mod{2^6}=40$.
 του κλειδιού $54$ είναι ο κόμβος $56$.
 }
 
-\subsection{}
+\subsection{Εισαγωγή κόμβου}
 \frame{
 \frametitle{Εισαγωγή Κόμβου}
 Ένας νέος κόμβος $n$ εισέρχεται στο σύστημα:
@@ -222,11 +235,18 @@ successor του.
 $26$ βρίσκει τον successor του (κόμβος $32$). Ο κόμβος $26$ αντιγράφει όλα τα
 κλειδιά του successor του που είναι μικρότερα από $26$. Με τη διαδικασία του
 ``stabilize'' ενημερώνεται ο κόμβος $21$, ότι ο successor του είναι ο κόμβος $26$
-
-Να scan-aro και να βάλω το παράδειγμα από το paper.
 }
 
-\subsection{}
+\frame{
+\frametitle{Εισαγωγή Κόμβου}
+\begin{figure}
+    \includegraphics[scale=0.6]{images/node_join.png}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
+\end{figure}
+}
+\subsection{Αποχώρηση κόμβου}
 \frame{
 \frametitle{Αποχώρηση Κόμβου}
 Για να αυξηθεί η διαθεσιμότητα του συστήματος, κάθε κόμβος κρατάει μία λίστα από
@@ -248,7 +268,7 @@ successors ($\Omega(\log{N})$) και όχι μόνο έναν. Εάν μία κ
 }
 
 \section{FUSE}
-\subsection{}
+\subsection{Γενικά για το VFS}
 \frame{
 \transboxin
 \frametitle{Virtual File System}
@@ -263,7 +283,7 @@ successors ($\Omega(\log{N})$) και όχι μόνο έναν. Εάν μία κ
 \end{itemize}
 }
 
-\subsection{}
+\subsection{Πληροφορίες για το FUSE}
 \frame{
 \frametitle{Filesystem in USErspace}
 \begin{itemize}
@@ -303,7 +323,6 @@ Mac OS X, OpenSolaris, GNU/Hurd.
 \end{itemize}
 }
 
-\subsection{}
 \frame{
 \frametitle{Filesystem in USErspace}
 Η δομή του FUSE:
@@ -326,7 +345,7 @@ Mac OS X, OpenSolaris, GNU/Hurd.
 }
 
 \section{ScorpioFS}
-\subsection{}
+\subsection{Αναπαράσταση Αρχείων}
 \frame{
 \transboxin
 \frametitle{Αναπαράσταση Αρχείων}
@@ -361,7 +380,7 @@ Mac OS X, OpenSolaris, GNU/Hurd.
 \end{figure}
 }
 
-\subsection{}
+\subsection{Έναρξη \& Τερματισμός}
 \frame{
 \frametitle{Έναρξη ScorpioFS}
 \begin{itemize}
@@ -388,7 +407,7 @@ Mac OS X, OpenSolaris, GNU/Hurd.
     \item Αποπροσαρτάται ο τοπικός κατάλογος και σταματάει το πρόγραμμα.
 \end{itemize}
 }
-\subsection{}
+\subsection{Εγγραφή ενός αρχείου}
 \frame{
 \frametitle{Εγγραφή ενός αρχείου}
 \begin{itemize}
@@ -428,7 +447,7 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 \end{itemize}
 }
 
-\subsection{}
+\subsection{Διαθεσιμότητα Αρχείων}
 \frame{
 \frametitle{Αντιγραφή Αρχείων}
 \begin{itemize}
@@ -436,7 +455,7 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 διαδικασία αντιγραφής αρχείων μεταξύ των κόμβων στο δίκτυο.
     \item Για κάθε ένα αρχείο που έχει στην αποθήκη του ο κόμβος, υπολογίζεται
 πάλι το SHA-1 hash του.
-    \item Αναζητάται ο υπεύθυνος κόμβος για το νέο πλέον key και μέσω RMI κλήσης
+    \item Αναζητείται ο υπεύθυνος κόμβος για το νέο πλέον key και μέσω RMI κλήσης
 αντιγράφεται σε αυτόν.
     \item Αν ο νέος υπεύθυνος κόμβος δεν είναι γνωστός για τον τρέχοντα τότε
 ψάχνει αναδρομικά.
@@ -444,6 +463,7 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 \end{itemize}
 }
 
+\subsection{Κονσόλα Διαχείρισης}
 \frame{
 \frametitle{Κονσόλα Διαχείρισης}
 \begin{itemize}
@@ -469,8 +489,40 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
     \item Συγκέντρωση και εξαγωγή σε αρχεία διάφορων μετρήσεων από τους κόμβους.
 \end{itemize}
 }
+
+\subsection{Ασφάλεια}
+\frame{
+    \frametitle{Ασφάλεια στο ScorpioFS}
+    \begin{itemize}
+    \item Η κρυπτογράφηση κάθε αρχείου μεμονωμένα δεν είναι αποδοτική
+    \item Για την αναπαράσταση του αρχείου συστήματος υποχρεωτικά θα πρέπει να
+υπάρχουν τα κατάλληλα metadata.
+    \item Πρόσβαση στα αρχεία σε περίπτωση που κάποιος κακόβουλος χρήστης του δικτύου έχει πρόσβαση σε αυτά.
+    \item Κρυπτογράφηση των metadata!
+    \end{itemize}
+}
+\frame{
+    \frametitle{Ασφάλεια στο ScorpioFS}
+    \begin{itemize}
+        \item The Legion of Bouncy Castle cryptographic provider
+        \item Advanced Encryption Standard symmetric encryption
+        \item Cipher Block Chaining (CBC)
+        \item Password-Based Key Derivation Function 2 128 bits
+        \item HMAC--SHA-1 pseudorandom function
+    \end{itemize}
+}
+\frame{
+    \frametitle{Ασφάλεια στο ScorpioFS}
+    \begin{itemize}
+        \item Κρυπτογράφηση των metadata που δομούν το σύστημα αρχείων
+        \item Αποστολή στο δίκτυο
+        \item Κρυπτογράφηση του τοπικού φακέλου που περιέχει τα κλειδιά που
+αντιστοιχούν στα metadata καθώς και τα Initialization Vectors και Salt που
+χρησιμοποιήθηκαν κατά την κρυπτογράφηση
+    \end{itemize}
+}
 \section{Μετρήσεις}
-\subsection{}
+\subsection{Γενικά}
 \frame{
 \frametitle{Μετρήσεις}
 Οι μετρήσεις που παίρνουμε είναι οι παρακάτω:
@@ -495,7 +547,7 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 \end{itemize}
 }
 
-\subsection{}
+\subsection{Πειράματα}
 \frame{
 \frametitle{Αντιγραφή Αρχείων}
 \begin{figure}
@@ -533,7 +585,12 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 
 \frame{
 \frametitle{Διαθεσιμότητα}
-Το περιεχόμενο της ταινίας ήταν διαθέσιμο μέχρι και όταν 52/58 $\simeq \log(58)$ κόμβους του δικτύου είχαν τερματίσει τη λειτουργία τους αφού ``έτρεχαν για 30'''
+Το περιεχόμενο της ταινίας ήταν διαθέσιμο μέχρι και όταν 52/58 $\simeq \log(58)$
+κόμβους του δικτύου είχαν τερματίσει τη λειτουργία τους αφού ``έτρεχαν για
+30'''\\[2em]
+
+Τα metadata που διαμορφώνουν τη δενδρική μορφή του συστήματος αρχείων
+διαμοιράζονται στο δίκτυο για μεγαλύτερη διαθεσιμότητα.
 }
 \frame{
 \frametitle{Διαθεσιμότητα}
@@ -566,8 +623,8 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 \end{enumerate}
 }
 
-\section{Τέλος}
-\subsection{}
+\section{Κλείσιμο}
+\subsection{Μελλοντική Εργασία}
 \frame{
 \frametitle{Μελλοντική Εργασία}
 \begin{itemize}
@@ -575,10 +632,11 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
     \item Διαγραφή αρχείων από τους κόμβους
     \item Δημιουργία χρηστών και usergroups
     \item NAT traversal
+    \item Περιορισμός του χώρου αποθήκευσης σε κάθε κόμβο
 \end{itemize}
 }
 
-\subsection{}
+\subsection{Ευχαριστίες}
 \frame{
 \frametitle{Ευχαριστίες}
 Θα ήθελα να ευχαριστήσω θερμά:
@@ -589,7 +647,6 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
 \end{itemize}
 }
 
-\subsection{}
 \frame{
 \frametitle{Ευχαριστώ}
 \begin{center}

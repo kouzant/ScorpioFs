@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
@@ -83,6 +84,31 @@ public class ConsoleClient {
 			e0.printStackTrace();
 		}
 	}
+
+    private static String finito(){
+        String line;
+        StringBuilder sb = new StringBuilder();
+        FileInputStream fis;
+        BufferedReader br;
+        try{
+            File motd = new File("config/motd");
+            fis = new FileInputStream(motd);
+            br = new BufferedReader(new InputStreamReader(fis));
+
+            while((line = br.readLine()) != null){
+                sb.append(line).append("\n");
+            }
+
+            br.close();
+            fis.close();
+            br = null;
+            fis = null;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
 	private static String help(){
 		StringBuilder sb = new StringBuilder();
 		
@@ -485,6 +511,11 @@ public class ConsoleClient {
 				 */
 			}else if(tokens[0].equals("help")){
 				System.out.println(help());
+                /*
+                 * Print easter egg
+                 */
+            }else if(tokens[0].equals("finito")){
+                System.out.println(finito());
 				/*
 				 * Exit from console
 				 */
