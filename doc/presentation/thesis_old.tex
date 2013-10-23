@@ -50,15 +50,6 @@
 μειονεκτήματα των κατανεμημένων συστημάτων.\normalsize
 \end{itemize}
 }
-\frame{
-    \frametitle{Επέκταση του ScorpioFS}
-    \begin{itemize}
-        \item Βελτίωση διαθεσιμότητας
-        \item Ασφάλεια
-        \item Κονσόλα Διαχείρισης
-        \item Μετρήσεις
-    \end{itemize}
-}
 \subsection{Συνιστώσες του ScorpioFS}
 \frame{
 \frametitle{Οι συνιστώσες του ScorpioFS \\ Chord}
@@ -154,6 +145,126 @@ $\bigcirc{(\frac{1}{N})}$ κλειδιά μετακινούνται.
     \item \textbf{Flexible naming} -- Δεν θέτει κάποιο περιορισμό στη μορφή των
 κλειδιών.
 \end{itemize}
+}
+
+\frame{
+\frametitle{Consistent Hashing}
+Ένα κλειδί $\kappa$ ανατίθεται στο πρώτο κόμβο που το αναγνωριστικό του ισούται
+ή ακολουθεί το $\kappa$. Ο κόμβος αυτός ονομάζεται $successor$ κόμβος του
+κλειδιού $\kappa$.
+
+\begin{figure}
+    \includegraphics[scale=2]{images/chord_hashing.jpg}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
+\end{figure}
+}
+
+\subsection{Μηχανισμός δρομολόγησης του Chord}
+\frame{
+\frametitle{Finger Table}
+Κάθε κόμβος $n$ κρατάει ένα πίνακα δρομολόγησης με $m (\bigcirc{(log{N})})$
+μοναδικές εγγραφές που ονομάζεται \emph{finger table}. Το i-οστό στοιχείο του πίνακα
+περιέχει το αναγνωριστικό του πρώτου κόμβου που απέχει από τον $n$ κατά
+λιγότερο από $2^{i-1}$.
+
+\begin{figure}
+    \includegraphics[scale=0.3]{images/chord_finger.png}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
+\end{figure}
+}
+
+\frame{
+\frametitle{Finger Table}
+Το πρώτο στοιχείο στον πίνακα του κόμβου $8$ είναι ο κόμβος $14$ αφού είναι ο πρώτος
+κόμβος που έπεται το $(8+2^0)\mod{2^6}=9$. Αντίστοιχα, το τελευταίο στοιχείο του
+πίνακα είναι ο κόμβος $42$, καθώς είναι ο πρώτος κόμβος που έπεται του
+$(8+2^5)\mod{2^6}=40$.
+}
+
+\frame{
+\frametitle{Finger Table}
+\begin{itemize}
+    \item Κάθε κόμβος κρατάει πληροφορία για ένα μικρό αριθμό κόμβων. Επίσης αυτοί
+οι κόμβοι είναι οι πιο κοντινοί του.
+    \item Γενικά το finger table ενός κόμβου δεν περιέχει αρκετή πληροφορία ώστε να
+καθορίσει τον successor ενός τυχαίου κλειδιού $k$.
+    \item Η διαδικασία για την εύρεση ενός successor μπορεί να γίνει αναδρομικά
+και στους κόμβους του finger table ενός κόμβου $n$, εάν το κλειδί προς αναζήτηση
+είναι πιο μακρυά από τον τελευταίο κόμβο στο finger table του κόμβου $n$.
+    \item Καθώς κάθε κόμβος έχει εγγραφές σε διαστήματα της δύναμης του δύο, μπορεί
+να προωθήσει μία ερώτηση τουλάχιστον στο μισό δρόμο.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Finger Table}
+Εάν υποθέσουμε ότι ο κόμβος $8$ θέλει να βρει τον successor για το κλειδί $54$.
+Αφού η μεγαλύτερη εγγραφή στο finger table του κόμβου $8$ που προηγείται του $54$
+είναι ο κόμβος $42$, ο κόμβος $8$ θα ρωτήσει τον κόμβο $42$ να εξυπηρετήσει την
+ερώτηση.
+
+Ο κόμβος $42$ βρίσκει ότι η μεγαλύτερη εγγραφή που προηγείται του $54$ είναι ο
+κόμβος $51$. Ο κόμβος $51$ θα βρει ότι ο successor του $54$ είναι ο
+κόμβος $56$. Τελικά ο κόμβος $51$ θα επιστρέψει στον κόμβο $8$ ότι ο successor
+του κλειδιού $54$ είναι ο κόμβος $56$.
+}
+
+\subsection{Εισαγωγή κόμβου}
+\frame{
+\frametitle{Εισαγωγή Κόμβου}
+Ένας νέος κόμβος $n$ εισέρχεται στο σύστημα:
+\begin{enumerate}
+    \item Ο κόμβος $n$ καλεί όποιο κόμβο γνωρίζει και του ζητάει να του βρει τον
+successor του.
+    \item Ανά τακτά διαστήματα γίνεται ``stabilize'' στο δίκτυο. Ο τρέχοντας
+κόμβος ρωτάει τον successor του, για τον predecessor του successor του. Με αυτό
+τον τρόπο ένας νέος κόμβος γίνεται γνωστός στο δίκτυο. Ο κόμβος $n$ αντιγράφει
+όσα στοιχεία από το finger table του successor του είναι μικρότερα από $n$.
+    \item Κάθε κόμβος ελέγχει περιοδικά τον predecessor του για ενημερώσει τυχών
+λανθασμένες εγγραφές.
+\end{enumerate}
+}
+
+\frame{
+\frametitle{Εισαγωγή Κόμβου}
+Ο κόμβος $26$ εισέρχεται στο σύστημα μεταξύ των κόμβων $21$ και $32$. Ο κόμβος
+$26$ βρίσκει τον successor του (κόμβος $32$). Ο κόμβος $26$ αντιγράφει όλα τα
+κλειδιά του successor του που είναι μικρότερα από $26$. Με τη διαδικασία του
+``stabilize'' ενημερώνεται ο κόμβος $21$, ότι ο successor του είναι ο κόμβος $26$
+}
+
+\frame{
+\frametitle{Εισαγωγή Κόμβου}
+\begin{figure}
+    \includegraphics[scale=0.6]{images/node_join.png}
+    \captionsetup{font={scriptsize,bf,it}}
+    \caption*{Πηγή: Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications}
+\end{figure}
+}
+\subsection{Αποχώρηση κόμβου}
+\frame{
+\frametitle{Αποχώρηση Κόμβου}
+Για να αυξηθεί η διαθεσιμότητα του συστήματος, κάθε κόμβος κρατάει μία λίστα από
+successors ($\Omega(\log{N})$) και όχι μόνο έναν. Εάν μία κλήση προς ένα successor αποτύχει, τότε
+γίνεται κλήση στον αμέσως επόμενο. Θα πρέπει να αποτύχουν όλοι οι κόμβοι για να
+υπάρχει δυσλειτουργία.\\[1em]
+
+Ένας κακόβουλος χρήστης θα μπορούσε κάνει ορισμένους κόμβους να αποτύχουν αλλά
+όχι συγκεκριμένους κατ' επιλογή κόμβους.
+}
+
+\frame{
+\frametitle{Αποχώρηση Κόμβου}
+Η εφαρμογή που χρησιμοποιεί το Chord πρωτόκολλο, ScorpioFS, αντιγράφει τα
+δεδομένα και σε άλλους κόμβους. Έτσι για τα ίδια δεδομένα είναι υπεύθυνοι
+παραπάνω από ένας κόμβοι αλλά με άλλο κλειδί.\\[1em]
+
+Μία οικειοθελής αποχώρηση μπορεί να θεωρηθεί σαν μία αποτυχία του κόμβου.
 }
 
 \section{FUSE}
@@ -377,44 +488,6 @@ hash αποφασίζει ποιος κόμβος είναι υπεύθυνος 
     \item Απαρίθμηση των ενεργών κόμβων στο δίκτυο.
     \item Συγκέντρωση και εξαγωγή σε αρχεία διάφορων μετρήσεων από τους κόμβους.
 \end{itemize}
-}
-\frame{
-    \frametitle{Κονσόλα Διαχείρισης}
-    \begin{itemize}
-        \item \textbf{ConsoleServer} Αυτόνομο νήμα που υλοποιεί τον proxy server
-σε κάθε κόμβο
-        \item \textbf{ConsoleClient} Κονσόλα διαχείρισης κόμβων μαζικά,
-επικοινωνεί με κάθε κόμβο με συγκεκριμένο πρωτόκολλο
-        \item \textbf{ConsoleClientReceiver} Αυτόνομο νήμα που το ξεκινάει η
-κονσόλα διαχείρισης με το οποίο επικοινωνούν οι κόμβοι για να στήλουν μηνύματα
-επιβεβαίωσης
-    \end{itemize}
-}
-\frame{
-    \frametitle{Λειτουργίες της κονσόλας}
-    \begin{itemize}
-    \item \textbf{node create IP\_ADDR[:PORT] [-chordport PORT -config
-CONFIG]}\\
-    node create 10.1.210.4:6789 -chordport 6782 -config config/chord.config
-    \item \textbf{node create -f FILE}\\
-    node create -f chordNodes
-    \begin{center}
-    \emph{#Proxy IP,Proxy port,chord node port,configuration file}
-    \end{center}
-    \item \textbf{node stop IP\_ADDR[:PORT] [-chordport PORT]}\\
-    node stop 10.1.210.4:6789 -chordport 6782
-    \item \textbf{node stop -f FILE}\\
-    node stop -f chordNodes
-    \end{itemize}
-}
-\frame{
-    \frametitle{Λειτουργίες της κονσόλας}
-    \begin{itemize}
-    \item \textbf{node stats get}
-    \item \textbf{node stats export}
-    \item \textbf{node stats clear}
-    \item \textbf{node list}
-    \end{itemize}
 }
 
 \subsection{Ασφάλεια}
